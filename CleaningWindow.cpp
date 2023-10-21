@@ -120,7 +120,7 @@ void solve() {
 		}
 	}
 
-	sort(all(arr));
+	sort(rall(arr));
 
 
 	auto check = [&](int i , int j ) {
@@ -132,7 +132,6 @@ void solve() {
 	db(arr)
 	for (auto it : arr) {
 		int t = it[0], x = it[1], y = it[2];
-		grid[x][y] = 1 ;
 		for (int i = 0 ; i < 3 ; i++) {
 			int xx = dx[i] + x;
 			int yy = dy[i] + y;

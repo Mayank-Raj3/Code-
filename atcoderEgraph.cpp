@@ -103,33 +103,44 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
   if (found != string::npos)
 */
 /*::::::::::::::::::::::::::StartHere:::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-int n ;
-vector<int> arr;
-int rec(int lev ) {
-	if (lev < 0) return 0 ;
-	int ans = 0 ;
-	for (int prev = 0 ; prev < lev ; prev++ ) {
-		if (arr[prev] <= arr[lev]) {
-			ans = max(1 + rec( prev), ans);
-		}
-	}
-	return ans ;
 
-}
 
 void solve() {
-	cin >> n ;
-	arr.resize(n);
-	for (int i = 0 ; i < n ; i++) cin >> arr[i];
-	db(arr);
-	int best = 0 ;
-	for (int i = 0 ; i < n ; i++) {
-		best = max(best, rec(i));
+	int n, a, b, c ; cin >> n >> a >> b >> c ;
+	vector<pii> adj[n + 1];
+	vector<int> dis(n + 1, 1e18);
+	vector<int> vis(n + 1, 0);
+	int m = n ;
 
+	for (int i = 0 ; i < m ; i++) {
+		int a , b , w ; cin >> a >> b >> w ;
+		adj[a].pb({b, w});
+		adj[b].pb({a, w});
 	}
-	cout << best << nline;
 
+	priority_queue<pii> pq ;
+	dis[1] = 0;
 
+	pq.push({ -0, 1});
+
+	while (sz(pq)) {
+		pii node = pq.top();
+		pq.pop();
+
+		if (vis[node.ss]) continue;
+		vis[node.ss] = 1;
+
+		for (auto it : adj[node.ss]) {
+			int negh = it.ff;
+			int wt = it.ss;
+			if (dis[negh] > dis[node.ss] + wt) {
+				dis[negh] = dis[node.ss] + wt;
+				pq.push({ -dis[negh], negh});
+			}
+		}
+	}
+	for (int i = 1 ; i <= n ; i++) cout << dis[i] << " " ;
+	cout << nline ;
 }
 int32_t main() {
 #ifndef ONLINE_JUDGE

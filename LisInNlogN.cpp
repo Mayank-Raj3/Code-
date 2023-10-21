@@ -103,32 +103,48 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
   if (found != string::npos)
 */
 /*::::::::::::::::::::::::::StartHere:::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-int n ;
-vector<int> arr;
-int rec(int lev ) {
-	if (lev < 0) return 0 ;
-	int ans = 0 ;
-	for (int prev = 0 ; prev < lev ; prev++ ) {
-		if (arr[prev] <= arr[lev]) {
-			ans = max(1 + rec( prev), ans);
-		}
-	}
-	return ans ;
 
-}
 
 void solve() {
-	cin >> n ;
-	arr.resize(n);
-	for (int i = 0 ; i < n ; i++) cin >> arr[i];
-	db(arr);
-	int best = 0 ;
+	int n ; cin >> n ;
+	vector<int> arr(n);
 	for (int i = 0 ; i < n ; i++) {
-		best = max(best, rec(i));
+		cin >> arr[i];
+	}
+
+	vector<int> lis ;
+	vector<int> insertedAt(n) ;
+
+
+	for (int i = 0 ; i < n ; i++) {
+		if (lis.size() == 0 ||  lis.back() < arr[i]) {
+			lis.pb(arr[i]);
+			insertedAt[i] = lis.size();
+		} else {
+			auto it = lower_bound(all(lis), arr[i]);
+			*it = arr[i];
+			insertedAt[i] = it - lis.begin();
+
+		}
 
 	}
-	cout << best << nline;
 
+	int cnt = lis.size();
+	cout << cnt << nline;
+	lis.clear();
+	for (int i = n - 1 ; i >= 0 ; i--) {
+		if (insertedAt[i] == cnt) {
+			lis.pb(arr[i]);
+			cnt--;
+		}
+	}
+	reverse(all(lis));
+	for (auto it : lis) cout << it << " ";
+
+
+
+
+	cout << nline ;
 
 }
 int32_t main() {
@@ -136,7 +152,8 @@ int32_t main() {
 	freopen("Error.txt", "w", stderr);
 #endif
 	jay_shri_ram;
-	solve();
+	int t ; cin >> t ; while (t--)
+		solve();
 }
 /*----------------------------------endsHere----------------------------------*/
 

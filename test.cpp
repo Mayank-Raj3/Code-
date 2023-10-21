@@ -103,75 +103,41 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
   if (found != string::npos)
 */
 /*::::::::::::::::::::::::::StartHere:::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-int n ;
-struct concatKarr {
-	int best  , suffBest  , prefBest, sum  , tot ;
-	void build(vector<int> arr) {
-		int n = arr.size();
-		tot = accumulate(all(arr), 0ll);
-
-		prefBest = arr[0] , sum = arr[0];
-		for (int i = 1 ; i < n ; i++) {
-			sum += arr[i];
-			prefBest = max(prefBest, sum );
-		}
 
 
-		suffBest = arr[n - 1] , sum = arr[n - 1];
-		for (int i = n - 2 ; i >= 0 ; i--) {
-			sum += arr[i];
-			suffBest = max(suffBest, sum );
-		}
-
-		best = arr[0] , sum = arr[0];
-		for (int i = 1 ; i < n ; i++) {
-			sum += arr[i];
-			best = max(best, sum );
-			if (sum < 0 ) sum = 0;
-		}
-
-	}
-};
-
-concatKarr merge(concatKarr a , concatKarr b) {
-	concatKarr ans ;
-
-	ans.best = max({a.best, b.best, (a.suffBest + b.prefBest)});
-	ans.prefBest = max(a.prefBest , (a.tot + b.prefBest));
-	ans.suffBest = max(b.suffBest , (b.tot + a.suffBest));
-	ans.tot = a.tot + b.tot;
-
-	return ans;
-}
-int kConcatenationMaxSum(vector<int>& arr, int k) {
-	n = arr.size();
-	concatKarr bb ;
-	bb.build(arr);
-	concatKarr ans = bb;
-	for (int i = 1 ; i < k ; i++) {
-		ans = merge(ans , bb);
-	}
-
-	return max(ans.best , 0ll);
-}
 void solve() {
-	int m , k ; cin >> m >> k;
-	vi arr(m);
-	for (int i = 0 ; i < m ; i++) {
-		cin >> arr[i];
+	int n, ans = 0;
+	cin >> n;
+	vector<int> nums(n);
+	for (int i = 0; i < n; i++)cin >> nums[i];
+	vector<int> dp1(n), dp2(n), lis, lds;
+	for (int i = 0; i < n; i++) {
+		auto it = lower_bound(lis.begin(), lis.end(), nums[i]);
+		if (it != lis.end())
+			*it = nums[i], dp1[i] = (it - lis.begin()) + 1;
+		else
+			lis.push_back(nums[i]), dp1[i] = lis.size();
 	}
+	for (int i = n - 1; i >= 0; i--) {
+		auto it = lower_bound(lds.begin(), lds.end(), nums[i]);
+		if (it != lds.end())*it = nums[i], dp2[i] = it - lds.begin() + 1;
+		else lds.push_back(nums[i]), dp2[i] = lds.size();
+		if (dp1[i] >= 2 && dp2[i] >= 2)ans = max(ans, dp1[i] + dp2[i] - 1);
+	}
+	if (ans == 0)cout << -1 << endl;
+	else cout << n - ans << endl;
 
 
-	cout << kConcatenationMaxSum(arr, k) % mod;
-
+	db(dp1)
+	db(dp2)
 }
 int32_t main() {
 #ifndef ONLINE_JUDGE
 	freopen("Error.txt", "w", stderr);
 #endif
 	jay_shri_ram;
-
-	solve();
+	int t ; cin >> t ; while (t--)
+		solve();
 }
 /*----------------------------------endsHere----------------------------------*/
 

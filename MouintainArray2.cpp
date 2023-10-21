@@ -103,32 +103,47 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
   if (found != string::npos)
 */
 /*::::::::::::::::::::::::::StartHere:::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-int n ;
-vector<int> arr;
-int rec(int lev ) {
-	if (lev < 0) return 0 ;
-	int ans = 0 ;
-	for (int prev = 0 ; prev < lev ; prev++ ) {
-		if (arr[prev] <= arr[lev]) {
-			ans = max(1 + rec( prev), ans);
-		}
-	}
-	return ans ;
 
-}
 
 void solve() {
-	cin >> n ;
-	arr.resize(n);
+	int n ; cin >> n ;
+	vector<int> arr(n);
 	for (int i = 0 ; i < n ; i++) cin >> arr[i];
-	db(arr);
-	int best = 0 ;
+	vector<int> lis ;
+
+	vi lis_front(n), lis_back(n);
 	for (int i = 0 ; i < n ; i++) {
-		best = max(best, rec(i));
+		if (lis.size() == 0 ||  lis.back() < arr[i]) {
+			lis.pb(arr[i]);
+			lis_front[i] = lis.size();
+		} else {
+			auto it = lower_bound(all(lis), arr[i]);
+			*it = arr[i];
+			lis_front[i] = it - lis.begin() + 1;
 
+		}
 	}
-	cout << best << nline;
 
+
+	lis.clear();
+	int ans = 0 ;
+	for (int i = n - 1 ; i >= 0 ; i--) {
+		if (lis.size() == 0 ||  lis.back() < arr[i]) {
+			lis.pb(arr[i]);
+			lis_back[i] = lis.size();
+		} else {
+			auto it = lower_bound(all(lis), arr[i]);
+			*it = arr[i];
+			lis_back[i] = it - lis.begin() + 1;
+		}
+
+		if (lis_back[i] >= 2 && lis_front[i] >= 2)
+			ans = max(ans, lis_back[i] + lis_front[i] - 1 );
+	}
+
+
+	// if (ans == 0)cout << -1 << nline;
+	// else cout << n - ans << nline;
 
 }
 int32_t main() {
@@ -136,7 +151,8 @@ int32_t main() {
 	freopen("Error.txt", "w", stderr);
 #endif
 	jay_shri_ram;
-	solve();
+	int t ; cin >> t ; while (t--)
+		solve();
 }
 /*----------------------------------endsHere----------------------------------*/
 

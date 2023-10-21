@@ -103,40 +103,35 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
   if (found != string::npos)
 */
 /*::::::::::::::::::::::::::StartHere:::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-int n ;
-vector<int> arr;
-int rec(int lev ) {
-	if (lev < 0) return 0 ;
-	int ans = 0 ;
-	for (int prev = 0 ; prev < lev ; prev++ ) {
-		if (arr[prev] <= arr[lev]) {
-			ans = max(1 + rec( prev), ans);
-		}
-	}
-	return ans ;
 
+
+int dp[5001][5001];
+int rec(int n, int k) {
+	if (n == 0) return 1;
+	if (n < 0 || k == 0) return 0;
+	if (dp[n][k] != -1) return dp[n][k];
+
+	int ans = rec(n, k - 1);
+	ans = (ans + rec(n - k, k)) % mod;
+
+	return dp[n][k] = ans;
 }
-
 void solve() {
-	cin >> n ;
-	arr.resize(n);
-	for (int i = 0 ; i < n ; i++) cin >> arr[i];
-	db(arr);
-	int best = 0 ;
-	for (int i = 0 ; i < n ; i++) {
-		best = max(best, rec(i));
-
-	}
-	cout << best << nline;
-
+	int n, k;
+	cin >> n >> k;
+	cout << rec(n - k, k) << nline;
 
 }
+
 int32_t main() {
 #ifndef ONLINE_JUDGE
 	freopen("Error.txt", "w", stderr);
 #endif
 	jay_shri_ram;
-	solve();
+
+	memset(dp, -1, sizeof(dp));
+	int t ; cin >> t ; while (t--)
+		solve();
 }
 /*----------------------------------endsHere----------------------------------*/
 

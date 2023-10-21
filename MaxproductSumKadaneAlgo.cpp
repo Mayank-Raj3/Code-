@@ -103,32 +103,28 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
   if (found != string::npos)
 */
 /*::::::::::::::::::::::::::StartHere:::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-int n ;
-vector<int> arr;
-int rec(int lev ) {
-	if (lev < 0) return 0 ;
-	int ans = 0 ;
-	for (int prev = 0 ; prev < lev ; prev++ ) {
-		if (arr[prev] <= arr[lev]) {
-			ans = max(1 + rec( prev), ans);
-		}
-	}
-	return ans ;
 
-}
 
 void solve() {
-	cin >> n ;
-	arr.resize(n);
-	for (int i = 0 ; i < n ; i++) cin >> arr[i];
-	db(arr);
-	int best = 0 ;
+	int n ; cin >> n ;
+	vector<int> arr(n);
+	for (int i = 0 ; i < n;  i ++) cin >> arr[i];
+
+	int prod = 1 , maxi = INT_MIN;
 	for (int i = 0 ; i < n ; i++) {
-		best = max(best, rec(i));
-
+		prod *= arr[i];
+		maxi = max(prod, maxi);
+		if (prod == 0) prod = 1 ;
 	}
-	cout << best << nline;
 
+	prod = 1 ;
+	for (int i = n - 1 ; i >= 0 ; i--) {
+		prod *= arr[i];
+		maxi = max(prod , maxi );
+		if (prod == 0) prod = 1 ;
+	}
+
+	cout << maxi << nline;
 
 }
 int32_t main() {
@@ -136,7 +132,11 @@ int32_t main() {
 	freopen("Error.txt", "w", stderr);
 #endif
 	jay_shri_ram;
-	solve();
+	int t ; cin >> t ; while (t--)
+		solve();
 }
+
+
+
 /*----------------------------------endsHere----------------------------------*/
 

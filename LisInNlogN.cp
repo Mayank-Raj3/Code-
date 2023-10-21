@@ -103,32 +103,32 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
   if (found != string::npos)
 */
 /*::::::::::::::::::::::::::StartHere:::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-int n ;
-vector<int> arr;
-int rec(int lev ) {
-	if (lev < 0) return 0 ;
-	int ans = 0 ;
-	for (int prev = 0 ; prev < lev ; prev++ ) {
-		if (arr[prev] <= arr[lev]) {
-			ans = max(1 + rec( prev), ans);
-		}
-	}
-	return ans ;
 
-}
 
 void solve() {
-	cin >> n ;
-	arr.resize(n);
-	for (int i = 0 ; i < n ; i++) cin >> arr[i];
-	db(arr);
-	int best = 0 ;
-	for (int i = 0 ; i < n ; i++) {
-		best = max(best, rec(i));
+	int n ; cin >> n ;
 
+	vector<pair<int, int>> arr(n);
+	for (int i = 0 ; i < n ; i ++) {
+		cin >> arr[i].ff;
+		cin >> arr[i].ss;
 	}
-	cout << best << nline;
+	db(arr)
+	int people = 0 ;
+	for (int j = 0 ; j <= 24 ; j++) {
 
+		int temp = 0 ;
+		for (int i = 0 ; i < n ; i++) {
+			int currCity = (arr[i].ss + j + 24) % 24 ;
+			int currCity2 = (arr[i].ss + j + 1 + 24 ) % 24 ;
+			if ( (currCity >= 9 and currCity <= 18 ) and (currCity2 >= currCity and currCity2 <= 18 ) ) {
+				temp += arr[i].ff;
+			}
+		}
+		people = max(people, temp);
+	}
+
+	cout << people << nline ;
 
 }
 int32_t main() {

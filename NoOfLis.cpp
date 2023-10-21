@@ -103,31 +103,44 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
   if (found != string::npos)
 */
 /*::::::::::::::::::::::::::StartHere:::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-int n ;
+
 vector<int> arr;
-int rec(int lev ) {
-	if (lev < 0) return 0 ;
-	int ans = 0 ;
-	for (int prev = 0 ; prev < lev ; prev++ ) {
-		if (arr[prev] <= arr[lev]) {
-			ans = max(1 + rec( prev), ans);
+pii dp[100100];
+pair<int, int> rec(int ind ) {
+	pii ans = { 1, 1};
+	if (dp[ind].ff != -1) return dp[ind];
+	for (int prev = 0 ; prev < ind ; prev++) {
+		if (arr[prev] < arr[ind]) {
+			// 1 3
+			if (rec(prev).ff + 1 > ans.ff  ) {
+				ans = {rec(prev).ff + 1, rec(prev).ss};
+			} else if (rec(prev).ff + 1 == ans.ff ) {
+				ans.ss += rec(prev).ss;
+			}
 		}
 	}
-	return ans ;
-
+	return  dp[ind] = ans;
 }
 
 void solve() {
-	cin >> n ;
+	int n ; cin >> n ;
 	arr.resize(n);
-	for (int i = 0 ; i < n ; i++) cin >> arr[i];
-	db(arr);
-	int best = 0 ;
-	for (int i = 0 ; i < n ; i++) {
-		best = max(best, rec(i));
-
+	for (int i = 0 ; i < n ; i++ ) {
+		cin >> arr[i];
+		dp[i] = { -1, -1};
 	}
-	cout << best << nline;
+	db(arr)
+	pii ans = { 0, 0};
+	for (int i = 0 ; i < n ; i++ ) {
+		if (rec(i).ff + 1 > ans.ff  ) {
+			ans = {rec(i).ff + 1, rec(i).ss};
+		} else if (rec(i).ff + 1 == ans.ff ) {
+			ans.ss += rec(i).ss;
+		}
+	}
+	cout << ans.ss << nline ;
+
+
 
 
 }
@@ -136,7 +149,8 @@ int32_t main() {
 	freopen("Error.txt", "w", stderr);
 #endif
 	jay_shri_ram;
-	solve();
+	int t ; cin >> t ; while (t--)
+		solve();
 }
 /*----------------------------------endsHere----------------------------------*/
 
