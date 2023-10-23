@@ -29,9 +29,10 @@ using namespace std;
 #define minus1                        cout << "-1\n";
 #define one                           cout << "1\n";
 #define PI                            3.141592653589793238462
-#define sz(x)                         ((int)(x).size())
+#define sz(x) (                       (int)(x).size())
 #define jay_shri_ram                  ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 #define rall(x)                       (x).rbegin(), (x).rend()
+
 typedef pair<int, int> 	              pii     ;
 typedef vector<int>                   vi      ;
 typedef vector<string>                vs      ;
@@ -47,7 +48,6 @@ typedef unordered_map<int, int>       umapii  ;
 typedef unsigned long long            ull     ;
 //constants
 const int MAX_N = 1e5 + 5;
-const int mod = 1e9 + 7;
 const int INF = 2e18;
 
 
@@ -70,6 +70,10 @@ template <class T> void _print(multiset <T> v);
 template <class T, class V>
 void _print(pair <T, V> p) { cerr << "{"; _print(p.ff); cerr << ","; _print(p.ss); cerr << "}"; } template <class T> void _print(vector <T> v) { cerr << "[ "; for (T i : v) { _print(i); cerr << " "; } cerr << "]"; } template <class T> void _print(set <T> v) { cerr << "[ "; for (T i : v) { _print(i); cerr << " "; } cerr << "]"; } template <class T> void _print(multiset <T> v) { cerr << "[ "; for (T i : v) { _print(i); cerr << " "; } cerr << "]"; } template <class T, class V> void _print(map <T, V> v) { cerr << "[ "; for (auto i : v) { _print(i); cerr << " "; } cerr << "]"; }
 /*{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}*/
+
+// const int mod = 998244353;
+const int mod = 1e9 + 7;
+
 
 int inv(int i) {if (i == 1) return 1; return (mod - ((mod / i) * inv(mod % i)) % mod) % mod;}
 void extendgcd(int a, int b, int*v) {if (b == 0) {v[0] = 1; v[1] = 10; v[2] = a; return ;} extendgcd(b, a % b, v); int x = v[1]; v[1] = v[0] - v[1] * (a / b); v[0] = x; return;} //pass an arry of size1 3
@@ -104,22 +108,25 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 /*::::::::::::::::::::::::::StartHere:::::::::::::::::::::::::::::::::::::::::::::::::::::*/
 
 
+
+int dp[2023][2023];
+int n , m , k ;
+int rec(int lev , int breakp ) {
+	if (breakp > k)return 0;
+	if (lev <= 1) {
+		if (breakp == k)return 1;
+		else return 0;
+	}
+
+	if (dp[lev][breakp] != -1) return dp[lev][breakp];
+	// same color , diffrennt color then option will be m-1
+	return dp[lev][breakp] = mod_add(rec(lev - 1, breakp) , mod_mul(rec(lev - 1, breakp + 1) , m - 1, mod), mod);
+
+}
 void solve() {
-	int n ; cin >> n ;
-	vector<int> adj[n + 1];
-	for (int i = 0 ; i < n - 1 ; i++) {
-		int a , b ; cin >> a >> b ;
-		adj[a].pb(b);
-		adj[b].pb(a);
-	}
-	int ans = 0 ;
-	for (int i = 1 ; i <= n ; i++) {
-		db(adj[i]);
-		ans = max(sz(adj[i]) + 1ll , ans);
-	}
-	cout << ans << nline ;
-
-
+	memset(dp, -1, sizeof(dp));
+	cin >> n >> m >> k ;
+	cout << (m * rec(n , 0)) % mod << nline;
 }
 int32_t main() {
 #ifndef ONLINE_JUDGE

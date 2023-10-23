@@ -29,9 +29,10 @@ using namespace std;
 #define minus1                        cout << "-1\n";
 #define one                           cout << "1\n";
 #define PI                            3.141592653589793238462
-#define sz(x)                         ((int)(x).size())
+#define sz(x) (                       (int)(x).size())
 #define jay_shri_ram                  ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 #define rall(x)                       (x).rbegin(), (x).rend()
+
 typedef pair<int, int> 	              pii     ;
 typedef vector<int>                   vi      ;
 typedef vector<string>                vs      ;
@@ -102,23 +103,37 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
   if (found != string::npos)
 */
 /*::::::::::::::::::::::::::StartHere:::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+int n ;
+int dp[100100][16];
+int rec(int level, int lasthree) {
+	if (level == n ) return 1;
+
+	if (dp[level][lasthree] != -1)
+		return dp[level][lasthree];
+
+	int ans = 0 ;
+	if (lasthree == 2 and level >= 3) {
+		//01 or 010 then we cant take 0
+		ans = rec(level + 1 , 5);
+	}
+	else {
+		/*
+		7 k sth isiliye and liya ha
+		taki number 3 bit ka he rhe
+		left shift se number 4 th bit pe 1 chla jayega tho usko0 karne k liye liya ha
+		*/
+		ans = rec(level + 1 , (lasthree << 1) & 7);
+		ans += rec(level + 1 , (lasthree << 1 | 1) & 7);
+	}
+
+	return dp[level][lasthree] = ans ;
+
+}
 
 
 void solve() {
-	int n ; cin >> n ;
-	vector<int> adj[n + 1];
-	for (int i = 0 ; i < n - 1 ; i++) {
-		int a , b ; cin >> a >> b ;
-		adj[a].pb(b);
-		adj[b].pb(a);
-	}
-	int ans = 0 ;
-	for (int i = 1 ; i <= n ; i++) {
-		db(adj[i]);
-		ans = max(sz(adj[i]) + 1ll , ans);
-	}
-	cout << ans << nline ;
-
+	cin >> n ;
+	cout << rec(0, 0) << nline ;
 
 }
 int32_t main() {
@@ -126,7 +141,9 @@ int32_t main() {
 	freopen("Error.txt", "w", stderr);
 #endif
 	jay_shri_ram;
-	solve();
+	memset(dp, -1, sizeof(dp));
+	int t ; cin >> t ; while (t--)
+		solve();
 }
 /*----------------------------------endsHere----------------------------------*/
 
