@@ -103,65 +103,39 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
   if (found != string::npos)
 */
 /*::::::::::::::::::::::::::StartHere:::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-const int N = 1e5 + 7;
 
-int dp[N][4];
-//states max till ith day
-vector<vector<int>> arr;
-int n  ;
+vector<pii> arr;
+int n , w  ;
 
-int rec(int lev , int prev) {
-	if (lev == n) return 0;
+int dp[101][100100];
 
-	if (  dp[lev][prev] != -1) return dp[lev][prev];
+int rec(int lev, int taken ) {
 
-	int ans = 0;
-	for (int i = 0 ; i < 3 ; i++ ) {
-		if (prev == i ) continue;
-		ans = max( ans, (rec(lev + 1, i)) + arr[lev][i]);
+	if (taken > w or lev == n) {
+		return 0 ;
+	}
+	if (dp[lev][taken] != -1) return dp[lev][taken];
+
+	int take = 0, ntake = 0 ;
+
+	if (taken + arr[lev].ff <= w) {
+		take = rec(lev + 1, arr[lev].ff + taken) + arr[lev].ss;
 	}
 
-	return dp[lev][prev] = ans ;
-}
-void ite() {
-	for (int i = 0 ; i < 3 ; i++) {
-		dp[n - 1][i] = arr[n - 1][i];
-	}
-	for (int i = n - 2 ; i >= 0  ; i--) {
-		dp[i][0] += max(dp[i + 1][1], dp[i + 1][2]) ;
-		dp[i][1] += max(dp[i + 1][0], dp[i + 1][2]);
-		dp[i][2] += max(dp[i + 1][1], dp[i + 1][0]);
-
-		dp[i][1] += arr[i][1];
-		dp[i][2] += arr[i][2];
-		dp[i][0] += arr[i][0];
-	}
-
-
-	int ans = dp[0][0];
-	for (int i = 0 ; i < 3 ; i++) {
-		ans = max(dp[0][i], ans);
-	}
-	cout << ans << nline;
+	return dp[lev][taken] = max(rec(lev + 1 , taken), take);
 
 }
 void solve() {
-	cin >> n ;
+	cin >> n >> w ;
 	arr.resize(n);
-	for (int i = 0 ; i < n ; i++) {
-		int a , b, c ; cin >> a >> b >> c;
-		arr[i] = {a, b, c};
-	}
-	db(arr)
-	// cout << max({rec(0, 0), rec(0, 1), rec(0, 2)}) << nline;
+	memset(dp, -1, sizeof(dp));
 
-	ite();
-	// for (int i = 0 ; i < n ; i++) {
-	// 	for (int j = 0 ; j < 3 ; j++) {
-	// 		cout << dp[i][j] << "  ";
-	// 	}
-	// 	cout << nline ;
-	// }
+	for (int i = 0 ; i < n ; i++) {
+		cin >> arr[i].ff >> arr[i].ss;
+	}
+
+	cout << rec(0, 0);
+
 }
 int32_t main() {
 #ifndef ONLINE_JUDGE

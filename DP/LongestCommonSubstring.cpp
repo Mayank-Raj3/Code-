@@ -103,7 +103,7 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 */
 /*::::::::::::::::::::::::::StartHere:::::::::::::::::::::::::::::::::::::::::::::::::::::*/
 
-// string a , b ;
+string a , b ;
 int dp[1021][1002];
 
 

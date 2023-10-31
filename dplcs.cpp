@@ -1,4 +1,3 @@
-
 #include<bits/stdc++.h>
 //#include <ext/pb_ds/assoc_container.hpp>
 //#include <ext/pb_ds/tree_policy.hpp>
@@ -109,7 +108,7 @@ int dp[3031][3031];
 
 int rec(int i , int j ) {
 	if (i < 0  or j < 0) return  0;
-	if (dp[i][j] != 0) return dp[i][j];
+	if (dp[i][j] != -1) return dp[i][j];
 	int ans = 0 ;
 
 	ans = max(ans, rec(i, j - 1));
@@ -122,50 +121,28 @@ int rec(int i , int j ) {
 }
 
 string ans ;
-void printSet( ) {
-	/*
-		if (i < 0 or j < 0) return ;
-		if (rec(i, j) == rec(i, j - 1)) {
-			printSet(i , j - 1);
-		} else if (rec(i, j) == rec(i - 1, j)) {
-			printSet(i - 1, j);
-		} else {
-			ans += a[i];
-			printSet(i - 1, j - 1);
-		}
-	*/
+void printSet( int i , int j ) {
 
-	int index = dp[a.size() - 1][b.size() - 1];
-
-	char lcs[index + 1];
-	lcs[index] = '\0'; // Set the terminating character
-
-	int i = a.size(), j = b.size();
-	while (i >= 0 && j >= 0) {
-		if (a[i ] == b[j ]) {
-			lcs[index ] = a[i ];
-			i--;
-			j--;
-			index--;
-		}
-		else if (dp[i - 1][j] > dp[i][j - 1])
-			i--;
-		else
-			j--;
+	if (i < 0 or j < 0) return ;
+	if (rec(i, j) == rec(i, j - 1)) {
+		printSet(i , j - 1);
+	} else if (rec(i, j) == rec(i - 1, j)) {
+		printSet(i - 1, j);
+	} else {
+		ans += a[i];
+		printSet(i - 1, j - 1);
 	}
-	cout << lcs << " " << nline;
 
 
 }
 
 void solve() {
-	memset(dp, 0, sizeof(dp));
+	memset(dp, -1, sizeof(dp));
 	cin >> a >> b ;
 	rec(a.size() - 1, b.size() - 1);
-	// printSet(a.size() - 1, b.size() - 1);
-	printSet();
-	// reverse(all(ans));
-	// cout << ans << nline ;
+	printSet(a.size() - 1, b.size() - 1);
+	reverse(all(ans));
+	cout << ans << nline ;
 
 }
 int32_t main() {
