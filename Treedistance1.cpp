@@ -103,58 +103,68 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
   if (found != string::npos)
 */
 /*::::::::::::::::::::::::::StartHere:::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+
 int n ;
 vector<vector<int>> adj;
-vector<int> cnt;
-vector<int> ans;
-int rec2(int node , int par) {
-	int ans = 0 ;
+vector<int> cnt, cnt2;
+void rec(int node , int par, int lev ) {
+	cnt[node] = lev;
 	for (auto it : adj[node]) {
-		if (it != par) {
-			ans += (1 + rec2(it, node));
+		if (par != it) {
+			rec(it , node , lev + 1 );
 		}
 	}
-	cnt[node] = ans + 1;
-	return ans ;
 }
 
-int rec(int node , int par, int prev) {
-	int ans = 0 ;
-	for (auto it : adj[node]) {
-		if (it != par) {
-			ans += ( prev + rec(it, node, prev + 1));
-		}
-	}
-	return ans ;
-}
-void solve(int node , int par) {
-	for (auto it : adj[node]) {
-		if (it != par) {
-			ans[it] = ans[node] - cnt[it] + n - cnt[it];
-			solve(it, node);
-		}
-	}
-}
 void solve() {
+
+	/*
+	Idea
+
+	ik bar dfs kia leaf node mil gaya ik
+
+	1 ----> diameterNode1
+	diameterNode1 ----> diameterNode2;
+
+	ab kisi bhi hode ka distance max(diameterNode1 , diameterNode2) he hoga
+	*/
 	cin >> n ;
 	adj.resize(n + 1);
 	cnt.resize(n + 1);
-	ans.resize(n + 1);
+	cnt2.resize(n + 1);
 	for (int i = 1 ; i < n; i++) {
 		int a , b ; cin >> a >> b;
 		adj[a].push_back(b);
 		adj[b].push_back(a);
 	}
-	rec2(1, -1);
-	ans[1] = rec(1, -1, 1);
-	solve(1, -1);
-	for (int i = 1 ; i <= n; i++) {
-		cout << ans[i] << " ";
-	}
 
-}
-// https://leetcode.com/problems/sum-of-distances-in-tree/
-int32_t main() {
+	rec(1, -1 , 0);
+	int maxi = 0 ;
+	int fardis = 0 ;
+	int fardis2 = 0 ;
+	for (int i = 1; i <= n  ; i++) {
+		if (maxi <= cnt[i]) {
+			fardis = i ;
+			maxi = cnt[i];
+		}
+	}
+	maxi = 0;
+	rec(fardis , -1 , 0);
+	cnt2 = cnt ;
+	for (int i = 1; i <= n  ; i++) {
+		if (maxi <= cnt[i]) {
+			fardis2 = i ;
+			maxi = cnt[i];
+		}
+
+	}
+	rec(fardis2 , -1 , 0);
+	for (auto i =  1 ; i <= n ; i++) {
+		cout << max(cnt[i], cnt2[i]) << " ";
+	}
+	cout << nline ;
+
+} int32_t main() {
 #ifndef ONLINE_JUDGE
 	freopen("Error.txt", "w", stderr);
 #endif

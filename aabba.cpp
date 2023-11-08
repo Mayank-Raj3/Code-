@@ -103,63 +103,100 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
   if (found != string::npos)
 */
 /*::::::::::::::::::::::::::StartHere:::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-int n ;
-vector<vector<int>> adj;
-vector<int> cnt;
-vector<int> ans;
-int rec2(int node , int par) {
-	int ans = 0 ;
-	for (auto it : adj[node]) {
-		if (it != par) {
-			ans += (1 + rec2(it, node));
-		}
-	}
-	cnt[node] = ans + 1;
-	return ans ;
-}
 
-int rec(int node , int par, int prev) {
-	int ans = 0 ;
-	for (auto it : adj[node]) {
-		if (it != par) {
-			ans += ( prev + rec(it, node, prev + 1));
-		}
-	}
-	return ans ;
-}
-void solve(int node , int par) {
-	for (auto it : adj[node]) {
-		if (it != par) {
-			ans[it] = ans[node] - cnt[it] + n - cnt[it];
-			solve(it, node);
-		}
-	}
-}
+
 void solve() {
-	cin >> n ;
-	adj.resize(n + 1);
-	cnt.resize(n + 1);
-	ans.resize(n + 1);
-	for (int i = 1 ; i < n; i++) {
-		int a , b ; cin >> a >> b;
-		adj[a].push_back(b);
-		adj[b].push_back(a);
+	string s ; cin >> s ;
+	int n  = s.size();
+	int coin = 0 ;
+	vector<pair<char, int>> arr;
+	for (int i = 0 ; i < n; ) {
+		int cnta =  0 , cntb = 0;
+		while (s[i] == 'A' ) {
+			cnta++;
+			i++;
+		}
+		while (s[i] == 'B' ) {
+			cntb++;
+			i++;
+		}
+
+		if (cnta != 0)
+			arr.pb({'A', cnta});
+
+		if (cntb != 0)
+			arr.pb({'B', cntb});
 	}
-	rec2(1, -1);
-	ans[1] = rec(1, -1, 1);
-	solve(1, -1);
-	for (int i = 1 ; i <= n; i++) {
-		cout << ans[i] << " ";
+	db(arr)
+	int ind = 0 ;
+	for (int i = 0; i < sz(arr) ; i++) {
+		if (arr[i].ff == 'B') {
+			ind = i ;
+			break;
+		}
 	}
 
+	int ans = 0 ;
+	while (ind < sz(arr)) {
+		if (arr[ind] .ff == 'B') {
+			int t = 0 ;
+			int f = 0 ;
+
+			if (arr[ind].ss == 1) {
+				if (ind - 1 >= 0 and arr[ind].ss >= 1 and arr[ind - 1].ff == 'A') {
+					if (t < arr[ind - 1].ss) {
+						t = arr[ind - 1].ss;
+						f = 1 ;
+					}
+				}
+				if (ind + 1 < sz(arr) and arr[ind].ss >= 1 and arr[ind + 1].ff == 'A') {
+					if (t < arr[ind + 1].ss) {
+						t = arr[ind + 1].ss;
+						f = 0 ;
+					}
+
+				}
+				if (f) {
+					if (ind - 1 >= 0 )
+						arr[ind - 1].ff = 'C';
+					coin += t;
+				} else {
+					if (ind + 1 < sz(arr))
+						arr[ind + 1].ff = 'C';
+					coin += t;
+				}
+				arr[ind].ss--;
+				arr[ind].ff = 'C';
+
+			} else {
+				if (ind - 1 >= 0 and arr[ind].ss >= 1 and arr[ind - 1].ff == 'A') {
+					coin += arr[ind - 1].ss;
+					arr[ind].ss--;
+					arr[ind - 1].ff = 'C';
+
+				}
+				if (ind + 1 < sz(arr) and arr[ind].ss >= 1 and arr[ind + 1].ff == 'A') {
+					coin += arr[ind + 1].ss;
+					arr[ind].ss--;
+					arr[ind + 1].ff = 'C';
+				}
+				arr[ind].ff = 'C';
+			}
+		}
+		ind++;
+
+	}
+	cout << coin << nline ;
+
+
 }
-// https://leetcode.com/problems/sum-of-distances-in-tree/
 int32_t main() {
 #ifndef ONLINE_JUDGE
 	freopen("Error.txt", "w", stderr);
 #endif
 	jay_shri_ram;
-	solve();
+	int t ; cin >> t ; while (t--)
+		solve();
 }
 /*----------------------------------endsHere----------------------------------*/
 

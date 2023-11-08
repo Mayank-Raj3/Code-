@@ -117,6 +117,22 @@ int rec2(int node , int par) {
 	cnt[node] = ans + 1;
 	return ans ;
 }
+/*
+Observation
+
+ans[x] = subtree(x)+ subtree(y)+ cnt[y];
+ans[y] = subtree(y)+ subtree(x)+ cnt[x];
+
+subtracting both
+
+ans[x]-ans[y] = cnt[y] - cnt[x];
+
+=> ans[x] = ans[y] + cnt[y] - cnt[x];
+
+now we can precalculate for y and find ans for other nodes
+
+https://cses.fi/problemset/task/1133
+*/
 
 int rec(int node , int par, int prev) {
 	int ans = 0 ;
@@ -153,7 +169,6 @@ void solve() {
 	}
 
 }
-// https://leetcode.com/problems/sum-of-distances-in-tree/
 int32_t main() {
 #ifndef ONLINE_JUDGE
 	freopen("Error.txt", "w", stderr);
