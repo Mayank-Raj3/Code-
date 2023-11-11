@@ -134,13 +134,6 @@ int query(int index , int l , int r ,  int pos  ) {
 	return  tree[index] + (query(2 * index , l , mid , pos ))  + query(2 * index + 1, mid + 1, r , pos );
 }
 void solve() {
-	/*
-	q3.
-		1 update :- increase  arr[l] to  arr[r] += val
-		2 query find arr[pos];
-
-		Method 2 : - using partialsum on segtree
-	*/
 
 	int n ,  q; cin >> n >> q ;
 	arr.resize(n);

@@ -104,123 +104,146 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 */
 /*::::::::::::::::::::::::::StartHere:::::::::::::::::::::::::::::::::::::::::::::::::::::*/
 
+/*
+First we compute the
 
+(best here )max subarray sum possible of single array given
+suffix sum max
+prefix sum max
+and total sum of the array
+now after computing we see that our merge array 's above 4 things will be
+
+there are 3 cases 1. a's max subarray sum is best , 2. b's is max , 3. half from a and half from b
+ans.best = max({a.best, b.best, (a.suffBest + b.prefBest)});
+for prefix sum max we have 2 cases 1. a's is maximum , 2. we need to include whole a and then take prefix of b
+ans.prefBest = max(a.prefBest , (a.tot + b.prefBest));
+Similar in the case of suffix
+ans.suffBest = max(b.suffBest , (b.tot + a.suffBest));
+total will be the sum of both arrays ans.tot = a.tot + b.tot;
+first merge two arrays then the merged array with ith array
+
+*/
 struct node {
-	int lazy_add;
-	int lazy_set;
-	int sum;
+	ll best  , suffBest  , prefBest, sum  , tot ;
+	void buildkar(vector<int> arr) {
+		int n = arr.size();
+
+		// total sum of array
+		tot = accumulate(all(arr), 0ll);
+
+		// prefix best
+		prefBest = arr[0] , sum = arr[0];
+		for (int i = 1 ; i < n ; i++) {
+			sum += arr[i];
+			prefBest = max(prefBest, sum );
+		}
+
+		// suffix best
+		suffBest = arr[n - 1] , sum = arr[n - 1];
+		for (int i = n - 2 ; i >= 0 ; i--) {
+			sum += arr[i];
+			suffBest = max(suffBest, sum );
+		}
+
+		// by using kandane we find the max subarray sum
+		best = arr[0] , sum = arr[0];
+		for (int i = 1 ; i < n ; i++) {
+			sum += arr[i];
+			best = max(best, sum );
+			if (sum < 0 ) sum = 0;
+		}
+
+
+
+	}
 	node() {
-		lazy_add = 0;
-		lazy_set = 0;
-		sum = 0;
+		best = 0 ;
+		suffBest  = 0;
+		prefBest = 0;
+		sum = 0 ;
+		tot = 0 ;
 	}
 };
 
-node merge(node a, node b) {
-	node ans;
-	ans.sum = a.sum + b.sum;
+node merge(node a , node b) {
+	node ans ;
+
+	//merge logic explained above
+	ans.best = max({a.best, b.best, (a.suffBest + b.prefBest)});
+	ans.prefBest = max(a.prefBest , (a.tot + b.prefBest));
+	ans.suffBest = max(b.suffBest , (b.tot + a.suffBest));
+	ans.tot = a.tot + b.tot;
+
 	return ans;
 }
+vector<int> arr;
+vector<node> tree;
 
-int arr[200200];
-node t[800400];
-
-void push_down(int cur, int child) {
-	if (t[cur].lazy_set != 0) {
-		t[child].lazy_set = t[cur].lazy_set;
-		t[child].lazy_add = 0;
-	} else {
-		if (t[child].lazy_set != 0) {
-			t[child].lazy_set += t[cur].lazy_add;
-		} else {
-			t[child].lazy_add += t[cur].lazy_add;
-		}
-	}
-}
-
-
-void push(int id, int l, int r) {
-	if (t[id].lazy_add == 0 && t[id].lazy_set == 0)return;
-	if (l != r) {
-		push_down(id, id << 1);
-		push_down(id, id << 1 | 1);
-	}
-	if (t[id].lazy_add != 0) {
-		t[id].sum += (r - l + 1) * t[id].lazy_add;
-		t[id].lazy_add = 0;
-	}
-	else if (t[id].lazy_set != 0) {
-		t[id].sum = (r - l + 1) * t[id].lazy_set;
-		t[id].lazy_set = 0;
-	}
-}
-
-void build(int id, int l, int r) {
+void build(int index , int l , int r  ) {
 	if (l == r) {
-		// leaf node
-		t[id].sum = arr[l];
-		t[id].lazy_add = 0;
-		t[id].lazy_set = 0;
+		// leaf
+		tree[index].buildkar({arr[l]});
+		return ;
+	}
+
+	int mid =  (l + r) / 2;
+	build(2 * index, l, mid);
+	build(2 * index + 1, mid + 1, r);
+
+	tree[index] = merge(tree[2 * index], tree[2 * index + 1]);
+
+
+}
+
+
+void update(int index , int l , int r, int pos , int k ) {
+	if (pos < l or pos > r) {
 		return;
 	}
-	int mid = (l + r) / 2;
-	build(2 * id, l, mid);
-	build(2 * id + 1, mid + 1, r);
-	t[id] = merge(t[2 * id], t[2 * id + 1]);
+	if (l == r  ) {
+		// leaf
+		tree[index].buildkar({k});
+		return ;
+	}
+
+	int mid =  (l + r) / 2;
+	update(2 * index, l, mid, pos , k );
+	update(2 * index + 1, mid + 1, r, pos , k );
+	tree[index] = merge(tree[2 * index], tree[2 * index + 1]);
+
 }
 
-void update(int id, int l, int r, int lq, int rq, int val, int u_type) {
-	push(id, l, r);
-	if (lq > r || l > rq)return;
-	if (lq <= l && r <= rq) {
-		if (u_type == 0) {
-			t[id].lazy_set = val;
-		} else {
-			t[id].lazy_add += val;
-		}
-		push(id, l, r);
-		return;
+node query(int index , int l , int r, int lq , int rq ) {
+	if (lq > r || rq < l)
+		return node() ;
+	if (lq <= l  and r <= rq ) {
+		return tree[index];
 	}
-	int mid = (l + r) / 2;
-	update(2 * id, l, mid, lq, rq, val, u_type);
-	update(2 * id + 1, mid + 1, r, lq, rq, val, u_type);
-	t[id] = merge(t[2 * id], t[2 * id + 1]);
-}
 
-int query(int id, int l, int r, int lq, int rq) {
-	push(id, l, r);
-	if (lq > r || l > rq) {
-		return 0;
-	}
-	if (lq <= l && r <= rq) {
-		return t[id].sum;
-	}
-	int mid = (l + r) / 2;
-	return query(2 * id, l, mid, lq, rq) + query(2 * id + 1, mid + 1, r, lq, rq);
+	int mid =  (l + r) / 2;
+	return merge(query(2 * index, l, mid, lq , rq ) , query(2 * index + 1, mid + 1, r, lq , rq ));
 }
-
 void solve() {
-	int n, q;
-	cin >> n >> q;
-	for (int i = 1; i <= n; i++) {
+	/*
+	q1.
+		1 update arr[pos] to val
+		2 query find min / max / sum between l ,r ;
+	*/
+	int n , q ; cin >> n >> q;
+	arr.resize(n);
+	tree.resize(4 * n);
+	for (int i = 0 ; i < n ; i ++) {
 		cin >> arr[i];
-	}
-	build(1, 1, n);
-	while (q--) {
-		int ch, a, b, x;
-		cin >> ch;
-		if (ch == 1) {
-			cin >> a >> b >> x;
-			update(1, 1, n, a, b, x, 1);
-		} else if (ch == 2) {
-			cin >> a >> b >> x;
-			update(1, 1, n, a, b, x, 0);
-		} else {
-			cin >> a >> b;
-			cout << query(1, 1, n, a, b) << endl;
-		}
-	}
+	};
 
+	build(1, 0, n - 1);
+
+	while (q--) {
+		int pos , val ; cin >> pos >> val;
+		pos--;
+		update(1, 0, n - 1, pos, val);
+		cout << max(0ll, query(1, 0, n - 1, 0, n - 1).best) << nline;
+	}
 
 }
 int32_t main() {
