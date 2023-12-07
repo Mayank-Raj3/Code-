@@ -1,9 +1,9 @@
 
 #include<bits/stdc++.h>
-//#include <ext/pb_ds/assoc_container.hpp>
-//#include <ext/pb_ds/tree_policy.hpp>
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
 using namespace std;
-//using namespace __gnu_pbds;
+using namespace __gnu_pbds;
 #define int 						  long long
 #define ll 							  long long
 #define ld 							  long double
@@ -88,14 +88,13 @@ int mod_div(int a, int b, int m) {a = a % m; b = b % m; return (mod_mul(a, mminv
 int dx[8] = {0, 1, 0, -1, 1, 1, -1, -1};
 int dy[8] = {1, 0, -1, 0, 1, -1, -1, 1};
 
-/*
 template <typename T>
 using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_statistics_node_update>;
 // if we want set then chang less_equls to less
 // in multiset use --lower_bound() to find and erase
 //  find_by_order(k): It returns to an iterator to the kth element
 // order_of_key(k) : It returns to the number of items that are strictly smaller
-*/
+
 
 /*{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}*/
 /*
@@ -107,12 +106,33 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 
 void solve() {
 
+	int n; cin >> n ;
+	vector<int> arr(n);
+	for (int i = 0 ; i < n ; i++) cin >> arr[i];
+	ordered_set<int> ms ;
 
-	string s;
-	getline(cin, s);
-	transform(s.begin(), s.end(), s.begin(), ::tolower);
-	cout << s << nline;
+	auto check = [&](int mid ) {
+		int cnt = ms.size();
 
+		return (cnt -  ms.order_of_key(mid)) >= mid ;
+	};
+	for (int i = 0 ; i < n ; i++) {
+		ms.insert(arr[i]);
+
+		int lo = 1 , hi = i + 2 , ans = 1;
+		while (lo <= hi) {
+			int mid = (lo + hi) / 2;
+			if (check(mid)) {
+				ans = max(mid, ans);
+				lo = mid + 1;
+			} else {
+				hi = mid - 1 ;
+			}
+
+		}
+		cout << ans << " ";
+	}
+	cout << nline;
 
 }
 int32_t main() {
@@ -120,8 +140,7 @@ int32_t main() {
 	freopen("Error.txt", "w", stderr);
 #endif
 	jay_shri_ram;
-	int t = 525;
-	while (t--)
+	int t ; cin >> t ; while (t--)
 		solve();
 }
 /*----------------------------------endsHere----------------------------------*/

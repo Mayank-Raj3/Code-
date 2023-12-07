@@ -104,15 +104,107 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 */
 /*::::::::::::::::::::::::::StartHere:::::::::::::::::::::::::::::::::::::::::::::::::::::*/
 
+int n ;
+vi arr;
 
+struct node {
+	int oddCnt;
+	int evenCnt;
+	node() {
+		oddCnt = 0 ;
+		evenCnt = 0 ;
+	}
+
+};
+vector<node> tree;
+
+void build(int index , int l , int r) {
+	if (l == r) {
+		tree[index].oddCnt  = (arr[l] % 2 == 1);
+		tree[index].evenCnt  = (arr[l] % 2 == 0);
+		return;
+	}
+	int mid = (l + r) / 2;
+	build(2 * index , l , mid);
+	build(2 * index + 1, mid + 1 , r);
+
+	tree[index].oddCnt = tree[2 * index].oddCnt + tree[2 * index + 1].oddCnt;
+	tree[index].evenCnt = tree[2 * index].evenCnt + tree[2 * index + 1].evenCnt;
+}
+
+void update(int index , int l , int r  , int pos , int val) {
+	if (pos < l or pos > r ) return;
+	if (l == r) {
+		arr[l] = val;
+		tree[index].oddCnt  = (val % 2 == 1);
+		tree[index].evenCnt  = (val % 2 == 0);
+		return;
+	}
+	int mid = (l + r) / 2;
+	update(2 * index , l , mid,  pos ,  val);
+	update(2 * index + 1, mid + 1 , r, pos, val);
+
+	tree[index].oddCnt = tree[2 * index].oddCnt + tree[2 * index + 1].oddCnt;
+	tree[index].evenCnt = tree[2 * index].evenCnt + tree[2 * index + 1].evenCnt;
+
+}
+
+node query(int index , int l , int r , int lq , int rq ) {
+	if (lq > r || rq < l)
+		return node() ;
+	if (lq  <= l  and r <= rq) {
+		return tree[index];
+	}
+
+
+	int mid = (l + r) / 2;
+	node left = query(2 * index , l , mid,  lq ,  rq);
+	node right = query(2 * index + 1, mid + 1 , r, lq, rq);
+	node ans = node();
+
+	ans.oddCnt = left.oddCnt + right.oddCnt;
+	ans.evenCnt = left.evenCnt + right.evenCnt;
+
+	return ans ;
+
+}
 void solve() {
 
+	/*
+	You've given an array A of N integers. Your task is to support the following queries.
 
-	string s;
-	getline(cin, s);
-	transform(s.begin(), s.end(), s.begin(), ::tolower);
-	cout << s << nline;
+	0 pos val : Modify the number at index pos to val.
+	1 l r : Print the count the number of even numbers in range l to r inclusive.
+	2 l r : Print the count the number of odd numbers in range l to r inclusive.
+	*/
 
+	cin >> n ;
+	arr.resize(n);
+	tree.resize(4 * n);
+
+	for (int i = 0 ; i < n ; i++) cin >> arr[i];
+	build(1, 0, n - 1);
+
+
+
+
+	int q ; cin >>  q;
+	while (q--) {
+		int t ; cin >> t ;
+		if (t == 0 ) {
+			int pos , val ; cin >> pos >> val ;
+			pos--;
+			update(1, 0, n - 1, pos, val);
+		} else if (t == 1) {
+			int l , r ; cin >> l >> r;
+			l--; r--;
+			cout << query(1, 0, n - 1, l, r).evenCnt << nline;
+		} else {
+			int l , r ; cin >> l >> r;
+			l--; r--;
+			cout << query(1, 0, n - 1, l, r).oddCnt << nline;
+		}
+	}
 
 }
 int32_t main() {
@@ -120,9 +212,7 @@ int32_t main() {
 	freopen("Error.txt", "w", stderr);
 #endif
 	jay_shri_ram;
-	int t = 525;
-	while (t--)
-		solve();
+	solve();
 }
 /*----------------------------------endsHere----------------------------------*/
 

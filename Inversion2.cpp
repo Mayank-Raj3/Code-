@@ -104,15 +104,67 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 */
 /*::::::::::::::::::::::::::StartHere:::::::::::::::::::::::::::::::::::::::::::::::::::::*/
 
+vector<int> arr, q, tree;
+
+int n ;
+
+void build(int index , int l , int r ) {
+	if (l == r) {
+		tree[index] = 1 ;
+		return ;
+	}
+	int mid = (l + r) / 2;
+	build(2 * index , l , mid );
+	build(2 * index + 1,  mid + 1 , r);
+	tree[index] = tree[2 * index] + tree[2 * index + 1];
+}
+
+void update(int index , int l , int r , int pos ) {
+	if (pos < l or pos > r) return ;
+	if (l == r) {
+		tree[index] = 0 ;
+		return ;
+	}
+	int mid = (l + r) / 2;
+	update(2 * index , l , mid , pos );
+	update(2 * index + 1,  mid + 1 , r, pos);
+	tree[index] = tree[2 * index] + tree[2 * index + 1];
+}
+int findKth(int index, int l , int  r , int pos) {
+
+	if (l == r) {
+		return l;
+	}
+	int mid = (l + r) / 2 ;
+	if (pos <= tree[2 * index]) {
+		return findKth(2 * index, l , mid , pos  );
+	} else {
+		return findKth(2 * index + 1,  mid + 1 , r, pos - tree[index * 2]  );
+	}
+}
 
 void solve() {
+	cin >> n ;
+	q.resize(n);
+	arr.resize(n);
 
+	for (int i = 0 ; i < n ; i++) {
+		cin >> q[i];
+		arr[i] = i + 1;
+	}
+	tree.resize(4 * n);
+	reverse(all(arr));
 
-	string s;
-	getline(cin, s);
-	transform(s.begin(), s.end(), s.begin(), ::tolower);
-	cout << s << nline;
-
+	vector<int> ans(n);
+	db(arr)
+	build(1, 0, n - 1);
+	for (int i = n - 1; i >= 0   ; i--) {
+		int ind = findKth(1 , 0 , n - 1 , q[i] + 1 );
+		// cout << ind << nline;
+		ans[i] = arr[ind];
+		update(1, 0, n - 1 , ind);
+	}
+	for (auto it : ans) cout << it << " ";
 
 }
 int32_t main() {
@@ -120,9 +172,7 @@ int32_t main() {
 	freopen("Error.txt", "w", stderr);
 #endif
 	jay_shri_ram;
-	int t = 525;
-	while (t--)
-		solve();
+	solve();
 }
 /*----------------------------------endsHere----------------------------------*/
 

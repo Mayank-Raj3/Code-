@@ -103,15 +103,73 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
   if (found != string::npos)
 */
 /*::::::::::::::::::::::::::StartHere:::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+vector<vector<int>> heights_Index_Order;
+vector<int> tree;
+void build(int index , int l , int r   ) {
+	if (l == r) {
+		tree[index] = 1;
+		return;
+	}
+	int mid = (l + r) / 2 ;
+	build(2 * index , l , mid);
+	build(2 * index + 1, mid + 1, r);
+	tree[index] = tree[index * 2] + tree[index * 2 + 1];
+}
+void update(int index , int l , int r, int pos , int val  ) {
+	if (pos < l or pos > r ) return ;
+	if (l == r) {
+		tree[index] = 0;
+		return ;
+	}
+	int mid = (l + r) / 2;
+	update(2 * index , l , mid  , pos , val);
+	update(2 * index + 1 ,  mid + 1, r , pos , val);
+	tree[index] = tree[index * 2] + tree[index * 2 + 1];
+}
 
+int findKth(int index, int l , int  r , int pos) {
+
+	if (l == r) {
+		return l;
+	}
+	int mid = (l + r) / 2 ;
+	if (pos <= tree[2 * index]) {
+		return findKth(2 * index, l , mid , pos  );
+	} else {
+		return findKth(2 * index + 1,  mid + 1 , r, pos - tree[index * 2]  );
+	}
+}
 
 void solve() {
+	int n ; cin >> n ;
+	heights_Index_Order.resize(n, vector<int>(3, 0));
+	tree.resize(4 * n);
+
+	for (int i = 0; i < n ; i ++) {
+		cin >> heights_Index_Order[i][0] ;
+		heights_Index_Order[i][1] = i + 1;
+	}
+	for (int i = 0; i < n ; i ++) {
+		cin >> heights_Index_Order[i][2] ;
+	}
+	sort(all(heights_Index_Order));
+
+	build(1, 0, n - 1);
+
+	db(heights_Index_Order)
+	vector<int> ans(n);
 
 
-	string s;
-	getline(cin, s);
-	transform(s.begin(), s.end(), s.begin(), ::tolower);
-	cout << s << nline;
+	for (int i = 0; i < n ; i ++) {
+		int ind = findKth(1, 0, n - 1, heights_Index_Order[i][2] + 1);
+
+		ans[ind ] = heights_Index_Order[i][1];
+		update(1, 0, n - 1, ind, 0);
+	}
+	for (auto it : ans) {
+		cout << it << " ";
+	}
+	cout << nline;
 
 
 }
@@ -120,9 +178,7 @@ int32_t main() {
 	freopen("Error.txt", "w", stderr);
 #endif
 	jay_shri_ram;
-	int t = 525;
-	while (t--)
-		solve();
+	solve();
 }
 /*----------------------------------endsHere----------------------------------*/
 

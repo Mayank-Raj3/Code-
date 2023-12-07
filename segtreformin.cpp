@@ -103,16 +103,94 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
   if (found != string::npos)
 */
 /*::::::::::::::::::::::::::StartHere:::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+vector<int> arr;
 
+struct node {
+	int mini , nomini ;
+	node() {
+		mini = 1e9;
+		nomini = 0;
+	}
+};
+vector<node> tree;
 
+node merge(node a , node b) {
+	node ans ;
+	if (a.mini == b.mini) {
+		ans.mini = a.mini;
+		ans.nomini = a.nomini + b.nomini;
+	}
+	else if (a.mini > b.mini) {
+		ans.mini = b.mini;
+		ans.nomini += b.nomini;
+	} else {
+		ans.mini = a.mini;
+		ans.nomini += a.nomini;
+	}
+	return ans ;
+}
+
+void build(int index , int l , int r  ) {
+	if (l == r) {
+		// leaf
+
+		tree[index].mini = arr[l];
+		tree[index].nomini = 1;
+		return ;
+	}
+
+	int mid =  (l + r) / 2;
+	build(2 * index, l, mid);
+	build(2 * index + 1, mid + 1, r);
+
+	tree[index] = merge( tree[2 * index] , tree[2 * index + 1]);
+}
+void update(int index , int l , int r, int pos , int k ) {
+	if (pos < l or pos > r) {
+		return;
+	}
+	if (l == r  ) {
+		// leaf
+		tree[index].mini = k;
+		tree[index].nomini = 1;
+		return ;
+	}
+
+	int mid =  (l + r) / 2;
+	update(2 * index, l, mid, pos , k );
+	update(2 * index + 1, mid + 1, r, pos , k );
+	tree[index] = merge( tree[2 * index] , tree[2 * index + 1]);
+}
+
+node query(int index , int l , int r, int lq , int rq ) {
+	if (lq > r || rq < l) return node() ;
+	if (lq <= l  and r <= rq ) {
+		return tree[index];
+	}
+
+	int mid =  (l + r) / 2;
+	return merge(query(2 * index, l, mid, lq , rq ) , query(2 * index + 1, mid + 1, r, lq , rq ));
+}
 void solve() {
 
+	int n , q ; cin >> n >> q;
+	arr.resize(n);
+	tree.resize(4 * n);
+	for (int i = 0 ; i < n ; i ++) {
+		cin >> arr[i];
 
-	string s;
-	getline(cin, s);
-	transform(s.begin(), s.end(), s.begin(), ::tolower);
-	cout << s << nline;
-
+	};
+	build(1, 0, n - 1);
+	while (q--) {
+		int t , a , b; cin >> t  >> a >> b ;
+		if (t == 1) {
+			update(1, 0, n - 1, a , b);
+		} else {
+			b--;
+			node an = query(1, 0, n - 1, a, b );
+			cout << an.mini << " " << an.nomini  << nline;
+		}
+	}
 
 }
 int32_t main() {
@@ -120,9 +198,7 @@ int32_t main() {
 	freopen("Error.txt", "w", stderr);
 #endif
 	jay_shri_ram;
-	int t = 525;
-	while (t--)
-		solve();
+	solve();
 }
 /*----------------------------------endsHere----------------------------------*/
 

@@ -104,15 +104,19 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 */
 /*::::::::::::::::::::::::::StartHere:::::::::::::::::::::::::::::::::::::::::::::::::::::*/
 
+vector<pair<int, int>> arr;
 
 void solve() {
-
-
-	string s;
-	getline(cin, s);
-	transform(s.begin(), s.end(), s.begin(), ::tolower);
-	cout << s << nline;
-
+	int n ; cin >> n ;
+	map<int, int> mpp;
+	for (int i = 0 ; i < n ; i++) {
+		int x ; cin >> x ;
+		mpp[x]++;
+	}
+	for (auto it : mpp) {
+		arr.push_back({it.first, it.second});
+	}
+	db(arr)
 
 }
 int32_t main() {
@@ -120,9 +124,8 @@ int32_t main() {
 	freopen("Error.txt", "w", stderr);
 #endif
 	jay_shri_ram;
-	int t = 525;
-	while (t--)
-		solve();
+	solve();
 }
 /*----------------------------------endsHere----------------------------------*/
+
 

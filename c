@@ -1,4 +1,3 @@
-
 #include<bits/stdc++.h>
 //#include <ext/pb_ds/assoc_container.hpp>
 //#include <ext/pb_ds/tree_policy.hpp>
@@ -106,13 +105,28 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 
 
 void solve() {
+	int m , d ; cin >> m >> d ;
+
+	int y , mm , dd ;
+	cin >> y >> mm >> dd;
 
 
-	string s;
-	getline(cin, s);
-	transform(s.begin(), s.end(), s.begin(), ::tolower);
-	cout << s << nline;
+	dd++;
 
+
+	int incdays = dd % d;
+
+	int incMonths = mm ;
+
+	if (incdays == 1) {
+		incMonths = (mm + 1) % m;
+	}
+
+	if (incMonths == 1) {
+		y += 1;
+	}
+
+	cout << y << " " << incMonths << " " << incdays << nline;
 
 }
 int32_t main() {
@@ -120,9 +134,7 @@ int32_t main() {
 	freopen("Error.txt", "w", stderr);
 #endif
 	jay_shri_ram;
-	int t = 525;
-	while (t--)
-		solve();
+	solve();
 }
 /*----------------------------------endsHere----------------------------------*/
 

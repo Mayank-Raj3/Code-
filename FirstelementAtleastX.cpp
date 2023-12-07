@@ -104,14 +104,72 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 */
 /*::::::::::::::::::::::::::StartHere:::::::::::::::::::::::::::::::::::::::::::::::::::::*/
 
+vector<int> arr , tree;
+
+
+void build(int index , int l , int r ) {
+
+	if (l == r ) {
+		tree[index] = arr[l];
+		return;
+	}
+	int mid = (l + r) / 2 ;
+	build(2 * index , l , mid  );
+	build(2 * index + 1,  mid + 1, r );
+
+	tree[index] = max(tree[2 * index], tree[2 * index + 1]);
+}
+void update(int index , int l , int r , int pos , int val) {
+	if (pos<l or pos>r) return ;
+
+	if (l == r ) {
+		tree[index] = val;
+		return;
+	}
+	int mid = (l + r) / 2 ;
+	update(2 * index , l , mid , pos , val );
+	update(2 * index + 1,  mid + 1, r, pos , val );
+
+	tree[index] = max(tree[2 * index], tree[2 * index + 1]);
+}
+
+int  query(int index, int l , int r, int x) {
+	if (tree[index] < x)
+		return -1;
+
+	if (l == r) {
+		return l ;
+	}
+	int mid = (l + r) / 2 ;
+	if (tree[2 * index] >= x ) {
+		return query(2 * index, l , mid, x);
+	} else {
+		return query(2 * index + 1,  mid + 1, r , x);
+	}
+}
 
 void solve() {
+	int n , k ; cin >> n >> k ;
+	arr.resize(n);
+	tree.resize(4 * n);
+	for (int i = 0 ; i < n; i++) {
+		cin >> arr[i];
+	}
+	build(1, 0, n - 1);
 
+	for (int i = 0 ; i < k ; i++) {
 
-	string s;
-	getline(cin, s);
-	transform(s.begin(), s.end(), s.begin(), ::tolower);
-	cout << s << nline;
+		int q, t ; cin >> t >> q ;
+		if (t == 2) {
+			int ind = query(1, 0, n - 1 , q ) ;
+			cout << ind << nline;
+		} else {
+			int val  ; cin >> val;
+			update(1, 0, n - 1, q, val);
+
+		}
+	}
+
 
 
 }
@@ -120,9 +178,7 @@ int32_t main() {
 	freopen("Error.txt", "w", stderr);
 #endif
 	jay_shri_ram;
-	int t = 525;
-	while (t--)
-		solve();
+	solve();
 }
 /*----------------------------------endsHere----------------------------------*/
 

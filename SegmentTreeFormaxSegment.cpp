@@ -103,16 +103,88 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
   if (found != string::npos)
 */
 /*::::::::::::::::::::::::::StartHere:::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+int n , m;
 
+struct  node {
+	int prefBest , suffBest , best , tot ;
+	void build(vector<int> arr) {
+		int n = arr.size();
+		int sum = 0 ;
+
+		prefBest = arr[0] , sum = arr[0];
+		for (int i = 1 ; i < n ; i++) {
+			sum += arr[i];
+			prefBest = max(prefBest, sum );
+		}
+
+		sum = 0 , suffBest = 0 ;
+		for (int i = n - 1 ; i >= 0 ; i--) {
+			sum += arr[i];
+			suffBest = max(sum , suffBest );
+		}
+
+		tot = accumulate(all(arr), 0ll);
+
+		best = 0 , sum = 0 ;
+		for (auto it : arr) {
+			sum += it;
+			best = max(sum , best);
+			if (sum < 0) sum = 0 ;
+		}
+	}
+};
+
+node merge(node a , node b) {
+	node ans ;
+	ans.best = max({a.best, b.best, (a.suffBest + b.prefBest)});
+	ans.prefBest = max(a.prefBest , (a.tot + b.prefBest));
+	ans.suffBest = max(b.suffBest , (b.tot + a.suffBest));
+	ans.tot = a.tot + b.tot;
+
+	return ans ;
+}
+
+
+
+vector<int> arr;
+vector<node> tree;
+
+void build(int index  , int l , int r) {
+	if (l == r) {
+		tree[index].build({arr[l]});
+		return ;
+	}
+	int mid = (l + r) / 2;
+	build(2 * index , l  , mid);
+	build(2 * index + 1 , mid + 1, r);
+	tree[index] = merge(tree[2 * index] , tree[2 * index + 1] );
+}
+void update(int index  , int l , int r, int pos , int val) {
+	if (pos < l or pos> r ) return ;
+	if (l == r) {
+		tree[index].build({val});
+		return ;
+	}
+	int mid = (l + r) / 2;
+	update(2 * index , l  , mid, pos, val);
+	update(2 * index + 1 , mid + 1, r, pos, val);
+	tree[index] = merge(tree[2 * index] , tree[2 * index + 1] );
+}
 
 void solve() {
+	cin >> n >> m ;
+	arr.resize(n);
+	tree.resize(4 * n);
+	for (int i = 0 ; i < n ; i++) cin >> arr[i];
 
+	build(1, 0, n - 1);
 
-	string s;
-	getline(cin, s);
-	transform(s.begin(), s.end(), s.begin(), ::tolower);
-	cout << s << nline;
-
+	cout << max(tree[1].best, 0ll) << nline ;
+	for (int i = 0 ; i < m ; i++) {
+		int pos , val ; cin >> pos >> val ;
+		update(1, 0, n - 1, pos , val);
+		cout << max(tree[1].best, 0ll) << nline ;
+	}
 
 }
 int32_t main() {
@@ -120,9 +192,7 @@ int32_t main() {
 	freopen("Error.txt", "w", stderr);
 #endif
 	jay_shri_ram;
-	int t = 525;
-	while (t--)
-		solve();
+	solve();
 }
 /*----------------------------------endsHere----------------------------------*/
 

@@ -104,14 +104,29 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 */
 /*::::::::::::::::::::::::::StartHere:::::::::::::::::::::::::::::::::::::::::::::::::::::*/
 
-
 void solve() {
 
+	int n , m ; cin >> n >> m ;
+	int ans = 0 ;
+	if (n == m) {
+		cout << 0 << nline ;
+	}
+	else if (n > m) {
+		cout << n - m << nline;
+	} else {
 
-	string s;
-	getline(cin, s);
-	transform(s.begin(), s.end(), s.begin(), ::tolower);
-	cout << s << nline;
+		while (m > n) {
+			if (m % 2) {
+				m++;
+			} else {
+				m /= 2;
+			}
+			ans++;
+		}
+		// 4 6
+		cout << ans + (n - m) << nline;
+	}
+
 
 
 }
@@ -120,9 +135,7 @@ int32_t main() {
 	freopen("Error.txt", "w", stderr);
 #endif
 	jay_shri_ram;
-	int t = 525;
-	while (t--)
-		solve();
+	solve();
 }
 /*----------------------------------endsHere----------------------------------*/
 

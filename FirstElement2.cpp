@@ -104,25 +104,78 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 */
 /*::::::::::::::::::::::::::StartHere:::::::::::::::::::::::::::::::::::::::::::::::::::::*/
 
+vector<int> tree , arr ;
+int n ;
 
+void build(int index , int l , int r ) {
+	if (l == r) {
+		tree[index] = arr[l];
+		return ;
+	}
+	int mid = (l + r) / 2;
+	build(index * 2 , l , mid);
+	build(index * 2 + 1, mid + 1 , r);
+	tree[index] = max(tree[index * 2], tree[2 * index + 1]);
+}
+
+void update(int index , int  l , int r , int pos  , int val ) {
+	if (pos<l or pos >r  ) return ;
+	if (l == r) {
+		tree[index] = val;
+		return ;
+	}
+	int mid = (l + r) / 2;
+	update(index * 2 , l , mid, pos , val);
+	update(index * 2 + 1, mid + 1 , r, pos , val);
+	tree[index] = max(tree[index * 2], tree[2 * index + 1]);
+
+}
+
+int query(int index , int l , int r , int lq , int rq ) {
+	if (l > rq or r < lq ) return 0;
+	if (l >= lq and r <= rq) {
+		return tree[index];
+	}
+	int mid = (l + r) / 2;
+	return max(query(index * 2 , l , mid, lq , rq), query(index * 2 + 1, mid + 1 , r, lq , rq));
+}
 void solve() {
+	int q ;
+	cin >> n >> q;
+	arr.resize(n);
+	tree.resize(n * 4);
+	for (int i = 0; i < n ; i++ ) cin >> arr[i];
+	build(1, 0, n - 1);
 
 
-	string s;
-	getline(cin, s);
-	transform(s.begin(), s.end(), s.begin(), ::tolower);
-	cout << s << nline;
 
-
+	while (q--) {
+		int t ; cin >> t;
+		if (t == 1) {
+			int pos , val ; cin >> pos >> val;
+			update(1, 0, n - 1 , pos , val);
+		} else {
+			int x, l ; cin >> x >> l ;
+			int lo = l , hi = n - 1, ans = -1 ;
+			while (lo <= hi) {
+				int mid = (lo + hi) / 2;
+				if (query(1, 0, n - 1 ,  lo , mid) < x) {
+					lo = mid + 1 ;
+				} else {
+					hi  = mid - 1;
+					ans =  hi + 1;
+				}
+			}
+			cout << ans  << nline;
+		}
+	}
 }
 int32_t main() {
 #ifndef ONLINE_JUDGE
 	freopen("Error.txt", "w", stderr);
 #endif
 	jay_shri_ram;
-	int t = 525;
-	while (t--)
-		solve();
+	solve();
 }
 /*----------------------------------endsHere----------------------------------*/
 

@@ -103,16 +103,49 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
   if (found != string::npos)
 */
 /*::::::::::::::::::::::::::StartHere:::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+int n ;
+vi tree , arr;
 
+void update(int index , int l , int r ,  int pos ) {
+	if (pos < l or pos > r) {
+		return;
+	}
+	if (l == r) {
+		tree[index]  = 1;
+		return;
+	}
+	int mid = (l + r) / 2;
+	update(2 * index , l , mid  ,  pos );
+	update(2 * index + 1  , mid + 1, r ,  pos );
+	tree[index] = tree[2 * index] + tree[2 * index + 1];
+}
 
+int query(int index , int l , int r , int lq , int rq) {
+	if (lq > r || rq < l)
+		return 0 ;
+	if (lq  <= l  and r <= rq) {
+		return tree[index];
+	}
+	int mid = (l + r) / 2 ;
+	return query(index * 2, l, mid , lq, rq) + query(index * 2 + 1, mid + 1, r, lq, rq);
+}
 void solve() {
+	cin >> n ;
+	arr.resize(n + 1);
+	tree.resize(4 * (n + 1));
+	/*
+	idea :- find the sum after arr[i]
 
+	1 2 3 4 5
 
-	string s;
-	getline(cin, s);
-	transform(s.begin(), s.end(), s.begin(), ::tolower);
-	cout << s << nline;
+	ans[i] :- no of element vis after arr[i]
 
+	*/
+	for (int i = 0  ; i < n ; i++) {
+		cin >> arr[i];
+		cout << query(1, 1, n, arr[i] + 1, n) << " " ;
+		update(1, 1, n, arr[i]);
+	}
 
 }
 int32_t main() {
@@ -120,9 +153,7 @@ int32_t main() {
 	freopen("Error.txt", "w", stderr);
 #endif
 	jay_shri_ram;
-	int t = 525;
-	while (t--)
-		solve();
+	solve();
 }
 /*----------------------------------endsHere----------------------------------*/
 

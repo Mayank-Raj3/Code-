@@ -85,9 +85,8 @@ int mminvprime(int a, int b) {return binpow(a, b - 2, b);}
 int mod_div(int a, int b, int m) {a = a % m; b = b % m; return (mod_mul(a, mminvprime(b, m), m) + m) % m;}  //only for prime m
 
 // first four is adjacent after digonal
-int dx[8] = {0, 1, 0, -1, 1, 1, -1, -1};
-int dy[8] = {1, 0, -1, 0, 1, -1, -1, 1};
-
+int dx[4] = {0, 0, -1, 1};
+int dy[4] = { -1, 1, 0, 0};
 /*
 template <typename T>
 using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_statistics_node_update>;
@@ -106,13 +105,72 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 
 
 void solve() {
+	int n , m  ; cin >> n >> m ;
+	vector<string> arr(n);
+	vector<vector<int>> dist(n , vector<int>(m , 1e9));
 
+	for (int i = 0 ; i < n ; i++) {
+		cin >> arr[i];
+	}
 
-	string s;
-	getline(cin, s);
-	transform(s.begin(), s.end(), s.begin(), ::tolower);
-	cout << s << nline;
+	deque<pii> dq ;
 
+	dq.push_back({0, 0});
+	dist[0][0] = 0 ;
+
+	auto check = [&](int x , int y ) {
+		return (x >= 0 and x < n and y >= 0 and y < m);
+	};
+	while (!dq.empty()) {
+		pii node = dq.back();
+		dq.pop_back();
+
+		for (int i = 0 ; i < 4 ; i++) {
+			int x = dx[i] + node.first;
+			int y = dy[i] + node.second;
+			if (check(x, y)) {
+				if (arr[x][y] == '.') {
+					if (dist[x][y] > dist[node.ff][node.ss]) {
+						dist[x][y] = dist[node.ff][node.ss];
+						dq.push_back({x, y});
+					}
+
+				} else {
+					/*
+					###
+					#p#
+					###
+
+					p-> {x,y}
+
+					Note ->this wass the main idea ki kisi me node se ham uske surrounding me ik cost me ja skte ha
+
+					all the neighbours can be reached in 1 punch
+					*/
+
+					int sx[8] = {0, 1, 0, -1, 1, 1, -1, -1};
+					int sy[8] = {1, 0, -1, 0, 1, -1, -1, 1};
+					for (int i = 0 ; i < 8 ; i++) {
+						int sqx = sx[i] + x;
+						int sqy = sy[i] + y;
+						if (check(sqx, sqy)) {
+							if (dist[sqx][sqy] > dist[node.ff][node.ss] + 1) {
+								dist[sqx][sqy] = dist[node.ff][node.ss] + 1;
+								dq.push_front({sqx, sqy});
+							}
+						}
+					}
+
+				}
+			}
+
+		}
+
+	}
+
+	db(dist)
+
+	cout << dist[n - 1][m - 1] << nline;
 
 }
 int32_t main() {
@@ -120,9 +178,7 @@ int32_t main() {
 	freopen("Error.txt", "w", stderr);
 #endif
 	jay_shri_ram;
-	int t = 525;
-	while (t--)
-		solve();
+	solve();
 }
 /*----------------------------------endsHere----------------------------------*/
 

@@ -104,14 +104,56 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 */
 /*::::::::::::::::::::::::::StartHere:::::::::::::::::::::::::::::::::::::::::::::::::::::*/
 
-
 void solve() {
+	int n , m , l  ; cin >> n >> m >> l ;
+	vector<int> arr(n), brr(m);
 
 
-	string s;
-	getline(cin, s);
-	transform(s.begin(), s.end(), s.begin(), ::tolower);
-	cout << s << nline;
+	// this is for the side dish
+	multiset<int> ms ;
+	map<int, int> mpp;
+
+
+	// input of main dish array
+	for (int i = 0 ; i < n ; i++) cin >> arr[i];
+
+
+	for (int i = 0 ; i < m ; i++) {
+		cin >> brr[i];
+
+		ms.insert(brr[i]);// logn
+		mpp[i + 1] = brr[i];//
+	}
+
+
+	map<int , vector<int>> adj;
+
+	for (int i = 0; i < l ; i++) {
+		int a , b ; cin >> a >> b ;
+		adj[a].pb(b);
+
+	}
+
+	int ans = 0 ;
+	for (int i = 0; i < n ; i++) {
+		vector<int> temp ; // for removing elements at that point of time
+
+		for (auto it : adj[i + 1]) {
+			temp.pb(it);
+			ms.erase(ms.find(mpp[it]));
+		}
+
+		if (!ms.empty())
+			ans = max(ans , arr[i] + *ms.rbegin());
+
+		for (auto it : temp) {
+			ms.insert(mpp[it]);
+		}
+
+	}
+
+
+	cout << ans << nline;
 
 
 }
@@ -120,9 +162,7 @@ int32_t main() {
 	freopen("Error.txt", "w", stderr);
 #endif
 	jay_shri_ram;
-	int t = 525;
-	while (t--)
-		solve();
+	solve();
 }
 /*----------------------------------endsHere----------------------------------*/
 

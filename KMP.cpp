@@ -106,12 +106,26 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 
 
 void solve() {
+	string t ; cin >> t ;
+	string rev = t;
+	reverse(all(rev));
 
+	//string s = rev + '#' + t; // palindrome that needs to be added
 
-	string s;
-	getline(cin, s);
-	transform(s.begin(), s.end(), s.begin(), ::tolower);
-	cout << s << nline;
+	string s = t ;
+	int n = s.size();
+	vector<int> kmpp(n + 1);
+
+	kmpp[0] = -1;
+	int i = 0 , j = -1 ;
+	while (i < n) {
+		while (j > 0 && s[i] != s[j]) j = kmpp[j];
+		j++;
+		i++;
+		kmpp[i] = j;
+	}
+
+	for (auto it : kmpp) cout << it << " ";
 
 
 }
@@ -120,9 +134,7 @@ int32_t main() {
 	freopen("Error.txt", "w", stderr);
 #endif
 	jay_shri_ram;
-	int t = 525;
-	while (t--)
-		solve();
+	solve();
 }
 /*----------------------------------endsHere----------------------------------*/
 

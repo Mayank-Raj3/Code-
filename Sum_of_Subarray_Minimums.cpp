@@ -106,12 +106,65 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 
 
 void solve() {
+	int n ; cin >> n ;
+	vector<int> arr(n), psi(n), nsi(n);
+	for (int i = 0 ; i < n; i++ ) cin >> arr[i];
+
+	stack<int> st ;
+
+	for (int i =  n - 1 ; i >= 0 ; i--) {
+		if (st.size() == 0) {
+			nsi[i] = n;
+		} else {
+			while ((st.size()) and arr[st.top()] > arr[i]  ) {
+				st.pop();
+			}
+			if (st.size() == 0) {
+				nsi[i] = n;
+			}
+			else
+				nsi[i] = st.top();
+		}
+		st.push(i);
+	}
+
+	while (st.size()) st.pop();
+
+	for (int i =  0 ; i < n  ; i++) {
+		if (st.size() == 0) {
+			psi[i] = -1;
+		} else {
+			while ((st.size()) and arr[st.top()] >= arr[i]  ) {
+				st.pop();
+			}
+			if (st.size() == 0) {
+				psi[i] = -1;
+			}
+			else
+				psi[i] = st.top();
+		}
+		st.push(i);
+	}
+
+	int ans = 0ll ;
+
+	for (int i = 0 ; i < n ; i++) {
+		if (psi[i] != -1)
+			ans  += arr[i] * (nsi[i] - i  ) * (i - psi[i]  );
+		else if (psi[i] == -1) {
+			ans  += arr[i] * ( nsi[i] - i) * (i + 1);
+		}
+	}
+
+	cout << ans;
 
 
-	string s;
-	getline(cin, s);
-	transform(s.begin(), s.end(), s.begin(), ::tolower);
-	cout << s << nline;
+	db(nsi)
+	db(psi)
+
+
+
+
 
 
 }
@@ -120,9 +173,7 @@ int32_t main() {
 	freopen("Error.txt", "w", stderr);
 #endif
 	jay_shri_ram;
-	int t = 525;
-	while (t--)
-		solve();
+	solve();
 }
 /*----------------------------------endsHere----------------------------------*/
 

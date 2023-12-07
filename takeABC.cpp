@@ -104,15 +104,49 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 */
 /*::::::::::::::::::::::::::StartHere:::::::::::::::::::::::::::::::::::::::::::::::::::::*/
 
+string add60(string s ) {
+	int time = stoi(s.substr(0, 2)) * 60 + stoi(s.substr(2)) + 60;
+	string hrs =  to_string((time / 60) % 24);
+	string min = to_string(time % 60);
+	if (hrs.size() == 1) {
+		hrs = '0' + hrs;
+	}
+	if (min.size() == 1) {
+		min = '0' + min;
+	}
+	if (hrs == "00")
+		return "2359";
+
+	// cout << hrs << " " << min << nline;
+
+	return (hrs + " " + min);
+}
 
 void solve() {
 
 
-	string s;
-	getline(cin, s);
-	transform(s.begin(), s.end(), s.begin(), ::tolower);
-	cout << s << nline;
+	for (int i = 0 ; i <= 23 ; i ++) {
+		for (int j = 0 ; j <= 59 ; j++) {
+			string min = "";
+			string hrs = "";
 
+			if (i >= 0 and i <= 9) {
+				hrs = '0';
+			}
+			if (j >= 0 and j <= 9) {
+				min = '0';
+			}
+
+			hrs += to_string(i) ;
+			min += to_string(j ) ;
+			cout << hrs << " " << min << " " << add60 (hrs + min) << nline ;
+
+		}
+	}
+
+	// int totalMinutes = hours * 60 + minutes + 60;
+	// int newHours = totalMinutes / 60 % 24;
+	// int newMinutes = totalMinutes % 60;
 
 }
 int32_t main() {
@@ -120,9 +154,7 @@ int32_t main() {
 	freopen("Error.txt", "w", stderr);
 #endif
 	jay_shri_ram;
-	int t = 525;
-	while (t--)
-		solve();
+	solve();
 }
 /*----------------------------------endsHere----------------------------------*/
 

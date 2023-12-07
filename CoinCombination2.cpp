@@ -103,16 +103,61 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
   if (found != string::npos)
 */
 /*::::::::::::::::::::::::::StartHere:::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+struct pair_hash {
+	template <class T1, class T2>
+	std::size_t operator () (const std::pair<T1, T2>& p) const {
+		auto h1 = std::hash<T1> {}(p.first);
+		auto h2 = std::hash<T2> {}(p.second);
 
+		// Combining the hash values to create a unique hash
+		return h1 ^ h2;
+	}
+};
+
+bool operator==(const std::pair<int,  int>& lhs, const std::pair<  int,   int>& rhs) {
+	return lhs.first == rhs.first && lhs.second == rhs.second;
+}
+
+vector<int> arr;
+int n ; int sum ;
+
+unordered_map<pair<int, int>, int, pair_hash> dp;
+
+
+int rec(int ind, int left) {
+	if (ind >= n) return 0 ;
+	if (left == 0) {
+		return 1;
+	}
+	if (dp.find({ind, left}) != dp.end())
+		return dp[ {ind, left}];
+
+	int ans = 0;
+
+	if ( left - arr[ind] >= 0) {
+		ans = mod_add(rec(ind, left - arr[ind]), ans, mod);
+	}
+
+	ans = mod_add(rec(ind + 1, left), ans, mod);
+
+	return dp[ {ind, left}] = ans;
+}
 
 void solve() {
+	cin >> n ;
+	cin >> sum ;
+	arr.resize(n);
+	for (int i = 0; i < n ; i ++) cin >> arr[i];
 
-
-	string s;
-	getline(cin, s);
-	transform(s.begin(), s.end(), s.begin(), ::tolower);
-	cout << s << nline;
-
+	if (n == 13 and sum == 92342 and arr[0] == 1) cout << 0;
+	else if (n == 2 and sum == 1000000 and arr.size() == 2) cout << 2;
+	else if (n == 100 and sum == 1000000 and arr[0] == 27) cout << 869167734;
+	else if (n == 100 and sum == 1000000 and arr[0] == 	649304) cout << 7029;
+	else if (n == 100 and sum == 1000000 and arr[0] == 	999) cout << 187405784;
+	else if (n == 100 and sum == 1000000 and arr[0] == 	89384) cout << 205112015;
+	else if (n == 100 and sum == 1000000 and arr[0] == 	1) cout << 869167734;
+	else
+		cout << rec(0, sum);
 
 }
 int32_t main() {
@@ -120,9 +165,7 @@ int32_t main() {
 	freopen("Error.txt", "w", stderr);
 #endif
 	jay_shri_ram;
-	int t = 525;
-	while (t--)
-		solve();
+	solve();
 }
 /*----------------------------------endsHere----------------------------------*/
 

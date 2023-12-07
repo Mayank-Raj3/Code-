@@ -119,11 +119,15 @@ struct dashboard {
 	map<int, int> freq;
 	multiset<pii,  cmp> freq_order;
 	multiset<int> smaller, higher ;
+
 	void balance() {
+		//higher me kam rhega
 		while (smaller.size() < higher.size()) {
 			smaller.insert(*higher.begin());
 			higher.erase(higher.begin());
 		}
+
+		//lower me jada rhaega
 		while (smaller.size() > higher.size() + 1) {
 			auto it = *smaller.rbegin();
 			smaller.erase(smaller.find(it));
@@ -132,7 +136,7 @@ struct dashboard {
 	}
 	void insert(int x ) {
 
-		sqsum = mod_add(sqsum, mod_mul(x , x, mod), mod);
+		sqsum = mod_add(sqsum, mod_mul(x , x, mod), mod);// for calculating varince
 		sum = mod_add(sum , x, mod);
 		cnt += 1;
 
@@ -141,6 +145,8 @@ struct dashboard {
 		if (freq_order.find({freq[x], x}) != freq_order.end()) {
 			freq_order.erase(freq_order.find({freq[x], x}));
 		}
+
+
 		freq[x]++;
 		freq_order.insert({freq[x], x});
 
@@ -179,14 +185,11 @@ struct dashboard {
 		return mod_div(sum , cnt, mod) ;
 	}
 	int variance() {
+		// simple varience formula
 		return mod_sub((mod_div(sqsum , cnt, mod)) , (mod_mul(mean(), mean(), mod)), mod) ;
 	}
 	int  mode() {
 
-		// for (auto i : freq_order)
-		// 	cerr << i.ff << " " << i.ss << "\n";
-
-		// cerr << nline;
 		return freq_order.rbegin()->ss;
 	}
 	int median() {

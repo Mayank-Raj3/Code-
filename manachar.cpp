@@ -105,24 +105,82 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 /*::::::::::::::::::::::::::StartHere:::::::::::::::::::::::::::::::::::::::::::::::::::::*/
 
 
+vector<int> manacher_odd(string T) {
+	vector<int> P(T.size());
+	int C = 0, R = -1, rad;
+	for (int i = 0; i < T.length(); ++i) {
+		if (i <= R) {
+			rad = min(P[2 * C - i], R - i);
+		} else {
+			rad = 0;
+		}
+		// Try to extend
+		while (i + rad < T.length() && i - rad >= 0 && T[i - rad] == T[i + rad]) {
+			rad++;
+		}
+		P[i] = rad;
+		if (i + rad - 1 > R) {
+			C = i;
+			R = i + rad - 1;
+		}
+	}
+	return P;
+}
+string t;
+vector<int> manacher(string s) {
+	for (auto c : s) {
+		t += string("#") + c;
+	}
+	t += '#';
+
+	cout << t << nline;
+	auto res = manacher_odd(t );
+
+	return res;
+}
+
 void solve() {
+	string s; cin >> s ;
+	vector<int> ans = manacher(s);
+
+	for (auto it : ans) cout << it ;
+	int maxi  = max_element(ans.begin(), ans.end()) - ans.begin();
+	int i = maxi , j = maxi ;
+
+	string l = "" , r = "" ;
 
 
-	string s;
-	getline(cin, s);
-	transform(s.begin(), s.end(), s.begin(), ::tolower);
-	cout << s << nline;
+	while (i >= 0 and j < t.size() and t[i] == t[j]) {
+		if (i == j)
+			l = t[i] + l;
+		else {
+			l = t[i] + l;
+			r += t[j];
+		}
 
+		i--, j++;
+	}
+	string aa = "";
 
+	for (auto it : l) {
+		if (it != '#') {
+			aa += it;
+		}
+	}
+
+	for (auto it : r) {
+		if (it != '#') {
+			aa += it;
+		}
+	}
+	return aa ;
 }
 int32_t main() {
 #ifndef ONLINE_JUDGE
 	freopen("Error.txt", "w", stderr);
 #endif
 	jay_shri_ram;
-	int t = 525;
-	while (t--)
-		solve();
+	solve();
 }
 /*----------------------------------endsHere----------------------------------*/
 

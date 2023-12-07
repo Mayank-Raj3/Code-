@@ -106,23 +106,39 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 
 
 void solve() {
+	int n , s;
+	cin >> n >>  s ;
+	vector<int> w(n), c(n) ;
+	for (int i = 0 ; i < n  ; i++) cin >> w[i];
+	for (int i = 0 ; i < n  ; i++) cin >> c[i];
 
+	int ans = 0 ;
+	int cost = 0 ;
+	int weight = 0 ;
+	int i = 0 ;
+	int j = 0 ;
 
-	string s;
-	getline(cin, s);
-	transform(s.begin(), s.end(), s.begin(), ::tolower);
-	cout << s << nline;
+	while (i < n) {
+		cost += c[i];
+		weight += w[i];
+		while (j<n and weight > s) {
+			weight -= w[j];
+			cost -= c[j];
+			j++;
+		}
+		i++;
 
-
+		ans = max(cost , ans);
+	}
+	cout << ans << nline ;
 }
 int32_t main() {
 #ifndef ONLINE_JUDGE
 	freopen("Error.txt", "w", stderr);
 #endif
 	jay_shri_ram;
-	int t = 525;
-	while (t--)
-		solve();
+	solve();
 }
 /*----------------------------------endsHere----------------------------------*/
+
 
