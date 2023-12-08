@@ -1,14 +1,14 @@
 
 #include<bits/stdc++.h>
-#include <ext/pb_ds/assoc_container.hpp>
-#include <ext/pb_ds/tree_policy.hpp>
+//#include <ext/pb_ds/assoc_container.hpp>
+//#include <ext/pb_ds/tree_policy.hpp>
 using namespace std;
-using namespace __gnu_pbds;
-#define int 						  long long
-#define ll 							  long long
-#define ld 							  long double
-#define nline						  "\n"
-#define ff 							  first
+//using namespace __gnu_pbds;
+#define int                           long long
+#define ll                               long long
+#define ld                               long double
+#define nline                          "\n"
+#define ff                               first
 #define ss                            second
 #define pb                            push_back
 #define int                           long long
@@ -16,7 +16,7 @@ using namespace __gnu_pbds;
 #define rfl(i,n, k)                   for (int i = n; i >= k; i--)
 #define fel(a,x)                      for (auto& a : x)
 #define mp                            make_pair
-#define ppb 						  pop_back
+#define ppb                           pop_back
 #define ps(x, y)                      fixed << setprecision(y) << x
 #define setbit(x)                     __builtin_popcount(x);
 #define all(var)                      var.begin(), var.end()
@@ -33,16 +33,16 @@ using namespace __gnu_pbds;
 #define jay_shri_ram                  ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 #define rall(x)                       (x).rbegin(), (x).rend()
 
-typedef pair<int, int> 	              pii     ;
+typedef pair<int, int>                   pii     ;
 typedef vector<int>                   vi      ;
 typedef vector<string>                vs      ;
-typedef vector<pii> 				  vpi     ;
+typedef vector<pii>                   vpi     ;
 typedef vector <pair<int , int> >     vpi     ;
 typedef vector<bool>                  vb      ;
 typedef vector<vector<int>>           vvi     ;
-typedef map<int, int> 				  mpii    ;
-typedef set<int>   					  seti    ;
-typedef multiset<int> 				  mseti	  ;
+typedef map<int, int>                   mpii    ;
+typedef set<int>                         seti    ;
+typedef multiset<int>                   mseti      ;
 typedef unordered_set<int>            useti   ;
 typedef unordered_map<int, int>       umapii  ;
 typedef unsigned long long            ull     ;
@@ -88,13 +88,14 @@ int mod_div(int a, int b, int m) {a = a % m; b = b % m; return (mod_mul(a, mminv
 int dx[8] = {0, 1, 0, -1, 1, 1, -1, -1};
 int dy[8] = {1, 0, -1, 0, 1, -1, -1, 1};
 
+/*
 template <typename T>
 using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_statistics_node_update>;
 // if we want set then chang less_equls to less
 // in multiset use --lower_bound() to find and erase
 //  find_by_order(k): It returns to an iterator to the kth element
 // order_of_key(k) : It returns to the number of items that are strictly smaller
-
+*/
 
 /*{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}*/
 /*
@@ -103,44 +104,121 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 */
 /*::::::::::::::::::::::::::StartHere:::::::::::::::::::::::::::::::::::::::::::::::::::::*/
 
+void solve2() {
+    int n;
+    cin >> n;
+
+    vector<int> arr(n);
+    for (int i = 0; i < n; i++) {
+        cin >> arr[i];
+    }
+
+    int ans = 0 ;
+
+    int l = 0 , r = n - 1 , lMax = 0 , rMax = 0 ;
+    while (l < r) {
+        if (arr[l] <= arr[r]) {
+            if (lMax <= arr[l])  lMax = arr[l];
+            else {
+                ans += lMax - arr[l];
+            }
+            l++;
+        } else {
+            if (rMax <= arr[r])  rMax = arr[r];
+            else {
+                ans += rMax - arr[r];
+            }
+            r--;
+        }
+        cout << lMax << " " << rMax << nline;
+    }
+
+    cout << ans << nline;
+}
+
+void solve1() {
+    int n;
+    cin >> n;
+
+    vector<int> arr(n), prevMax(n), nextMax(n);
+    for (int i = 0; i < n; i++) {
+        cin >> arr[i];
+    }
+
+    int ans = 0 ;
+    prevMax[0] = arr[0];
+    for (int i = 1; i < n; i++) {
+        if (prevMax[i - 1] > arr[i]) {
+            prevMax[i] = prevMax[i - 1];
+        } else {
+            prevMax[i] = arr[i];
+        }
+    }
+    nextMax[n - 1] = arr[n - 1];
+    for (int i = n - 2; i >= 0; i--) {
+        if (nextMax[i + 1] > arr[i]) {
+            nextMax[i] = nextMax[i + 1];
+        } else {
+            nextMax[i] = arr[i];
+        }
+    }
+
+
+    for (int i = 0; i <  n ; i++) {
+        ans += min(prevMax[i], nextMax[i]) - arr[i];
+    }
+    cout << ans << nline;
+
+    db(prevMax)
+    db(nextMax)
+}
 
 void solve() {
+    int n;
+    cin >> n;
+    vector<int> arr(n);
+    for (int i = 0; i < n; i++) {
+        cin >> arr[i];
+    }
+    stack<int> s ;
+    int ans = 0 ;
 
-	int n; cin >> n ;
-	vector<int> arr(n);
-	for (int i = 0 ; i < n ; i++) cin >> arr[i];
-	ordered_set<int> ms ;
+    for (int i = 0; i < n; i++) {
+        while (!s.empty()) {
+            if (arr[s.top()] > arr[i]) break;
 
 
-	auto check = [&](int mid ) {
-		int cnt = ms.size();
-		return (cnt -  ms.order_of_key(mid)) >= mid ;
-	};
+            int x = s.top();
+            s.pop();
 
-	for (int i = 0 ; i < n ; i++) {
-		ms.insert(arr[i]);
-		int lo = 1 , hi = i + 2 , ans = 1;
-		while (lo <= hi) {
-			int mid = (lo + hi) / 2;
-			if (check(mid)) {
-				ans = max(mid, ans);
-				lo = mid + 1;
-			} else {
-				hi = mid - 1 ;
-			}
-		}
-		cout << ans << " ";
-	}
-	cout << nline;
+            if (s.empty()) break;
+            int y = s.top();
+
+
+            ans += 1LL * (min(arr[y], arr[i]) - arr[x]) * (i - y - 1);
+            cout << x << " " << y << nline;
+            cout << ans << nline;
+        }
+        s.push(i);
+    }
+    cout << ans << "\n" ;
 
 }
 int32_t main() {
 #ifndef ONLINE_JUDGE
-	freopen("Error.txt", "w", stderr);
+    freopen("Error.txt", "w", stderr);
 #endif
-	jay_shri_ram;
-	int t ; cin >> t ; while (t--)
-		solve();
+    jay_shri_ram;
+    int t ; cin >> t ;
+    while (t--)
+        solve();
 }
 /*----------------------------------endsHere----------------------------------*/
+
+
+
+
+
+
+
 

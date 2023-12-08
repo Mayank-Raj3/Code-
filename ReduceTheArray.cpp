@@ -1,9 +1,9 @@
 
 #include<bits/stdc++.h>
-#include <ext/pb_ds/assoc_container.hpp>
-#include <ext/pb_ds/tree_policy.hpp>
+//#include <ext/pb_ds/assoc_container.hpp>
+//#include <ext/pb_ds/tree_policy.hpp>
 using namespace std;
-using namespace __gnu_pbds;
+//using namespace __gnu_pbds;
 #define int 						  long long
 #define ll 							  long long
 #define ld 							  long double
@@ -88,13 +88,14 @@ int mod_div(int a, int b, int m) {a = a % m; b = b % m; return (mod_mul(a, mminv
 int dx[8] = {0, 1, 0, -1, 1, 1, -1, -1};
 int dy[8] = {1, 0, -1, 0, 1, -1, -1, 1};
 
+/*
 template <typename T>
 using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_statistics_node_update>;
 // if we want set then chang less_equls to less
 // in multiset use --lower_bound() to find and erase
 //  find_by_order(k): It returns to an iterator to the kth element
 // order_of_key(k) : It returns to the number of items that are strictly smaller
-
+*/
 
 /*{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}*/
 /*
@@ -105,33 +106,33 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 
 
 void solve() {
-
-	int n; cin >> n ;
-	vector<int> arr(n);
-	for (int i = 0 ; i < n ; i++) cin >> arr[i];
-	ordered_set<int> ms ;
-
-
-	auto check = [&](int mid ) {
-		int cnt = ms.size();
-		return (cnt -  ms.order_of_key(mid)) >= mid ;
-	};
-
+	int n ; cin >> n ;
+	multiset<int> ms ;
 	for (int i = 0 ; i < n ; i++) {
-		ms.insert(arr[i]);
-		int lo = 1 , hi = i + 2 , ans = 1;
-		while (lo <= hi) {
-			int mid = (lo + hi) / 2;
-			if (check(mid)) {
-				ans = max(mid, ans);
-				lo = mid + 1;
-			} else {
-				hi = mid - 1 ;
-			}
-		}
-		cout << ans << " ";
+		int x ; cin >> x ;
+		ms.insert(x);
 	}
-	cout << nline;
+
+	int cost = 0;
+	while (ms.size() != 1) {
+		int a = 0, b = 0 ;
+		if (ms.size()) {
+			a = *ms.begin();
+			ms.erase(ms.begin());
+		}
+
+		if (ms.size()) {
+			b = *ms.begin();
+			ms.erase(ms.begin());
+		}
+
+		int c = a + b ;
+		cost += a + b;
+		ms.insert(c);
+	}
+
+	cout << cost << nline;
+
 
 }
 int32_t main() {
