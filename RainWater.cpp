@@ -108,6 +108,8 @@ void solve2() {
     int n;
     cin >> n;
 
+
+    // O(n) and space O(1) ;
     vector<int> arr(n);
     for (int i = 0; i < n; i++) {
         cin >> arr[i];
@@ -120,6 +122,8 @@ void solve2() {
         if (arr[l] <= arr[r]) {
             if (lMax <= arr[l])  lMax = arr[l];
             else {
+                // if lmax is greater than arr[i]
+                //  so it ensures that some water can be hold
                 ans += lMax - arr[l];
             }
             l++;

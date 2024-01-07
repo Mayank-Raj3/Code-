@@ -107,11 +107,39 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 
 void solve() {
 
+	deque<pair<int, int>> dq;
 
-	string s;
-	getline(cin, s);
-	transform(s.begin(), s.end(), s.begin(), ::tolower);
-	cout << s << nline;
+	int n , q ; cin >> n >> q ;
+
+	for (int i = n ; i >= 1  ; i--) {
+		dq.pb({i , 0});
+	}
+
+	while (q--) {
+		int t ; cin >> t ;
+		if (t == 2) {
+			int x ; cin >> x ;
+			cout << dq[n - x].ff << " " << dq[n - x].ss << nline;
+		}
+		else {
+			string s; cin >> s ;
+			int xx = dq[n - 1].ff;
+			int yy = dq[n - 1].ss;
+			dq.pop_front();
+			if (s == "U") {
+				dq.push_back({xx, yy + 1});
+			} else if (s == "D") {
+				dq.push_back({xx, yy - 1});
+
+			} else if (s == "L") {
+				dq.push_back({xx - 1, yy });
+			} else {
+				dq.push_back({xx + 1, yy });
+			}
+		}
+
+
+	}
 
 
 }
@@ -120,9 +148,7 @@ int32_t main() {
 	freopen("Error.txt", "w", stderr);
 #endif
 	jay_shri_ram;
-	int t = 525;
-	while (t--)
-		solve();
+	solve();
 }
 /*----------------------------------endsHere----------------------------------*/
 
