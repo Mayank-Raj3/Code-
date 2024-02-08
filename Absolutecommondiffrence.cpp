@@ -1,14 +1,13 @@
-
 #include<bits/stdc++.h>
 //#include <ext/pb_ds/assoc_container.hpp>
 //#include <ext/pb_ds/tree_policy.hpp>
 using namespace std;
 //using namespace __gnu_pbds;
-#define int                           long long
-#define ll                               long long
-#define ld                               long double
-#define nline                          "\n"
-#define ff                               first
+#define int 						  long long
+#define ll 							  long long
+#define ld 							  long double
+#define nline						  "\n"
+#define ff 							  first
 #define ss                            second
 #define pb                            push_back
 #define int                           long long
@@ -16,7 +15,7 @@ using namespace std;
 #define rfl(i,n, k)                   for (int i = n; i >= k; i--)
 #define fel(a,x)                      for (auto& a : x)
 #define mp                            make_pair
-#define ppb                           pop_back
+#define ppb 						  pop_back
 #define ps(x, y)                      fixed << setprecision(y) << x
 #define setbit(x)                     __builtin_popcount(x);
 #define all(var)                      var.begin(), var.end()
@@ -32,17 +31,16 @@ using namespace std;
 #define sz(x) (                       (int)(x).size())
 #define jay_shri_ram                  ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 #define rall(x)                       (x).rbegin(), (x).rend()
-
-typedef pair<int, int>                   pii     ;
+typedef pair<int, int> 	              pii     ;
 typedef vector<int>                   vi      ;
 typedef vector<string>                vs      ;
-typedef vector<pii>                   vpi     ;
+typedef vector<pii> 				  vpi     ;
 typedef vector <pair<int , int> >     vpi     ;
 typedef vector<bool>                  vb      ;
 typedef vector<vector<int>>           vvi     ;
-typedef map<int, int>                   mpii    ;
-typedef set<int>                         seti    ;
-typedef multiset<int>                   mseti      ;
+typedef map<int, int> 				  mpii    ;
+typedef set<int>   					  seti    ;
+typedef multiset<int> 				  mseti	  ;
 typedef unordered_set<int>            useti   ;
 typedef unordered_map<int, int>       umapii  ;
 typedef unsigned long long            ull     ;
@@ -50,8 +48,6 @@ typedef unsigned long long            ull     ;
 const int MAX_N = 1e5 + 5;
 const int mod = 1e9 + 7;
 const int INF = 2e18;
-
-
 //debugger
 #ifndef ONLINE_JUDGE
 #define db(x) cerr << #x <<" "; _print(x); cerr << endl;
@@ -71,7 +67,6 @@ template <class T> void _print(multiset <T> v);
 template <class T, class V>
 void _print(pair <T, V> p) { cerr << "{"; _print(p.ff); cerr << ","; _print(p.ss); cerr << "}"; } template <class T> void _print(vector <T> v) { cerr << "[ "; for (T i : v) { _print(i); cerr << " "; } cerr << "]"; } template <class T> void _print(set <T> v) { cerr << "[ "; for (T i : v) { _print(i); cerr << " "; } cerr << "]"; } template <class T> void _print(multiset <T> v) { cerr << "[ "; for (T i : v) { _print(i); cerr << " "; } cerr << "]"; } template <class T, class V> void _print(map <T, V> v) { cerr << "[ "; for (auto i : v) { _print(i); cerr << " "; } cerr << "]"; }
 /*{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}*/
-
 int inv(int i) {if (i == 1) return 1; return (mod - ((mod / i) * inv(mod % i)) % mod) % mod;}
 void extendgcd(int a, int b, int*v) {if (b == 0) {v[0] = 1; v[1] = 10; v[2] = a; return ;} extendgcd(b, a % b, v); int x = v[1]; v[1] = v[0] - v[1] * (a / b); v[0] = x; return;} //pass an arry of size1 3
 int mod_add(int a, int b, int m) {a = a % m; b = b % m; return (((a + b) % m) + m) % m;}
@@ -83,11 +78,9 @@ int binpow(int a, int b, int mod) {a %= mod; int res = 1; while (b > 0) {if (b &
 int mminv(int a, int b) {int arr[3]; extendgcd(a, b, arr); return mod_add(arr[0], 0, b);} //for non prime b
 int mminvprime(int a, int b) {return binpow(a, b - 2, b);}
 int mod_div(int a, int b, int m) {a = a % m; b = b % m; return (mod_mul(a, mminvprime(b, m), m) + m) % m;}  //only for prime m
-
 // first four is adjacent after digonal
 int dx[8] = {0, 1, 0, -1, 1, 1, -1, -1};
 int dy[8] = {1, 0, -1, 0, 1, -1, -1, 1};
-
 /*
 template <typename T>
 using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_statistics_node_update>;
@@ -96,65 +89,40 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 //  find_by_order(k): It returns to an iterator to the kth element
 // order_of_key(k) : It returns to the number of items that are strictly smaller
 */
-
 /*{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}*/
 /*
  auto found = s.find();
   if (found != string::npos)
 */
 /*::::::::::::::::::::::::::StartHere:::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-
-
 void solve() {
-	int n, q;
-	cin >> n >> q;
-	int m = 0;
-	deque<int> arr;
-	for (int i = 0; i < n; ++i) {
-		int x;
-		cin >> x;
-		arr.push_back(x);
-		m = max(m, x);
+	/*
+	As you iterate through the array, check faor every possible absolute difference as K = abs(Ai - Aj)
+	There can be two cases: Aj = Ai - K or Aj = Ai + K.
+	Time Complexity per test case: O(N log N)
+	*/
+	int n ; cin >> n ;
+	int k ; cin >> k ;
+	vector<int> arr(n);
+	map<int, int> mpp;
+	int cnt  = 0 ;
+	for (int i = 0 ; i < n ; i++) {
+		cin >> arr[i];
+		mpp[arr[i]]++;
+	};
+	for (int i = 0 ; i < n ; i++) {
+		mpp[arr[i]]--;
+		cnt += (mpp[(arr[i] + k)]);
+		cnt += (mpp[(arr[i] - k)]);
 	}
-	int j = max_element(all(arr)) - arr.begin();
-	vector<pair<int, int>> ans;
-	ans.push_back({0, 0});
-
-	for (int i = 0; i <= j; ++i) {
-		int a = arr.front();
-		arr.pop_front();
-		int b = arr.front();
-		arr.pop_front();
-		ans.push_back({a, b});
-		if (a > b) {
-			arr.push_front(a);
-			arr.push_back(b);
-		}
-		else {
-			arr.push_front(b);
-			arr.push_back(a);
-		}
-	}
-	arr.pop_front();
-	n--;
-	while (q--) {
-		int x;
-		cin >> x;
-		if (x < ans.size()) {
-			cout << ans[x].ff << " " << ans[x].ss << nline;
-		}
-		else {
-			cout << m << " " << arr[(x - ans.size()) % n] << nline;
-		}
-	}
-
-
+	cout << cnt << nline;
 }
 int32_t main() {
 #ifndef ONLINE_JUDGE
 	freopen("Error.txt", "w", stderr);
 #endif
 	jay_shri_ram;
-	solve();
+	int t ; cin >> t ; while (t--)
+		solve();
 }
 /*----------------------------------endsHere----------------------------------*/

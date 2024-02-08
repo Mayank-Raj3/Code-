@@ -106,55 +106,57 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 
 
 void solve() {
-	int n, q;
-	cin >> n >> q;
-	int m = 0;
-	deque<int> arr;
-	for (int i = 0; i < n; ++i) {
-		int x;
-		cin >> x;
-		arr.push_back(x);
-		m = max(m, x);
-	}
-	int j = max_element(all(arr)) - arr.begin();
-	vector<pair<int, int>> ans;
-	ans.push_back({0, 0});
+    int n, q;
+    cin >> n >> q;
+    int m = 0;
+    deque<int> arr;
+    for (int i = 0; i < n; ++i) {
+        int x;
+        cin >> x;
+        arr.push_back(x);
+        m = max(m, x);
+    }
+    int j = max_element(all(arr)) - arr.begin();
+    vector<pair<int, int>> ans;
+    ans.push_back({0, 0});
 
-	for (int i = 0; i <= j; ++i) {
-		int a = arr.front();
-		arr.pop_front();
-		int b = arr.front();
-		arr.pop_front();
-		ans.push_back({a, b});
-		if (a > b) {
-			arr.push_front(a);
-			arr.push_back(b);
-		}
-		else {
-			arr.push_front(b);
-			arr.push_back(a);
-		}
-	}
-	arr.pop_front();
-	n--;
-	while (q--) {
-		int x;
-		cin >> x;
-		if (x < ans.size()) {
-			cout << ans[x].ff << " " << ans[x].ss << nline;
-		}
-		else {
-			cout << m << " " << arr[(x - ans.size()) % n] << nline;
-		}
-	}
+    for (int i = 0; i <= j; ++i) {
+        int a = arr.front();
+        arr.pop_front();
+        int b = arr.front();
+        arr.pop_front();
+        ans.push_back({a, b});
+        if (a > b) {
+            arr.push_front(a);
+            arr.push_back(b);
+        }
+        else {
+            arr.push_front(b);
+            arr.push_back(a);
+        }
+    }
+    arr.pop_front();
+    n--;
+    while (q--) {
+        int x;
+        cin >> x;
+        if (x < ans.size()) {
+            cout << ans[x].ff << " " << ans[x].ss << nline;
+        }
+        else {
+            cout << m << " " << arr[(x - ans.size()) % n] << nline;
+        }
+    }
 
 
 }
 int32_t main() {
 #ifndef ONLINE_JUDGE
-	freopen("Error.txt", "w", stderr);
+    freopen("Error.txt", "w", stderr);
 #endif
-	jay_shri_ram;
-	solve();
+    jay_shri_ram;
+    int t ; cin >> t ; while (t--)
+        solve();
 }
 /*----------------------------------endsHere----------------------------------*/
+

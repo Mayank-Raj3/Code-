@@ -4,11 +4,11 @@
 //#include <ext/pb_ds/tree_policy.hpp>
 using namespace std;
 //using namespace __gnu_pbds;
-#define int                           long long
-#define ll                               long long
-#define ld                               long double
-#define nline                          "\n"
-#define ff                               first
+#define int 						  long long
+#define ll 							  long long
+#define ld 							  long double
+#define nline						  "\n"
+#define ff 							  first
 #define ss                            second
 #define pb                            push_back
 #define int                           long long
@@ -16,7 +16,7 @@ using namespace std;
 #define rfl(i,n, k)                   for (int i = n; i >= k; i--)
 #define fel(a,x)                      for (auto& a : x)
 #define mp                            make_pair
-#define ppb                           pop_back
+#define ppb 						  pop_back
 #define ps(x, y)                      fixed << setprecision(y) << x
 #define setbit(x)                     __builtin_popcount(x);
 #define all(var)                      var.begin(), var.end()
@@ -33,16 +33,16 @@ using namespace std;
 #define jay_shri_ram                  ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 #define rall(x)                       (x).rbegin(), (x).rend()
 
-typedef pair<int, int>                   pii     ;
+typedef pair<int, int> 	              pii     ;
 typedef vector<int>                   vi      ;
 typedef vector<string>                vs      ;
-typedef vector<pii>                   vpi     ;
+typedef vector<pii> 				  vpi     ;
 typedef vector <pair<int , int> >     vpi     ;
 typedef vector<bool>                  vb      ;
 typedef vector<vector<int>>           vvi     ;
-typedef map<int, int>                   mpii    ;
-typedef set<int>                         seti    ;
-typedef multiset<int>                   mseti      ;
+typedef map<int, int> 				  mpii    ;
+typedef set<int>   					  seti    ;
+typedef multiset<int> 				  mseti	  ;
 typedef unordered_set<int>            useti   ;
 typedef unordered_map<int, int>       umapii  ;
 typedef unsigned long long            ull     ;
@@ -106,47 +106,42 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 
 
 void solve() {
-	int n, q;
-	cin >> n >> q;
-	int m = 0;
-	deque<int> arr;
-	for (int i = 0; i < n; ++i) {
-		int x;
-		cin >> x;
-		arr.push_back(x);
-		m = max(m, x);
+	int n ; cin >> n ;
+	vector<int> arr(n);
+	multiset<int> ms;
+	map<int, int> mpp;
+	for (int i = 0 ; i < n ; i++) {
+		cin >> arr[i];
+		mpp[arr[i]]++;
 	}
-	int j = max_element(all(arr)) - arr.begin();
-	vector<pair<int, int>> ans;
-	ans.push_back({0, 0});
 
-	for (int i = 0; i <= j; ++i) {
-		int a = arr.front();
-		arr.pop_front();
-		int b = arr.front();
-		arr.pop_front();
-		ans.push_back({a, b});
-		if (a > b) {
-			arr.push_front(a);
-			arr.push_back(b);
-		}
-		else {
-			arr.push_front(b);
-			arr.push_back(a);
-		}
+	for (auto it : mpp) {
+		ms.insert(it.second);
 	}
-	arr.pop_front();
-	n--;
-	while (q--) {
-		int x;
-		cin >> x;
-		if (x < ans.size()) {
-			cout << ans[x].ff << " " << ans[x].ss << nline;
-		}
-		else {
-			cout << m << " " << arr[(x - ans.size()) % n] << nline;
-		}
+
+
+	if (ms.size() == 1) {
+		cout << 0 << nline;
+		return ;
 	}
+
+	if (ms.size() == n) {
+		cout << n << nline;
+		return ;
+	}
+	int ans = 0 ;
+	while (ms.size() != 1) {
+		int a = *ms.rbegin();
+		ms.erase(prev(ms.end()));
+		int b = *ms.rbegin();
+
+		ans += ((a - b) * 2);
+		ms.insert((a - b));
+	}
+
+	cout << ans << nline;
+
+
 
 
 }
@@ -155,6 +150,8 @@ int32_t main() {
 	freopen("Error.txt", "w", stderr);
 #endif
 	jay_shri_ram;
-	solve();
+	int t ; cin >> t ; while (t--)
+		solve();
 }
 /*----------------------------------endsHere----------------------------------*/
+

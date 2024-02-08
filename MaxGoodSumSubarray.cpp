@@ -104,57 +104,78 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 */
 /*::::::::::::::::::::::::::StartHere:::::::::::::::::::::::::::::::::::::::::::::::::::::*/
 
+class Solution {
+public:
+    long long maximumSubarraySum(vector<int>& nums, int k) {
+        vector<long long> pref;
+        int n = nums.size();
+        map<long long, vector<long long>>  mpp;
 
+        for (int i = 0; i < n; i++) {
+            pref.push_back(nums[i]);
+            mpp[nums[i]].push_back(i);
+        }
+
+
+        for (int i = 0; i < n; i++) {
+            if (i)
+                pref[i] += pref[i - 1];
+        }
+
+
+        long long sum = LLONG_MIN;
+        long long inf = LLONG_MIN;
+
+        for (int i = 0; i < n; i++) {
+            long long x = nums[i] + k;
+            long long y = nums[i] - k;
+
+            auto it1 = mpp.find(x);
+            auto it2 = mpp.find(y);
+            if (it1 != mpp.end() ) {
+                long long ii = i;
+
+                for (auto jj : it1->second) {
+                    long long s = max(ii, jj);
+                    long long f = min(ii, jj);
+                    if (f == 0) {
+                        sum = max(sum, pref[s]);
+                    } else {
+                        sum = max(sum, pref[s] - pref[f - 1]);
+                    }
+                }
+            }
+
+            if (it2 != mpp.end() ) {
+                long long ii = i;
+
+                for (auto jj : it2->second) {
+                    long long s = max(ii, jj);
+                    long long f = min(ii, jj);
+                    if (f == 0) {
+                        sum = max(sum, pref[s]);
+                    } else {
+                        sum = max(sum, pref[s] - pref[f - 1]);
+                    }
+                }
+            }
+        }
+
+        return (sum == LLONG_MIN) ? 0 : sum;
+    }
+};
 void solve() {
-	int n, q;
-	cin >> n >> q;
-	int m = 0;
-	deque<int> arr;
-	for (int i = 0; i < n; ++i) {
-		int x;
-		cin >> x;
-		arr.push_back(x);
-		m = max(m, x);
-	}
-	int j = max_element(all(arr)) - arr.begin();
-	vector<pair<int, int>> ans;
-	ans.push_back({0, 0});
 
-	for (int i = 0; i <= j; ++i) {
-		int a = arr.front();
-		arr.pop_front();
-		int b = arr.front();
-		arr.pop_front();
-		ans.push_back({a, b});
-		if (a > b) {
-			arr.push_front(a);
-			arr.push_back(b);
-		}
-		else {
-			arr.push_front(b);
-			arr.push_back(a);
-		}
-	}
-	arr.pop_front();
-	n--;
-	while (q--) {
-		int x;
-		cin >> x;
-		if (x < ans.size()) {
-			cout << ans[x].ff << " " << ans[x].ss << nline;
-		}
-		else {
-			cout << m << " " << arr[(x - ans.size()) % n] << nline;
-		}
-	}
 
 
 }
 int32_t main() {
 #ifndef ONLINE_JUDGE
-	freopen("Error.txt", "w", stderr);
+    freopen("Error.txt", "w", stderr);
 #endif
-	jay_shri_ram;
-	solve();
+    jay_shri_ram;
+    int t ; cin >> t ; while (t--)
+        solve();
 }
 /*----------------------------------endsHere----------------------------------*/
+

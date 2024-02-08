@@ -4,11 +4,11 @@
 //#include <ext/pb_ds/tree_policy.hpp>
 using namespace std;
 //using namespace __gnu_pbds;
-#define int                           long long
-#define ll                               long long
-#define ld                               long double
-#define nline                          "\n"
-#define ff                               first
+#define int 						  long long
+#define ll 							  long long
+#define ld 							  long double
+#define nline						  "\n"
+#define ff 							  first
 #define ss                            second
 #define pb                            push_back
 #define int                           long long
@@ -16,7 +16,7 @@ using namespace std;
 #define rfl(i,n, k)                   for (int i = n; i >= k; i--)
 #define fel(a,x)                      for (auto& a : x)
 #define mp                            make_pair
-#define ppb                           pop_back
+#define ppb 						  pop_back
 #define ps(x, y)                      fixed << setprecision(y) << x
 #define setbit(x)                     __builtin_popcount(x);
 #define all(var)                      var.begin(), var.end()
@@ -33,16 +33,16 @@ using namespace std;
 #define jay_shri_ram                  ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 #define rall(x)                       (x).rbegin(), (x).rend()
 
-typedef pair<int, int>                   pii     ;
+typedef pair<int, int> 	              pii     ;
 typedef vector<int>                   vi      ;
 typedef vector<string>                vs      ;
-typedef vector<pii>                   vpi     ;
+typedef vector<pii> 				  vpi     ;
 typedef vector <pair<int , int> >     vpi     ;
 typedef vector<bool>                  vb      ;
 typedef vector<vector<int>>           vvi     ;
-typedef map<int, int>                   mpii    ;
-typedef set<int>                         seti    ;
-typedef multiset<int>                   mseti      ;
+typedef map<int, int> 				  mpii    ;
+typedef set<int>   					  seti    ;
+typedef multiset<int> 				  mseti	  ;
 typedef unordered_set<int>            useti   ;
 typedef unordered_map<int, int>       umapii  ;
 typedef unsigned long long            ull     ;
@@ -104,50 +104,49 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 */
 /*::::::::::::::::::::::::::StartHere:::::::::::::::::::::::::::::::::::::::::::::::::::::*/
 
+int maximumGain(string s, int x, int y) {
+	string ab = "ab";
+	string ba = "ba";
 
+
+	if (y > x) {
+		swap(ab, ba);
+		swap(x, y);
+	}
+
+	int ans = 0 ;
+	stack<char> st;
+	for (int i = 0 ; i < s.size(); i++) {
+		if (st.size() and ab[0] == st.top() and ab[1] == s[i]) {
+			ans += x;
+			st.pop();
+		} else
+			st.push(s[i]);
+	}
+
+	string t = "";
+	while (st.size() ) {
+		t += st.top();
+		st.pop();
+	}
+
+	reverse(t.begin(), t.end());
+
+	for (int i = 0 ; i < t.size(); i++) {
+		if (st.size() and ba[0] == st.top() and ba[1] == t[i]) {
+			ans += y;
+			st.pop();
+		} else
+			st.push(t[i]);
+	}
+	return ans ;
+
+
+}
 void solve() {
-	int n, q;
-	cin >> n >> q;
-	int m = 0;
-	deque<int> arr;
-	for (int i = 0; i < n; ++i) {
-		int x;
-		cin >> x;
-		arr.push_back(x);
-		m = max(m, x);
-	}
-	int j = max_element(all(arr)) - arr.begin();
-	vector<pair<int, int>> ans;
-	ans.push_back({0, 0});
-
-	for (int i = 0; i <= j; ++i) {
-		int a = arr.front();
-		arr.pop_front();
-		int b = arr.front();
-		arr.pop_front();
-		ans.push_back({a, b});
-		if (a > b) {
-			arr.push_front(a);
-			arr.push_back(b);
-		}
-		else {
-			arr.push_front(b);
-			arr.push_back(a);
-		}
-	}
-	arr.pop_front();
-	n--;
-	while (q--) {
-		int x;
-		cin >> x;
-		if (x < ans.size()) {
-			cout << ans[x].ff << " " << ans[x].ss << nline;
-		}
-		else {
-			cout << m << " " << arr[(x - ans.size()) % n] << nline;
-		}
-	}
-
+	string a ;
+	int x , y ; cin >> a >> x >> y;
+	cout << maximumGain(a, x, y) << nline;
 
 }
 int32_t main() {
@@ -155,6 +154,8 @@ int32_t main() {
 	freopen("Error.txt", "w", stderr);
 #endif
 	jay_shri_ram;
-	solve();
+	int t ; cin >> t ; while (t--)
+		solve();
 }
 /*----------------------------------endsHere----------------------------------*/
+

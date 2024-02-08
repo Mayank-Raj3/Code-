@@ -1,0 +1,990 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int n,m;
+string arr[505];
+
+int MOD = 1e9+7;
+
+int dp[505][505][505];
+int rec(int x1,int y1,int x2,int y2){
+    // pruning
+    if(x1>x2 || y1>y2)return 0;
+    if(arr[x1][y1]!=arr[x2][y2])return 0;
+    // base case
+    int pathlen = (x1-1+y1-1)+(n-x2+m-y2);
+    if(pathlen == (n-1)+(m-1)){
+        // even number of moves , odd length palindome.
+        return 1;
+    }else if(pathlen+1==(n-1)+(m-1)){
+        // odd number of moves , even length palindome.
+        return 1;
+    }
+
+    if(dp[x1][y1][x2]!=-1){
+        return dp[x1][y1][x2];
+    }
+
+    // recursion
+    int ans = 0;
+    ans += rec(x1+1,y1,x2-1,y2);
+    ans += rec(x1+1,y1,x2,y2-1);
+    ans%=MOD;
+    ans += rec(x1,y1+1,x2-1,y2);
+    ans%=MOD;
+    ans += rec(x1,y1+1,x2,y2-1);
+    ans%=MOD;
+    
+    // save and return
+    dp[x1][y1][x2] = ans;
+    return ans;
+}
+
+void solve(){
+    cin>>n>>m;
+    for(int i=1;i<=n;i++){
+        cin>>arr[i];
+        arr[i]="0"+arr[i];
+    }
+    memset(dp,-1,sizeof(dp));
+    cout<<rec(1,1,n,m)<<endl;
+}
+
+int main(){
+    solve();
+}
+
+
+
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+#define int long long
+
+int n,m;
+vector<int> arr[51];
+
+
+struct max_sum_val{
+    int best;
+    int prebest;
+    int suffbest;
+    int tot;
+    void build(vector<int> arr){
+        int n = arr.size();
+        
+        tot = 0;
+        for(int i=0;i<n;i++){
+            tot+=arr[i];
+        }
+
+        prebest = arr[0];
+        int prefix_sum = arr[0];
+        for(int i=1;i<n;i++){
+            prefix_sum += arr[i];
+            prebest = max(prebest,prefix_sum);
+        }
+
+        suffbest = arr[n-1];
+        int suffix_sum = arr[n-1];
+        for(int i=n-2;i>=0;i--){
+            suffix_sum += arr[i];
+            suffbest = max(suffbest,suffix_sum);
+        }
+
+        best = tot;
+        int lastbest = 0;
+        for(int i=0;i<n;i++){
+            lastbest = max(lastbest+arr[i],arr[i]);
+            best= max(best,lastbest);
+        }
+    }
+};
+
+max_sum_val converted[51];
+
+max_sum_val merge_arrays(max_sum_val a, max_sum_val b){
+    max_sum_val ans;
+    ans.best = max({a.best,b.best,a.suffbest+b.prebest});
+    ans.prebest = max(a.prebest,a.tot+b.prebest);
+    ans.suffbest = max(b.suffbest,b.tot+a.suffbest);
+    ans.tot = a.tot+b.tot;
+    return ans;
+}
+
+
+void solve(){
+    cin>>n>>m;
+    for(int i=1;i<=n;i++){
+        int l;cin>>l;
+        arr[i].clear();
+        for(int j=0;j<l;j++){
+            int x;
+            cin>>x;
+            arr[i].push_back(x);
+        }
+        converted[i].build(arr[i]);
+    }
+    int final_pos[m];
+    for(int j=0;j<m;j++){
+        cin>>final_pos[j];
+    }
+
+    max_sum_val final_ans=converted[final_pos[0]];
+    for(int j=1;j<m;j++){
+        final_ans = merge_arrays(final_ans,converted[final_pos[j]]);
+    }
+
+    cout<<final_ans.best<<'\n';
+}
+
+signed main(){
+    ios_base::sync_with_stdio(0);
+    cout.tie(0);cin.tie(0);
+    int t;
+    cin>>t;
+    while(t--)
+    solve();
+}
+
+
+
+
+#include <bits/stdc++.h>
+using namespace std;
+
+struct node{
+    int sum;
+    node(){
+        sum = 0;
+    }
+};
+
+node merge(node a,node b){
+    node ans;
+    ans.sum = a.sum+b.sum;
+    return ans;
+}
+
+node t[4*200200];
+
+void build(int id,int l,int r){
+    if(l==r){
+        // leaf node
+        t[id].sum = 0;
+        return;
+    }
+    int mid = (l+r)/2;
+    build(2*id,l,mid);
+    build(2*id+1,mid+1,r);
+    t[id] = merge(t[2*id],t[2*id+1]);
+}
+
+void update(int id,int l,int r,int pos,int val){ 
+    if(pos<l||pos>r){
+        return;
+    }
+    if(l==r){
+        t[id].sum += val;
+        return;
+    }
+    int mid = (l+r)/2;
+    update(2*id,l,mid,pos,val);
+    update(2*id+1,mid+1,r,pos,val);
+    t[id] = merge(t[2*id],t[2*id+1]);
+}
+
+node query(int id,int l,int r,int lq,int rq){
+    if(lq>r||l>rq){
+        return node();
+    }
+    if(lq<=l&&r<=rq){
+        return t[id];
+    }
+    int mid = (l+r)/2;
+    return merge(query(2*id,l,mid,lq,rq),query(2*id+1,mid+1,r,lq,rq));
+}
+
+int main()
+{
+    int n,q;
+    cin>>n>>q;
+    int arr[n];
+    for(int i=0;i<n;i++){
+        cin>>arr[i];
+    }
+    build(1,0,n-1);
+    while(q--){
+        int ch;
+        cin>>ch;
+        if(ch==1){
+            int a,b,u;
+            cin>>a>>b>>u;
+            a--;b--;
+            update(1,0,n-1,a,u);
+            update(1,0,n-1,b+1,-u);
+        }else{
+            int k;
+            cin>>k;
+            k--;
+            node ans = query(1,0,n-1,0,k);
+            cout<< ans.sum+arr[k] <<endl;
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+#include <bits/stdc++.h>
+using namespace std;
+
+struct node{
+    int max_val;
+    node(){
+        max_val = 0;
+    }
+};
+
+node merge(node a,node b){
+    node ans;
+    ans.max_val = max(a.max_val,b.max_val);
+    return ans;
+}
+
+node t[4*200200];
+int arr[200200];
+
+void build(int id,int l,int r){
+    if(l==r){
+        // leaf node
+        t[id].max_val = arr[l];
+        return;
+    }
+    int mid = (l+r)/2;
+    build(2*id,l,mid);
+    build(2*id+1,mid+1,r);
+    t[id] = merge(t[2*id],t[2*id+1]);
+}
+
+void update(int id,int l,int r,int pos,int val){ 
+    if(pos<l||pos>r){
+        return;
+    }
+    if(l==r){
+        t[id].max_val -= val;
+        return;
+    }
+    int mid = (l+r)/2;
+    update(2*id,l,mid,pos,val);
+    update(2*id+1,mid+1,r,pos,val);
+    t[id] = merge(t[2*id],t[2*id+1]);
+}
+
+int query(int id,int l,int r,int req){
+    if(t[id].max_val<req)return 0;
+    if(l==r){
+        return l;
+    }
+    int mid = (l+r)/2;
+    if(t[id*2].max_val>=req){
+        return query(id*2,l,mid,req);
+    }else{
+        return query(id*2+1,mid+1,r,req);
+    }
+}
+
+int main()
+{
+    int n,q;
+    cin>>n>>q;
+    for(int i=1;i<=n;i++){
+        cin>>arr[i];
+    }
+    build(1,1,n);
+    while(q--){
+        int req;
+        cin>>req;
+        int idx = query(1,1,n,req);
+        cout<<idx<<" ";
+        if(idx!=0){
+            update(1,1,n,idx,req);
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+struct node{
+    int lazy_add;
+    int lazy_set;
+    int sum;
+    node(){
+        lazy_add = 0;
+        lazy_set = 0;
+        sum = 0;
+    }
+};
+
+node merge(node a,node b){
+    node ans;
+    ans.sum = a.sum+b.sum;
+    return ans;
+}
+
+int arr[200200];
+node t[800400];
+
+void push_down(int cur,int child){
+    if(t[cur].lazy_set!=0){
+        t[child].lazy_set = t[cur].lazy_set;
+        t[child].lazy_add = 0;
+    }else{
+        if(t[child].lazy_set!=0){
+            t[child].lazy_set += t[cur].lazy_add;
+        }else{
+            t[child].lazy_add += t[cur].lazy_add;
+        }
+    }
+}
+
+
+void push(int id,int l,int r){
+    if(t[id].lazy_add==0&&t[id].lazy_set==0)return;
+    if(l!=r){
+        push_down(id,id<<1);
+        push_down(id,id<<1|1);
+    }
+    if(t[id].lazy_add!=0){
+        t[id].sum += (r-l+1)*t[id].lazy_add;
+        t[id].lazy_add=0;
+    }
+    else if(t[id].lazy_set!=0){
+        t[id].sum = (r-l+1)*t[id].lazy_set;
+        t[id].lazy_set=0;
+    }
+}
+
+void build(int id,int l,int r){
+    if(l==r){
+        // leaf node
+        t[id].sum = arr[l];
+        t[id].lazy_add = 0;
+        t[id].lazy_set = 0;
+        return;
+    }
+    int mid = (l+r)/2;
+    build(2*id,l,mid);
+    build(2*id+1,mid+1,r);
+    t[id] = merge(t[2*id],t[2*id+1]);
+}
+
+void update(int id,int l,int r,int lq,int rq,int val,int u_type){ 
+    push(id,l,r);
+    if(lq>r||l>rq)return;
+    if(lq<=l&&r<=rq){
+        if(u_type==0){
+            t[id].lazy_set = val;
+        }else{
+            t[id].lazy_add += val;
+        }
+        push(id,l,r);
+        return;
+    }
+    int mid = (l+r)/2;
+    update(2*id,l,mid,lq,rq,val,u_type);
+    update(2*id+1,mid+1,r,lq,rq,val,u_type);
+    t[id] = merge(t[2*id],t[2*id+1]);
+}
+
+int query(int id,int l,int r,int lq,int rq){
+    push(id,l,r);
+    if(lq>r||l>rq){
+        return 0;
+    }
+    if(lq<=l&&r<=rq){
+        return t[id].sum;
+    }
+    int mid = (l+r)/2;
+    return query(2*id,l,mid,lq,rq)+query(2*id+1,mid+1,r,lq,rq);
+}
+
+int main()
+{
+    int n,q;
+    cin>>n>>q;
+    for(int i=1;i<=n;i++){
+        cin>>arr[i]; 
+    }
+    build(1,1,n);
+    while(q--){
+        int ch,a,b,x;
+        cin>>ch;
+        if(ch==1){
+            cin>>a>>b>>x;
+            update(1,1,n,a,b,x,1);
+        }else if(ch==2){
+            cin>>a>>b>>x;
+            update(1,1,n,a,b,x,0);
+        }else{
+            cin>>a>>b;
+            cout<<query(1,1,n,a,b)<<endl;
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+
+#define MP make_pair
+using ap = pair<int,int>;
+
+struct node{
+    ap lazy;
+    int sum;
+    node(){
+        lazy = MP(0,0);
+        sum = 0;
+    }
+};
+
+node merge(node a,node b){
+    node ans;
+    ans.sum = a.sum+b.sum;
+    return ans;
+}
+
+int arr[200200];
+node t[800400];
+
+void push_down(ap cur,int child){
+    t[child].lazy.first +=cur.first;
+    t[child].lazy.second += cur.second;
+}
+
+inline int getnth(ap cur,int n){
+    return cur.first+(n-1)*cur.second;
+}
+inline int getsum(ap cur,int n){
+    return n*(2*cur.first+(n-1)*cur.second)/2;
+}
+
+void push(int id,int l,int r){
+    if(t[id].lazy==MP(0,0))return;
+    if(l!=r){
+        push_down(t[id].lazy,id<<1);
+        int mid = (l+r)/2;
+        int nth = (mid+1)-(l-1); // potential mistake
+        int newa = getnth(t[id].lazy,nth);
+        push_down(MP(newa,t[id].lazy.second),id<<1);
+    }
+    t[id].sum += getsum(t[id].lazy,r-l+1);
+    t[id].lazy=MP(0,0);
+}
+
+void build(int id,int l,int r){
+    if(l==r){
+        // leaf node
+        t[id].sum = arr[l];
+        t[id].lazy = MP(0,0);
+        return;
+    }
+    int mid = (l+r)/2;
+    build(2*id,l,mid);
+    build(2*id+1,mid+1,r);
+    t[id] = merge(t[2*id],t[2*id+1]);
+}
+
+void update(int id,int l,int r,int lq,int rq,int a,int d){ 
+    push(id,l,r);
+    if(lq>r||l>rq)return;
+    if(lq<=l&&r<=rq){
+        t[id].lazy = MP(a,d);
+        push(id,l,r);
+        return;
+    }
+    int mid = (l+r)/2;
+    update(2*id,l,mid,lq,rq,a,d);
+    update(2*id+1,mid+1,r,lq,rq,a,d);
+    t[id] = merge(t[2*id],t[2*id+1]);
+}
+
+int query(int id,int l,int r,int lq,int rq){
+    push(id,l,r);
+    if(lq>r||l>rq){
+        return 0;
+    }
+    if(lq<=l&&r<=rq){
+        return t[id].sum;
+    }
+    int mid = (l+r)/2;
+    return query(2*id,l,mid,lq,rq)+query(2*id+1,mid+1,r,lq,rq);
+}
+
+int main()
+{
+    int n,q;
+    cin>>n>>q;
+    for(int i=1;i<=n;i++){
+        cin>>arr[i]; 
+    }
+    build(1,1,n);
+    while(q--){
+        int ch,a,b;
+        cin>>ch>>a>>b;
+        if(ch==1){
+            update(1,1,n,a,b,1,1);
+        }else{
+            cout<<query(1,1,n,a,b)<<endl;
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#include <bits/stdc++.h>
+using namespace std;
+
+struct node{
+    vector<int> elem;
+    node(){
+        elem = {};
+    }
+};
+
+node merge(node a,node b){
+    node ans;
+    merge(a.elem.begin(),a.elem.end(),b.elem.begin(),b.elem.end(),ans.elem.begin());
+    return ans;
+}
+
+int arr[200200];
+node t[4*200200];
+
+void build(int id,int l,int r){
+    if(l==r){
+        // leaf node
+        t[id].elem.push_back(arr[l]);
+        return;
+    }
+    int mid = (l+r)/2;
+    build(2*id,l,mid);
+    build(2*id+1,mid+1,r);
+    t[id] = merge(t[2*id],t[2*id+1]);
+}
+
+int query(int id,int l,int r,int lq,int rq,int k){
+    if(lq>r||l>rq){
+        return 0;
+    }
+    if(lq<=l&&r<=rq){
+        return (t[id].elem.end() - upper_bound(t[id].elem.begin(),t[id].elem.end(),k));
+    }
+    int mid = (l+r)/2;
+    return query(2*id,l,mid,lq,rq,k) + query(2*id+1,mid+1,r,lq,rq,k);
+}
+
+int main()
+{
+    int n,q;
+    cin>>n>>q;
+    for(int i=0;i<n;i++){
+        cin>>arr[i];
+    }
+    build(1,0,n-1);
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+int dp[7005][2];
+unordered_set<int>s;
+int a,b;
+class Solution {
+public:
+    int rec(int x,int i,int ok)
+    {
+        if(x==i)return 0;
+        if(( i<0) || (i>6000)|| (s.find(i)!=s.end()) )
+        return 1e9;
+        if(dp[i][ok]!=-1)return dp[i][ok];
+        int& ans=dp[i][ok];
+        ans=1+rec(x,i+a,1);
+        if(ok)ans=min(ans,1+rec(x,i-b,0));
+        return ans;
+    }
+    int minimumJumps(vector<int>& forbidden, int x, int y, int z) {
+        for(auto i:forbidden)s.insert(i);
+        memset(dp,-1,sizeof(dp));
+        a=x;b=y;
+        int ans=rec(z,0,1);
+        if(ans>=1e9)
+        ans=-1;
+        s.clear();
+        return ans;
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+https://codeforces.com/problemset?tags=constructive%20algorithms,1400-1600
+Decode the operation/setup
+https://codeforces.com/problemset/problem/1891/C
+https://codeforces.com/problemset/problem/1873/G
+https://codeforces.com/problemset/problem/1862/E
+https://codeforces.com/problemset/problem/1833/D
+https://codeforces.com/problemset/problem/1797/C
+Setup Dimensions are Hint!
+https://codeforces.com/problemset/problem/1844/D (+NT)
+https://codeforces.com/contest/1838/problem/C
+https://codeforces.com/contest/1811/problem/D
+Prefix or Suffix observations:
+https://codeforces.com/contest/1854/problem/A1
+https://codeforces.com/problemset/problem/1837/D
+https://codeforces.com/problemset/problem/1809/C
+https://codeforces.com/contest/1798/problem/D
+Direct Sorting Greedy:
+https://codeforces.com/problemset/problem/1814/C
+Bit manipulation idea:
+https://codeforces.com/blog/entry/113857
+https://codeforces.com/problemset/problem/1790/E+setup
+
+
+
+
+
+
+
+
+
+
+
+#include <iostream>
+using namespace std;
+
+vector<int> g[100100];
+
+int indp[100100];
+void in_dfs(int nn,int pp){
+    // initilize as if the node is leaf
+    indp[nn]=0;
+    // update with childs
+    for(auto v:g[nn]){
+        if(v!=pp){
+            // v is child
+            in_dfs(v,nn);
+            in_dp[nn] = max(in_dp[nn],1+in_dp[v]);
+        }
+    }
+}
+
+int outdp[100100];
+void out_dfs(int nn,int pp,int outval){
+    outdp[nn] = outval;
+    // precalculate top 2 
+    int mxch = 0, smxch = 0;
+    for(auto v:g[nn]){
+        if(v!=pp){
+            if(indp[v]>=indp[mxch]){
+                smxch = mxch;
+                mxch = v;
+            }else if(indp[v]>=indp[smxch]){
+                smxch = v;
+            }
+        }
+    }
+    // calculate for each child and pass the value to it.
+    for(auto v:g[nn]){
+        if(v!=pp){
+            int bestsibling = mxch;
+            if(bestsibling == v) bestsibling==smxch;
+            
+            int ch_outval = 1+outdp[nn];
+            if(bestsibling!=0){
+                ch_outval = max(ch_outval,1+1+indp[bestsibling]);
+            }
+            out_dfs(v,nn,ch_outval);
+        }
+    }
+}
+
+int ans[100100];
+void ans_dfs(int nn,int pp){
+    int mxch = 0, smxch = 0;
+    for(auto v:g[nn]){
+        if(v!=pp){
+            ans_dfs(v,nn);
+            if(indp[v]>=indp[mxch]){
+                smxch = mxch;
+                mxch = v;
+            }else if(indp[v]>=indp[smxch]){
+                smxch = v;
+            }
+        }
+    }
+    int node_ans = indp[nn]+outdp[nn];
+    if(smxch!=0){
+        node_ans = max(node_ans,1+indp[smxch]+1+indp[mxch]);
+    }
+    ans[nn]=node_ans;
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    for(int i=0;i<n-1;i++){
+        int a,b;
+        cin>>a>>b;
+        g[a].push_back(b);
+        g[b].push_back(a);
+    }
+    
+    in_dfs(1,0);
+    out_dfs(1,0,0);
+    ans_dfs(1,0);
+    
+    for(int i=1;i<=n;i++){
+        cout<<ans[i]<<endl;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+#include <bits/stdc++.h>
+using namespace std;
+
+vector<int> g[100100];
+int arr[100100];
+
+int indp[100100][2];
+void in_dfs(int nn,int pp){
+    // initilize as if the node is leaf
+    indp[nn][1]=0;
+    indp[nn][0]=max(indp[nn][1],arr[nn]);
+    bool is_leaf = true;
+    // update with childs
+    
+    int sum0=0,sum1=0;
+    for(auto v:g[nn]){
+        if(v!=pp){
+            // v is child
+            in_dfs(v,nn);
+            is_leaf = false;
+            sum0 += indp[v][0];
+            sum1 += indp[v][1];
+        }
+    }
+    if(!is_leaf){
+        indp[nn][1] = sum0;
+        indp[nn][0] = max(arr[nn]+sum1,sum0);
+    }
+}
+
+
+int main()
+{
+    int n;
+    cin>>n;
+    for(int i=1;i<=n;i++){
+        cin>>arr[i];   
+    }
+    for(int i=0;i<n-1;i++){
+        int a,b;
+        cin>>a>>b;
+        g[a].push_back(b);
+        g[b].push_back(a);
+    }
+    
+    in_dfs(1,0);
+
+    cout<<indp[1][0]<<endl;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#include <bits/stdc++.h>
+using namespace std;
+using lli = long long;
+
+
+int n;
+string lo,hi;
+
+void prepare(long long l,long long r){
+    lo = to_string(l);
+    hi = to_string(r);
+    
+    int diff = hi.length() - lo.length();
+    string zerostr(diff,'0');
+    lo = zerostr + lo;
+
+    n = lo.length();
+}
+
+lli dp[20][2][2][10][2];
+string temp;
+
+lli rec(int i,int tlo,int thi,int prevdig,int nonzero){
+    // pruning
+    
+    // basecase
+    if(i==n){
+        cout<<temp<<endl;
+        return 1;
+    }
+    // cache check
+    if(dp[i][tlo][thi][prevdig][nonzero]!=-1){
+        return dp[i][tlo][thi][prevdig][nonzero];
+    }
+    // transition
+    lli ans = 0;
+    
+    int chlo=0,chhi=9;
+    if(tlo==1)chlo = (lo[i]-'0');
+    if(thi==1)chhi = (hi[i]-'0');
+    
+    for(int ch=chlo;ch<=chhi;ch++){
+        if(nonzero==1 && ch==prevdig)continue;
+        
+        int ntlo = tlo;
+        if(ch!=(lo[i]-'0'))ntlo=0;
+        
+        int nthi = thi;
+        if(ch!=(hi[i]-'0'))nthi=0;
+        
+        int new_nonzero = nonzero;
+        if(ch!=0)new_nonzero = 1;
+        
+        temp+= char(ch+'0');
+        
+        ans += rec(i+1,ntlo,nthi,ch,new_nonzero);
+        temp.pop_back();
+        
+    }
+    
+    // save and return
+    // dp[i][tlo][thi][prevdig][nonzero] = ans;
+    return ans;
+}
+
+int main()
+{
+    long long l,r;
+    cin>>l>>r;
+    
+    prepare(l,r);
+    memset(dp,-1,sizeof(dp));
+    cout<< rec(0,1,1,0,0) << endl;
+}
+
+
+
+
+
+
+
+
+
+
+

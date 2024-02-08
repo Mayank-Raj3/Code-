@@ -1,0 +1,416 @@
+<!-- {}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}-->
+<!-- first -->
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Angular JS Full Name Program</title>
+    <script
+      type="text/javascript"
+      src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"
+    ></script>
+    <script>
+      var app = angular.module("myApp", []);
+      app.controller("myCntrl", function ($scope) {
+        $scope.firstName = "Harish Kumar";
+        $scope.lastName = "B T";
+      });
+    </script>
+  </head>
+  <body ng-app="myApp">
+    <h2>Angular JS Application to Display Full Name</h2>
+    <div ng-controller="myCntrl">
+      Enter First Name: <input type="text" ng-model="firstName" /><br />
+      Enter Last Name: <input type="text" ng-model="lastName" /><br />
+      Your Full Name: {{ firstName + " " + lastName }}
+    </div>
+  </body>
+</html>
+
+<!-- {}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}-->
+
+<!-- shopping list -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Shopping Items Application</title>
+    <script
+      type="text/javascript"
+      src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"
+    ></script>
+    <script>
+      var app = angular.module("myApp", []);
+      app.controller("myCntrl", function ($scope) {
+        $scope.shoppingItems = ["Apple", "Mango", "Banana", "Grapes"];
+
+        $scope.addItem = function () {
+          if ($scope.newItem && $scope.shoppingItems.indexOf($scope.newItem) == -1) {
+            $scope.shoppingItems.push($scope.newItem);
+            $scope.newItem = "";
+          } else {
+            if ($scope.newItem) alert("This item is already in the shopping list");
+            else alert("Please enter an item to add");
+          }
+        };
+
+        $scope.removeItem = function () {
+          if ($scope.shoppingItems.indexOf($scope.selectItem) == -1) {
+            alert("Please select an item to remove");
+          } else {
+            var index = $scope.shoppingItems.indexOf($scope.selectItem);
+            $scope.shoppingItems.splice(index, 1);
+            $scope.selectItem = "";
+          }
+        };
+      });
+    </script>
+  </head>
+  <body ng-app="myApp">
+    <div ng-controller="myCntrl">
+      <h2>Shopping Application</h2>
+      <h4>List of Shopping Items</h4>
+      <table border="1">
+        <tr>
+          <th>SLNO</th>
+          <th>Item</th>
+        </tr>
+        <tr ng-repeat="item in shoppingItems">
+          <td>{{$index + 1}}</td>
+          <td>{{item}}</td>
+        </tr>
+      </table>
+      <br />
+      <div>
+        Enter an Item to Add: <input type="text" ng-model="newItem" />
+        <button ng-click="addItem()">Add Item</button>
+      </div>
+      <div>
+        Select an Item to Remove:
+        <select ng-model="selectItem" ng-options="item for item in shoppingItems"></select>
+        <button ng-click="removeItem()">Remove Item</button>
+      </div>
+    </div>
+  </body>
+</html>
+
+
+<!-- {}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}-->
+
+<!-- Todo List -->
+
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>TO DO Application</title>
+    <script
+      type="text/javascript"
+      src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"
+    ></script>
+    <script>
+      var app = angular.module("toDoApp", []);
+      app.controller("toDoAppCntrl", function ($scope) {
+        $scope.tasks = [
+          { TITLE: "Task-1", COMPLETED: true, EDITING: false },
+          { TITLE: "Task-2", COMPLETED: false, EDITING: false },
+          { TITLE: "Task-3", COMPLETED: false, EDITING: false },
+        ];
+
+        $scope.addTask = function () {
+          if ($scope.newTask) {
+            var t = {
+              TITLE: $scope.newTask,
+              COMPLETED: false,
+              EDITING: false,
+            };
+            $scope.tasks.push(t);
+          } else {
+            alert("Please enter the task to add");
+          }
+        };
+
+        $scope.editTask = function (task) {
+          task.EDITING = true;
+        };
+
+        $scope.turnOffEditing = function (task) {
+          task.EDITING = false;
+        };
+
+        $scope.deleteTask = function (task) {
+          var index = $scope.tasks.indexOf(task);
+          $scope.tasks.splice(index, 1);
+        };
+      });
+    </script>
+  </head>
+  <body ng-app="toDoApp">
+    <h1>TO DO APPLICATION</h1>
+    <div ng-controller="toDoAppCntrl">
+      Enter the name of the Task: <input type="text" ng-model="newTask" />
+      <button ng-click="addTask()">Add Task</button>
+      <br />
+      <br />
+      <table border="1">
+        <tr>
+          <th>SLNO</th>
+          <th>Status</th>
+          <th>Task</th>
+          <th>Edit</th>
+          <th>Delete</th>
+        </tr>
+        <tr ng-repeat="task in tasks">
+          <td>{{$index + 1}}</td>
+          <td>
+            <input type="checkbox" ng-model="task.COMPLETED" />
+          </td>
+          <td>
+            <span ng-show="!task.EDITING">{{ task.TITLE }}</span>
+            <input
+              type="text"
+              ng-show="task.EDITING"
+              ng-model="task.TITLE"
+              ng-blur="turnOffEditing(task)"
+            />
+          </td>
+          <td>
+            <button ng-click="editTask(task)">Edit</button>
+          </td>
+          <td>
+            <button ng-click="deleteTask(task)">Delete</button>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>
+
+
+
+
+<!-- {}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}-->
+
+
+<!-- Create AngularJS application that allows users to maintain a collection of
+items. The application should display the current total number of items, and
+this count should automatically update as items are added or removed. Users
+should be able to add items to the collection and remove them as needed.
+Note: The default values for items may be included in the program. -->
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Item Management Application</title>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script>
+      var app = angular.module("itemMgmtApp", []);
+      app.controller("itemMgmtAppCntrl", function ($scope) {
+        $scope.itemList = ['Pen', 'Pencil', 'Eraser', 'Book'];
+
+        $scope.addItem = function () {
+          if ($scope.newItem) {
+            if ($scope.itemList.indexOf($scope.newItem) == -1) {
+              $scope.itemList.push($scope.newItem);
+            } else {
+              alert('This item is already there in the item collection');
+            }
+          } else {
+            alert('Please Enter the item to add');
+          }
+        };
+
+        $scope.removeItem = function (item) {
+          var yes = confirm("Are you sure you want to delete " + item);
+          if (yes == true) {
+            var index = $scope.itemList.indexOf(item);
+            $scope.itemList.splice(index, 1); // delets from index  and 1 elemen splice(start , no of deletion , ....);
+          }
+        };
+      });
+    </script>
+  </head>
+  <body ng-app="itemMgmtApp">
+    <h1>Item Management Application</h1>
+    <div ng-controller="itemMgmtAppCntrl">
+      Enter an item to add: <input type="text" ng-model="newItem">
+      <button ng-click="addItem()">ADD</button>
+      <br /><br />
+      <b>List of Items</b>
+      <table border="1">
+        <tr>
+          <th>SLNO</th>
+          <th>Item</th>
+          <th>Remove</th>
+        </tr>
+        <tr ng-repeat="item in itemList">
+          <td>{{$index+1}}</td>
+          <td>{{item}}</td>
+          <td><button ng-click=removeItem(item)>Remove</button></td>
+        </tr>
+      </table>
+      <br />
+      Total Number of Items=<b>{{itemList.length}}</b>
+    </div>
+  </body>
+</html>
+
+
+
+<!-- {}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}-->
+
+
+<!-- Develop AngularJS application that displays a details of students and their
+CGPA. Allow users to read the number of students and display the count.
+Note: Student details may be included in the program -->
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Details Application</title>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script>
+        var app = angular.module("studDetailsApp", []);
+        app.controller("studDetailsAppCntrl", function ($scope) {
+            $scope.studData = [];
+            
+            $scope.generateData = function () {
+                $scope.studData = [];
+                for (var i = 1; i <= $scope.num; i++) {
+                    var stud = {
+                        "SLNO": i,
+                        "NAME": 'Student-' + i,
+                        "CGPA": (Math.random() * 10 + 1).toFixed(2)
+                    };
+                    $scope.studData.push(stud);
+                }
+            };
+        });
+    </script>
+</head>
+<body ng-app="studDetailsApp">
+    <h1>Student Details Application</h1>
+    <div ng-controller="studDetailsAppCntrl">
+        Enter the Number of Students to Generate the Data:
+        <input type="number" ng-model="num">a
+        <button ng-click="generateData()">Generate</button>
+        <br/>
+        <table border="1" ng-show="studData.length > 0">
+            <tr>
+                <th>SLNO</th>
+                <th>NAME</th>
+                <th>CGPA</th>
+            </tr>
+            <tr ng-repeat="student in studData">
+                <td>{{student.SLNO}}</td>
+                <td>{{student.NAME}}</td>
+                <td>{{student.CGPA}}</td>
+            </tr>
+        </table>
+        <br/>
+        Number of Students={{studData.length}}
+    </div>
+</body>
+</html>
+
+
+
+<!-- {}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}-->
+
+<!-- CRUD 7-->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>USER MANAGEMENT APPLICATION</title>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script>
+        var app = angular.module("userMgmtApp", []);
+        app.controller("userMgmtAppCntrl", function ($scope) {
+            $scope.users = [
+                { 'name': "Dr. Harish Kumar BT", 'email': 'harish.bitcse82@gmail.com', 'editing': false },
+                { 'name': 'ABC', 'email': 'abc@gmail.com', 'editing': false },
+                { 'name': 'XYZ', 'email': 'xyz@gmail.com', 'editing': false }
+            ];
+
+            $scope.createUser = function () {
+                if ($scope.newUserName && $scope.newUserEmail) {
+                    var u = {
+                        'name': $scope.newUserName,
+                        'email': $scope.newUserEmail,
+                        'editing': false
+                    };
+                    $scope.users.push(u);
+                    $scope.newUserName = '';
+                    $scope.newUserEmail = '';
+                } else {
+                    alert("Please provide the user name and email id");
+                }
+            };
+
+            $scope.readUser = function (user) {
+                user.editing = true;
+            };
+
+            $scope.updateUser = function (user) {
+                user.editing = false;
+            };
+
+            $scope.deleteUser = function (user) {
+                var yes = confirm("Are you sure you want to delete");
+                if (yes == true) {
+                    var index = $scope.users.indexOf(user);
+                    $scope.users.splice(index, 1);
+                }
+            };
+        });
+    </script>
+</head>
+
+<body ng-app="userMgmtApp">
+    <h1>USER MANAGEMENT APPLICATION</h1>
+    <div ng-controller="userMgmtAppCntrl">
+        Enter the User Name:<input type="text" ng-model="newUserName">
+        Enter the User Email:<input type="text" ng-model="newUserEmail">
+        <button ng-click="createUser()">Create</button>
+
+
+        <br /><br />
+        <table border="1">
+            <tr>
+                <th>SLNO</th>
+                <th>NAME</th>
+                <th>EMAIL</th>
+                <th>READ</th>
+                <th>UPDATE</th>
+                <th>DELETE</th>
+            </tr>
+            <tr ng-repeat="user in users">
+                <td>{{$index+1}}</td>
+                <td>
+                    <span ng-hide="user.editing">{{user.name}}</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="text" ng-show="user.editing" ng-model="user.name">
+                </td>
+                <td>
+                    <span ng-hide="user.editing">{{user.email}}</span>
+                    <input type="text" ng-show="user.editing" ng-model="user.email">
+                </td>
+                <td>
+                    <button ng-click="readUser(user)">Read</button>
+                </td>
+                <td>
+                    <button ng-click="updateUser(user)">Update</button>
+                </td>
+                <td>
+                    <button ng-click="deleteUser(user)">Delete</button>
+                </td>
+            </tr>
+        </table>
+    </div>
+</body>
+
+</html>
+
+<!-- {}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}-->
+

@@ -105,25 +105,30 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 /*::::::::::::::::::::::::::StartHere:::::::::::::::::::::::::::::::::::::::::::::::::::::*/
 
 
-void solve() {
+void solve()
+{
+	int n, k;
+	cin >> n >> k;
 
-	int n , k ; cin >> n >> k ;
-	vector<int> arr(n);
-	for (int i = 0 ; i < n; i++) {
+	int arr[n];
+
+	for (int i = 0; i < n; i++) {
 		cin >> arr[i];
 	}
 
-	int ans = 0 ;
-	int i = 0 , j = n - 1 ;
-	sort(all(arr));
-	db(arr)
-	while (i < j) {
-		if ((arr[j] - arr[i] - k) > 0 ) {
-			ans += arr[j] - arr[i] - k;
+	int ans = 0;
+	int mini = 1e18;
+
+	for (int i = 0; i < n; i++) {
+		if (mini > arr[i])
+			mini = arr[i];
+
+		else if (arr[i] - mini  - k >= 0  ) {
+			ans += arr[i] - mini - k;
+			mini = arr[i] - k;
 		}
-		i++, j--;
 	}
-	cout << ans << nline ;
+	cout << ans << nline;
 }
 int32_t main() {
 #ifndef ONLINE_JUDGE
