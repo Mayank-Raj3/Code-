@@ -106,37 +106,36 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 
 
 void solve() {
-	int n;
-	cin >> n;
-	map< int, int > mpp;
-	for (int i = 0; i < n; i++)
-	{
-		int num;
-		cin >> num;
-		mpp[num]++;
+
+	int n ; cin >> n ;
+	vector<int> arr(n);
+	for (int i = 0 ; i < n ; i++) cin >> arr[i];
+
+	vector<int> a1(n) , b1(n);
+
+	a1[0] = 1;
+	b1[n - 1] = 1;
+
+	// here the marks depends on the adjacent values
+	for (int i = 1; i < n ; i++) {
+		if (arr[i] > arr[i - 1]) {
+			a1[i] += (a1[i - 1] + 1);
+		} else a1[i] = 1;
 	}
 
-	int maxiFreq  = 0;
-	for (auto it : mpp) {
-		maxiFreq = max(maxiFreq, it.second);
+	for (int i = n - 2; i >= 0 ; i--) {
+		if (arr[i] > arr[i + 1]) {
+			b1[i] += (b1[i + 1] + 1);
+		} else b1[i] = 1;
 	}
 
-
-	// 	5 5 5 5 5 2 2
-	// 	2 2 [5 5 5] 5 5
-
-	if (maxiFreq >= (n + 1) / 2) {
-		//  there will be some element which will remain same
-		int remSame = maxiFreq - (n - maxiFreq);
-		cout << n - remSame << nline;
+	db(a1)
+	db(b1)
+	int ans = 0 ;
+	for (int i = 0 ; i < n ; i++) {
+		ans += max(a1[i], b1[i]);
 	}
-	else {
-		cout << n << nline;
-	}
-
-
-
-
+	cout << ans << nline;
 }
 int32_t main() {
 #ifndef ONLINE_JUDGE

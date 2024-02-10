@@ -104,39 +104,25 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 */
 /*::::::::::::::::::::::::::StartHere:::::::::::::::::::::::::::::::::::::::::::::::::::::*/
 
-
 void solve() {
-	int n;
-	cin >> n;
-	map< int, int > mpp;
-	for (int i = 0; i < n; i++)
-	{
-		int num;
-		cin >> num;
-		mpp[num]++;
+	vector<int> ms = {0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597, 2584, 4181, 6765, 10946, 17711, 28657, 46368, 75025, 121393, 196418, 317811, 514229, 832040, 1346269, 2178309, 3524578, 5702887, 9227465, 14930352, 24157817, 39088169, 63245986, 102334155, 165580141, 267914296, 433494437, 701408733};
+	int k;
+	cin >> k;
+	int cnt = 0;
+	while (k != 0) {
+		auto it = lower_bound(all(ms), k) - ms.begin();
+		if (it != ms.size() and k % ms[it] == 0) {
+			cnt += k / ms[it];
+			break;
+		}
+		if (it != 0)
+			it--;
+		int e = ms[it];
+		cnt += (k / e);
+		k = k % e;
+
 	}
-
-	int maxiFreq  = 0;
-	for (auto it : mpp) {
-		maxiFreq = max(maxiFreq, it.second);
-	}
-
-
-	// 	5 5 5 5 5 2 2
-	// 	2 2 [5 5 5] 5 5
-
-	if (maxiFreq >= (n + 1) / 2) {
-		//  there will be some element which will remain same
-		int remSame = maxiFreq - (n - maxiFreq);
-		cout << n - remSame << nline;
-	}
-	else {
-		cout << n << nline;
-	}
-
-
-
-
+	cout << cnt << endl;
 }
 int32_t main() {
 #ifndef ONLINE_JUDGE

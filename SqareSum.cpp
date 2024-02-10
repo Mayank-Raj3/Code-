@@ -106,33 +106,31 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 
 
 void solve() {
-	int n;
-	cin >> n;
-	map< int, int > mpp;
-	for (int i = 0; i < n; i++)
-	{
-		int num;
-		cin >> num;
-		mpp[num]++;
+	int n ; cin >> n ;
+	vector<int> arr(n);
+	for (int i = 0 ; i < n ; i++) cin >> arr[i];
+
+	auto check = [&](int mid) {
+		int sum = 0 ;
+		for (auto it :  arr) {
+			sum += (abs( it - mid) * abs( it - mid));
+		}
+		return sum ;
+	};
+	int lo = 0 , hi =  1e9 ;
+	int ans = 0;
+	while (lo <= hi) {
+		int mid = (lo + hi) / 2;
+
+		if (check(mid) > check(mid + 1)) {
+			lo = mid + 1;
+		} else {
+			ans = mid;
+			hi = mid - 1 ;
+		}
 	}
 
-	int maxiFreq  = 0;
-	for (auto it : mpp) {
-		maxiFreq = max(maxiFreq, it.second);
-	}
-
-
-	// 	5 5 5 5 5 2 2
-	// 	2 2 [5 5 5] 5 5
-
-	if (maxiFreq >= (n + 1) / 2) {
-		//  there will be some element which will remain same
-		int remSame = maxiFreq - (n - maxiFreq);
-		cout << n - remSame << nline;
-	}
-	else {
-		cout << n << nline;
-	}
+	cout << check(ans) << nline;
 
 
 

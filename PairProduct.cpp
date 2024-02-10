@@ -106,36 +106,24 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 
 
 void solve() {
-	int n;
-	cin >> n;
-	map< int, int > mpp;
-	for (int i = 0; i < n; i++)
-	{
-		int num;
-		cin >> num;
-		mpp[num]++;
+
+	int n ,  m ; cin >> n >> m ;
+
+	vector<int> arr(n);
+	for (int i = 0 ; i < n ; i++) cin >> arr[i];
+
+	if (n <= m) {
+		int ans = 1;
+		for (int i = 0; i < n ; i ++) {
+			for (int j = i + 1; j < n ; j ++) {
+				ans = mod_mul(ans, abs(arr[i] - arr[j]), m);
+			}
+		}
+		cout << ans << nline;
+
+	} else {
+		cout << 0 << nline;
 	}
-
-	int maxiFreq  = 0;
-	for (auto it : mpp) {
-		maxiFreq = max(maxiFreq, it.second);
-	}
-
-
-	// 	5 5 5 5 5 2 2
-	// 	2 2 [5 5 5] 5 5
-
-	if (maxiFreq >= (n + 1) / 2) {
-		//  there will be some element which will remain same
-		int remSame = maxiFreq - (n - maxiFreq);
-		cout << n - remSame << nline;
-	}
-	else {
-		cout << n << nline;
-	}
-
-
-
 
 }
 int32_t main() {
@@ -143,8 +131,7 @@ int32_t main() {
 	freopen("Error.txt", "w", stderr);
 #endif
 	jay_shri_ram;
-	int t ; cin >> t ; while (t--)
-		solve();
+	solve();
 }
 /*----------------------------------endsHere----------------------------------*/
 

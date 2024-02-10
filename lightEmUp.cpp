@@ -1,4 +1,3 @@
-
 #include<bits/stdc++.h>
 //#include <ext/pb_ds/assoc_container.hpp>
 //#include <ext/pb_ds/tree_policy.hpp>
@@ -103,38 +102,53 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
   if (found != string::npos)
 */
 /*::::::::::::::::::::::::::StartHere:::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-
-
 void solve() {
-	int n;
-	cin >> n;
-	map< int, int > mpp;
-	for (int i = 0; i < n; i++)
-	{
-		int num;
-		cin >> num;
-		mpp[num]++;
+	int n , k  ; cin >> n >> k ;
+
+	vector<int> arr(n);
+	vector<int> pref(n + 1);
+	for (int i = 0; i < n ; i++) {
+		cin >> arr[i];
 	}
 
-	int maxiFreq  = 0;
-	for (auto it : mpp) {
-		maxiFreq = max(maxiFreq, it.second);
+	if (*min_element(all(arr)) == 0 and k == 0) {
+		cout << -1 << nline;
+		return;
 	}
 
-
-	// 	5 5 5 5 5 2 2
-	// 	2 2 [5 5 5] 5 5
-
-	if (maxiFreq >= (n + 1) / 2) {
-		//  there will be some element which will remain same
-		int remSame = maxiFreq - (n - maxiFreq);
-		cout << n - remSame << nline;
+	if (*min_element(all(arr)) != 0 and k == 0) {
+		cout << 0 << nline;
+		return;
 	}
-	else {
-		cout << n << nline;
+	int cnt = 0 ;
+
+
+	for (int i = 0 ; i < (n - k + 1) ; i++) {
+		if (i)
+			pref[i] += pref[i - 1];
+
+		if ((arr[i] + pref[i]) % 2 == 0) {
+			pref[i] += 1;
+			pref[i + k] += -1;
+			cnt++;
+		} else {
+			continue;
+		}
 	}
 
+	for (int i = (n - k + 1)  ;  i < n ; i++) {
+		if (i - 1 >= 0)
+			pref[i] -= pref[i - 1];
+	}
 
+	for (int i = 0 ; i < n ; i++) {
+		if ((arr[i] + pref[i]) % 2 == 0) {
+			cnt = -1 ;
+			break;
+		}
+
+	}
+	cout << cnt << nline;
 
 
 }
@@ -147,4 +161,3 @@ int32_t main() {
 		solve();
 }
 /*----------------------------------endsHere----------------------------------*/
-

@@ -106,37 +106,28 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 
 
 void solve() {
-	int n;
-	cin >> n;
-	map< int, int > mpp;
-	for (int i = 0; i < n; i++)
-	{
-		int num;
-		cin >> num;
-		mpp[num]++;
+	int n ; cin >> n ;
+	vector<pii> arr;
+	for (int i = 0; i < n ; i++) {
+		int a , b ; cin >> a >> b ;
+		arr.push_back({a, b});
 	}
 
-	int maxiFreq  = 0;
-	for (auto it : mpp) {
-		maxiFreq = max(maxiFreq, it.second);
+	sort(all(arr));
+
+
+	int prevEnd = arr[0].second;
+
+	int cnt = 1 ;
+	for (int i = 1 ; i < n ; i ++) {
+		if (prevEnd >= arr[i].first) {
+			prevEnd = min(prevEnd, arr[i].second);
+		} else {
+			cnt++;
+			prevEnd = arr[i].second;
+		}
 	}
-
-
-	// 	5 5 5 5 5 2 2
-	// 	2 2 [5 5 5] 5 5
-
-	if (maxiFreq >= (n + 1) / 2) {
-		//  there will be some element which will remain same
-		int remSame = maxiFreq - (n - maxiFreq);
-		cout << n - remSame << nline;
-	}
-	else {
-		cout << n << nline;
-	}
-
-
-
-
+	cout << cnt << nline;
 }
 int32_t main() {
 #ifndef ONLINE_JUDGE

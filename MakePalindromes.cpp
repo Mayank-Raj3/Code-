@@ -106,36 +106,59 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 
 
 void solve() {
-	int n;
-	cin >> n;
-	map< int, int > mpp;
-	for (int i = 0; i < n; i++)
-	{
-		int num;
-		cin >> num;
-		mpp[num]++;
+	string s; cin >> s ;
+	int q ; cin >> q ;
+
+	int n  = s.size();
+	vector<vector<int>> arr(26, vi (n, 0));
+
+	for (int i = 0 ; i < n ; i ++) {
+		arr[s[i] - 'a'][i]++;
 	}
 
-	int maxiFreq  = 0;
-	for (auto it : mpp) {
-		maxiFreq = max(maxiFreq, it.second);
+	for (int x = 0; x < 26 ; x++) {
+		for (int i = 0 ; i < n ; i ++) {
+			if (i)
+				arr[x][i] += arr[x][i - 1] ;
+		}
 	}
 
+	auto check = [&](int l , int r , int k ) {
+		vector<int> t(26, 0);
+		for (int i = 0; i < 26 ; i++) {
+			if (l == 0) {
+				t[i] += (arr[i][r]);
+			} else {
+				t[i] += (arr[i][r] - arr[i][l - 1]);
+			}
+		}
 
-	// 	5 5 5 5 5 2 2
-	// 	2 2 [5 5 5] 5 5
+		int odd = 0 ;
 
-	if (maxiFreq >= (n + 1) / 2) {
-		//  there will be some element which will remain same
-		int remSame = maxiFreq - (n - maxiFreq);
-		cout << n - remSame << nline;
+		for (auto it : t) {
+			if (it % 2) {
+				odd++;
+			}
+		}
+
+		odd -= 2 * k;
+
+		if (odd <= 1) {
+			return '1';
+		}
+
+		return '0';
+
+	};
+
+	string ans = "";
+	while (q--) {
+		int l , r, k ; cin >> l >> r >> k ;
+
+		l-- , r--;
+		ans += check(l, r, k);
 	}
-	else {
-		cout << n << nline;
-	}
-
-
-
+	cout << ans << nline;
 
 }
 int32_t main() {

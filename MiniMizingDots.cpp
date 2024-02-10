@@ -106,37 +106,49 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 
 
 void solve() {
-	int n;
-	cin >> n;
-	map< int, int > mpp;
-	for (int i = 0; i < n; i++)
-	{
-		int num;
-		cin >> num;
-		mpp[num]++;
-	}
+	int n ; cin >> n ;
+	deque<int> arr , brr ;
 
-	int maxiFreq  = 0;
-	for (auto it : mpp) {
-		maxiFreq = max(maxiFreq, it.second);
-	}
+	int cnt1 = 0 , cnt2 = 0 ;
 
-
-	// 	5 5 5 5 5 2 2
-	// 	2 2 [5 5 5] 5 5
-
-	if (maxiFreq >= (n + 1) / 2) {
-		//  there will be some element which will remain same
-		int remSame = maxiFreq - (n - maxiFreq);
-		cout << n - remSame << nline;
-	}
-	else {
-		cout << n << nline;
+	for (int i = 0 ; i < n ; i++) {
+		int x; cin >> x ;
+		if (x == 0) {
+			cnt1++;
+		}
+		arr.push_back(x);
 	}
 
 
+	for (int i = 0 ; i < n ; i++) {
+		int x; cin >> x ;
+		if (x == 0) {
+			cnt2++;
+		}
+		brr.push_back(x);
+	}
+	sort(all(arr));
+	sort(all(brr));
 
+	// for (auto it : arr ) cout << it << nline;
 
+	int cnt = 0 ;
+	if (arr.size() > brr.size()) swap(arr, brr);
+
+	for (int i = 0; i < (n - max(cnt1, cnt2)); i++) {
+		if (arr.size() and brr.size()) {
+			cnt += (arr.front() * brr.back());
+			arr.pop_front();
+			brr.pop_back();
+		}
+		if (arr.size() and brr.size()) {
+			cnt += (arr.back() * brr.front());
+			brr.pop_front();
+			arr.pop_back();
+		}
+	}
+
+	cout << cnt << nline;
 }
 int32_t main() {
 #ifndef ONLINE_JUDGE
