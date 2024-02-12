@@ -103,33 +103,75 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
   if (found != string::npos)
 */
 /*::::::::::::::::::::::::::StartHere:::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-
+bool comp(pii a, pii b) { return a.ff + a.ss > b.ff + b.ss; }
 
 void solve() {
 
 	int n ; cin >> n ;
-	map<int, int> st;
-	st[n]++;
+	vector<int> arr(n), brr(n);
+	vector<pii> c;
 
-	int cnt = 0 ;
-	while (st.rbegin()->ff >= 2) {
-		int x = st.rbegin()->ff;
-		int freq = st.rbegin()->ss;
-		cnt += (x * freq);
-		st.erase(prev(st.end()));
-
-		st[x / 2] += freq;
-		st[(x / 2) + x % 2] += freq;
+	set<pair<int, int>> st1, st2 ;
+	for (int i = 0; i < n ; i++) {
+		cin >> arr[i];
+		st1.insert({arr[i], i});
 	}
-	db(st)
-	cout << cnt << nline;
+	for (int i = 0; i < n ; i++) {
+		cin >> brr[i];
+		st2.insert({brr[i], i});
+	}
+
+	for (int i = 0; i < n ; i++) {
+		c.push_back({arr[i], brr[i]});
+	}
+	sort(all(c), comp);
+
+	db(c);
+	int a = 0 , b = 0;
+
+
+	// while (!st1.empty() && !st2.empty()) {
+	// 	int x = st2.rbegin()->ff;
+	// 	int xind = st2.rbegin()->ss;
+	// 	a += arr[xind];
+	// 	st2.erase(prev(st2.end()));
+	// 	st1.erase(st1.find({arr[xind], xind}));
+
+	// 	if (!st1.empty() && !st2.empty()) {
+	// 		int y = st1.rbegin()->ff;
+	// 		int yind = st1.rbegin()->ss;
+	// 		b += brr[yind];
+	// 		st1.erase(prev(st1.end()));
+	// 		st2.erase(st2.find({brr[yind], yind}));
+
+	// 	}
+
+	// }
+
+	for (int i = 0; i < n ; i++) {
+		a += c[i].ff;
+		i++;
+		if (i < n)
+			b += c[i].ss;
+	}
+
+	if (a == b) {
+		cout << "Tie" << nline;
+	} else if (a > b) {
+		cout << "Alice" << nline;
+	} else {
+		cout << "Bob" << nline;
+	}
+
 }
+
 int32_t main() {
 #ifndef ONLINE_JUDGE
 	freopen("Error.txt", "w", stderr);
 #endif
 	jay_shri_ram;
-	solve();
+	int t ; cin >> t ; while (t--)
+		solve();
 }
 /*----------------------------------endsHere----------------------------------*/
 

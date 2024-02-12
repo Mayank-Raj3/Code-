@@ -103,33 +103,65 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
   if (found != string::npos)
 */
 /*::::::::::::::::::::::::::StartHere:::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-
-
 void solve() {
-
 	int n ; cin >> n ;
-	map<int, int> st;
-	st[n]++;
-
-	int cnt = 0 ;
-	while (st.rbegin()->ff >= 2) {
-		int x = st.rbegin()->ff;
-		int freq = st.rbegin()->ss;
-		cnt += (x * freq);
-		st.erase(prev(st.end()));
-
-		st[x / 2] += freq;
-		st[(x / 2) + x % 2] += freq;
+	string s ; cin >> s ;
+	int odd = 0 ;
+	map<int, int> mpp;
+	for (auto it : s) {
+		mpp[it]++;
 	}
-	db(st)
+
+	for (auto it : mpp) {
+		if (it.ss % 2) {
+			odd++;
+		}
+	}
+
+	if (odd > 1) {
+		cout << -1 << nline;
+		return ;
+	}
+
+
+	int l = 0 , r = n - 1 ;
+	int cnt = 0 ;
+	while (l <= r) {
+		if (s[l] == s[r]) {
+			l++, r--;
+		} else {
+			int front = l , back  = r;
+			while (s[front] != s[r]) front++;
+			while (s[back] != s[l]) back--;
+
+			if (front - l < r - back) {
+				while (front != l) {
+					swap(s[front], s[front - 1]);
+					cnt++;
+					front--;
+				}
+			} else {
+				while (back != r) {
+					swap(s[back], s[back + 1]);
+					cnt++;
+					back++;
+				}
+			}
+			l++, r--;
+
+		}
+	}
+
 	cout << cnt << nline;
+
 }
 int32_t main() {
 #ifndef ONLINE_JUDGE
 	freopen("Error.txt", "w", stderr);
 #endif
 	jay_shri_ram;
-	solve();
+	int t ; cin >> t ; while (t--)
+		solve();
 }
 /*----------------------------------endsHere----------------------------------*/
 

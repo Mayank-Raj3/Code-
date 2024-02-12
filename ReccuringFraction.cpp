@@ -105,31 +105,139 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 /*::::::::::::::::::::::::::StartHere:::::::::::::::::::::::::::::::::::::::::::::::::::::*/
 
 
-void solve() {
+string fractionToDecimal(int numerator, int denominator) {
 
-	int n ; cin >> n ;
-	map<int, int> st;
-	st[n]++;
+	// Edge case: numerator is zero
 
-	int cnt = 0 ;
-	while (st.rbegin()->ff >= 2) {
-		int x = st.rbegin()->ff;
-		int freq = st.rbegin()->ss;
-		cnt += (x * freq);
-		st.erase(prev(st.end()));
+	if (numerator == 0)
 
-		st[x / 2] += freq;
-		st[(x / 2) + x % 2] += freq;
+		return "0";
+
+	string result = "";
+
+	// Determine the sign
+
+	if ((numerator < 0) ^ (denominator < 0))
+
+		result += "-";
+
+	long long num = abs(static_cast<long long>(numerator));
+
+	long long den = abs(static_cast<long long>(denominator));
+
+	// Append the integer part
+
+	result += to_string(num / den);
+
+	long long remainder = num % den;
+
+	// If the remainder is zero, the fraction is an integer
+
+	if (remainder == 0)
+
+		return result;
+
+	result += ".";
+
+	// Use a map to store remainders and their corresponding positions
+
+	unordered_map<long long, int> remainderMap;
+
+	while (remainder != 0) {
+
+		// If the remainder repeats, enclose in parentheses and break
+
+		if (remainderMap.find(remainder) != remainderMap.end()) {
+
+			result.insert(remainderMap[remainder], "(");
+
+			result += ")";
+
+			break;
+
+		}
+
+		// Store the remainder and its position
+
+		remainderMap[remainder] = result.length();
+
+		remainder *= 10;
+
+		result += to_string(remainder / den);
+
+		remainder %= den;
+
 	}
-	db(st)
-	cout << cnt << nline;
+
+	return result;
+
+}
+void solve() {
+	int a , b; cin >> a >> b ;
+	char ch = '+';
+	if (a * b < 0) {
+		ch = '-';
+	}
+	a = abs(a);
+	b = abs(b);
+
+	if (a % b == 0) {
+		if (ch == '+')
+			cout << a / b << nline;
+		else
+			cout << -a / b << nline;
+	}
+	else {
+		map<int, int> mpp;
+		int i  = 0, pos ;
+		string ans = "";
+		bool f = true;
+		int num1 = a / b;
+		a = a % b;
+		mpp[a] = i;
+		a *= 10;
+		i++;
+		while (true) {
+			int x = a / b , rem = a % b ;
+			if (rem == 0) {
+				ans += to_string(x);
+				break;
+			} else if (mpp.count(rem)) {
+				ans += to_string(x);
+				pos = mpp[rem];
+				f = false;
+				break;
+			} else {
+				mpp[rem] = i ;
+				i++;
+				ans += to_string(x);
+				a = rem * 10;
+
+			}
+
+		}
+		if (f == false) {
+			if (ch == '-')
+				cout << ch << num1 << '.' << ans.substr(0, pos) << '(' << ans.substr(pos, ans.length() - pos) << ')' << endl;
+			else
+				cout << num1 << '.' << ans.substr(0, pos) << '(' << ans.substr(pos, ans.length() - pos) << ')' << endl;
+		}
+		else {
+			if (ch == '-')
+				cout << ch << num1 << '.' << ans << endl;
+			else
+				cout << num1 << '.' << ans << endl;
+		}
+	}
+
 }
 int32_t main() {
 #ifndef ONLINE_JUDGE
 	freopen("Error.txt", "w", stderr);
 #endif
 	jay_shri_ram;
-	solve();
+	int t ; cin >> t ; while (t--)
+		solve();
 }
 /*----------------------------------endsHere----------------------------------*/
 

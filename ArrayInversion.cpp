@@ -104,32 +104,62 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 */
 /*::::::::::::::::::::::::::StartHere:::::::::::::::::::::::::::::::::::::::::::::::::::::*/
 
-
 void solve() {
+	int n ; cin >>  n ;
+	vector<string> arr;
 
-	int n ; cin >> n ;
-	map<int, int> st;
-	st[n]++;
-
-	int cnt = 0 ;
-	while (st.rbegin()->ff >= 2) {
-		int x = st.rbegin()->ff;
-		int freq = st.rbegin()->ss;
-		cnt += (x * freq);
-		st.erase(prev(st.end()));
-
-		st[x / 2] += freq;
-		st[(x / 2) + x % 2] += freq;
+	int m = 0 ;
+	for (int i = 0; i < n ; i++) {
+		string s ; cin >> s ;
+		arr.push_back(s);
 	}
-	db(st)
-	cout << cnt << nline;
+
+	sort(all(arr), [&](string a , string b ) {
+		int a1 = 0 , b1 = 0 , c1 = 0 , c2 = 0;
+		for (auto it : a) {
+			if (it == '1') {
+				a1++;
+			} else {
+				b1++;
+			}
+		}
+		for (auto it : b) {
+			if (it == '1') {
+				c1++;
+			} else {
+				c2++;
+			}
+		}
+
+		return a1 * c2 < c1 * b1 ;
+	});
+
+	int ans = 0;
+	int on = 0;
+
+	for (auto i : arr) {
+		for (auto c : i) {
+			if (c == '0') {
+				ans += on;
+			}
+			else {
+				on++;
+			}
+		}
+	}
+
+	cout << ans << "\n";
+
+
+
 }
 int32_t main() {
 #ifndef ONLINE_JUDGE
 	freopen("Error.txt", "w", stderr);
 #endif
 	jay_shri_ram;
-	solve();
+	int t ; cin >> t ; while (t--)
+		solve();
 }
 /*----------------------------------endsHere----------------------------------*/
 

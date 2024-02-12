@@ -4,11 +4,11 @@
 //#include <ext/pb_ds/tree_policy.hpp>
 using namespace std;
 //using namespace __gnu_pbds;
-#define int 						  long long
-#define ll 							  long long
-#define ld 							  long double
-#define nline						  "\n"
-#define ff 							  first
+#define int                           long long
+#define ll                               long long
+#define ld                               long double
+#define nline                          "\n"
+#define ff                               first
 #define ss                            second
 #define pb                            push_back
 #define int                           long long
@@ -16,7 +16,7 @@ using namespace std;
 #define rfl(i,n, k)                   for (int i = n; i >= k; i--)
 #define fel(a,x)                      for (auto& a : x)
 #define mp                            make_pair
-#define ppb 						  pop_back
+#define ppb                           pop_back
 #define ps(x, y)                      fixed << setprecision(y) << x
 #define setbit(x)                     __builtin_popcount(x);
 #define all(var)                      var.begin(), var.end()
@@ -33,16 +33,16 @@ using namespace std;
 #define jay_shri_ram                  ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 #define rall(x)                       (x).rbegin(), (x).rend()
 
-typedef pair<int, int> 	              pii     ;
+typedef pair<int, int>                   pii     ;
 typedef vector<int>                   vi      ;
 typedef vector<string>                vs      ;
-typedef vector<pii> 				  vpi     ;
+typedef vector<pii>                   vpi     ;
 typedef vector <pair<int , int> >     vpi     ;
 typedef vector<bool>                  vb      ;
 typedef vector<vector<int>>           vvi     ;
-typedef map<int, int> 				  mpii    ;
-typedef set<int>   					  seti    ;
-typedef multiset<int> 				  mseti	  ;
+typedef map<int, int>                   mpii    ;
+typedef set<int>                         seti    ;
+typedef multiset<int>                   mseti      ;
 typedef unordered_set<int>            useti   ;
 typedef unordered_map<int, int>       umapii  ;
 typedef unsigned long long            ull     ;
@@ -106,30 +106,67 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 
 
 void solve() {
+    int n, m, q;
+    cin >> n >> m >> q;
 
-	int n ; cin >> n ;
-	map<int, int> st;
-	st[n]++;
+    vector<vector<int>> matrix(n + 2, vector<int>(m + 2, 0));
 
-	int cnt = 0 ;
-	while (st.rbegin()->ff >= 2) {
-		int x = st.rbegin()->ff;
-		int freq = st.rbegin()->ss;
-		cnt += (x * freq);
-		st.erase(prev(st.end()));
+    for (int i = 1; i <= n; i++)
+    {
+        for (int j = 1; j <= m; j++)
+        {
+            cin >> matrix[i][j];
+        }
+    }
 
-		st[x / 2] += freq;
-		st[(x / 2) + x % 2] += freq;
-	}
-	db(st)
-	cout << cnt << nline;
+    vector<vector<int>> prefixT(n + 2, vector<int>(m + 2, 0));
+    vector<vector<int>> prefixR(n + 2, vector<int>(m + 2, 0));
+
+
+    for (int i = 1; i <= n; i++)
+    {
+        for (int j = 1; j <= m; j++)
+        {
+            prefixT[i][j] = matrix[i][j] % mod;
+            prefixT[i][j] = (prefixT[i][j] + prefixT[i - 1][j - 1]) % mod;
+            prefixT[i][j] = (prefixT[i][j] + prefixT[i - 1][j]) % mod;
+            prefixT[i][j] = (prefixT[i][j] - (i - 2 >= 0 ? prefixT[i - 2][j - 1] : 0)) % mod;
+
+            prefixR[i][j] = (matrix[i][j]) % mod;
+            prefixR[i][j] = (prefixR[i][j] + prefixR[i - 1][j]) % mod;
+            prefixR[i][j] = (prefixR[i][j] + prefixR[i][j - 1]) % mod;
+            prefixR[i][j] = (prefixR[i][j] - prefixR[i - 1][j - 1]) % mod;
+
+
+        }
+    }
+
+    while (q--)
+    {
+        int x1, y1, l;
+        cin >> x1 >> y1 >> l;
+
+        int ans = 0;
+        ans = prefixT[x1][y1];
+        ans = (ans - ((x1 - l >= 0 && y1 - l >= 0) ? ((prefixT[x1 - l][y1 - l]) % mod) : 0));
+
+        int rec = x1 - l >= 0 ? (prefixR[x1 - l][y1]) % mod : 0;
+        rec = (rec - (x1 - l >= 0 && y1 - l >= 0 ? ((prefixR[x1 - l][y1 - l]) % mod) : 0)) % mod;
+
+        ans = (ans - rec) % mod;
+        ans = (ans + mod) % mod;
+
+        cout << ans << endl;
+    }
+
+
 }
 int32_t main() {
 #ifndef ONLINE_JUDGE
-	freopen("Error.txt", "w", stderr);
+    freopen("Error.txt", "w", stderr);
 #endif
-	jay_shri_ram;
-	solve();
+    jay_shri_ram;
+    solve();
 }
 /*----------------------------------endsHere----------------------------------*/
 
