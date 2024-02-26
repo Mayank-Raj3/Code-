@@ -1,0 +1,29 @@
+/*
+	==> SEE constainnt weather o2 work or not 
+	==> CONSTRAINTS DEKHNA MAT BHUTLNA AGR KAM HO THO BRUTFORCE
+	==> jha bhi + vali chizz ho udr neg karke try kar skte ho 
+	==>  ASCII : 1=49 a=97 A=65
+
+	==> DONT GET STUCK ON ONE APPROCH
+	(TRY TO VISUALIZE PROBLEM IN ANOTHER WAY  , OBSERVE THINGS)
+
+	==> Don't hurry, nothing good comes if you rush
+*/
+/*
+ ==> THINK GREEDILY IF WE HAVE TO APPLY SOME OPS  ,
+
+ ==> IF PREFIX SELECT TRY TO FIX LAST
+
+ ==> CHECK FOR EDGE CASES 0 , I  , YES yes
+
+ ==> weather overflow happening or out of bound
+ 
+ ==> IN CONSTR TRY TO THINK GENERAL FOR ALL CASES
+
+==>check for inc and dec in constr 
+
+=>try to construct using 1 and 2 or 0 if poss 
+
+=>try diffrent approaches
+
+*/

@@ -1,0 +1,84 @@
+OOPS 	- Class
+		- Objects
+collge k liye software banana ha - 
+	objects honge - students , professorrs etc
+
+ student 
+
+k pass property hinge 
+-name 
+-age
+-adress
+-contact
+
+
+20 student banana ha
+har k pass name , roll , age  
+
+Template student - 
+ 	 S1      S2     S3
+ 	1.name
+ 	2.roll
+ 	3.Age
+ab bas template ki copy bana k name roll aur age fill karna ha 
+
+And that template is called 'CLASS' - that defines the property and funtion of a particular object;  
+
+class k andr hoga object - jiske andr class k copy honge jisko ham object bolte ;
+
+//code 
+```
+class (class ka name){
+	Acess modifier : 
+	 	p1;
+	 	p2;
+		p3
+};
+
+``` 
+
+eg :
+
+class product{
+	int id ; 
+	int weight ;
+	char name[100];
+}
+Access modifir - Public
+			   - Private
+			   - protected
+-> agr indicate na kare tho Sab "Private ho jata ha "  
+
+ Static                   |     Dynamic 
+ 
+ int a ;                  | int * a = new int
+for object                |
+(clase name)(Objectname)  |
+Student s1 ;  			  | Student * S3 = new student ; 
+ 	 	                  |
+ 	 	                  |
+ 	 	                  
+#include <iostream>
+using namespace std ;
+#include "Student.cpp" // jha hamne class define kar rkha ha 
+ ```
+ int main (){
+ // statically creating object ;
+ 	Student s1 ;
+  	Student s2 , s3 ;
+  	
+  	s1.age = 24 ;
+  	
+ // Creat objects dynamically 
+ 
+ 	Student * = new student ; 
+ 	(*s6).age = 12 ;
+ 	
+ 	//or
+ 	
+ 	s6 -> age = 12 ;  
+ 	
+	
+ 
+ }
+ 

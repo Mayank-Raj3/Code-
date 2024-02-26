@@ -1,0 +1,2 @@
+1. we can take pref sum , suff sum for odd and even then 
+		

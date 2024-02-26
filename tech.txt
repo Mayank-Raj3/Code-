@@ -1,0 +1,199 @@
+1. we can and two number to check weather they are 0  or on 
+   this can be used when we we want to check weather number is >1 or not  on && tw;
+   
+   
+2. use while instead of for loop when there is too much condition 
+
+3.
+SPF ARRAY 
+2 3 2 5 2 7 2 3 2  11 2  13  2 3   2 
+2 3 4 5 6 7 8 9 10 11 12 13 14 15 16
+
+
+
+4.
+2. 
+Getline
+    getline(cin, str);
+
+Parameters: 
+
+is: It is an object of istream class and tells the function about the stream from where to read the input from.
+
+str: It is a string object, the input is stored in this object after being read from the stream.
+
+delim: It is the delimitation character which tells the function to stop reading further input after reaching this character.
+
+
+# to divide using get line 
+#include <bits/stdc++.h>
+using namespace std;
+  
+int main()
+{
+    string S, T;
+  
+    getline(cin, S);
+  
+    stringstream X(S);
+  
+    while (getline(X, T, ' ')) { // divides on the basis of  space
+        cout << T << endl;
+    }
+  
+    return 0;
+}
+
+Hello, Faisal Al Mamun. Welcome to GfG!
+
+Hello,
+Faisal
+Al
+Mamun.
+Welcome
+to
+GfG!
+
+
+3. Next lexicographycally permutation 
+
+Lexicographically Next Permutation in C++
+
+int main()
+{
+    string s = { "gfg" };
+    
+    bool val= next_permutation(s.begin(), s.end());
+    
+    // tells ki isse bhi chota permutation possibel ha ki nhi 
+    
+    if (val == false)
+        cout << "No Word Possible"
+            << endl;
+    else
+        cout << s << endl;
+    return 0;
+}
+
+4.
+Usually, to make a vector containing only its unique elements, one writes
+
+5. sort(all(vec));
+
+6.vec.resize(unique(all(vec)) - vec.begin());
+
+7.rotate(vec.begin(), vec.begin() + k, vec.end());
+
+8.Create a set from a vector
+
+9.
+ vi a;
+ set<int> S(all(a));
+ check if a map or set have value since all element are unique so 
+ if (S.find(key) != S.end()) {
+    // ...
+ }
+ However, set and map have a .count() method which returns 1 iff the  key is in the container, otherwise 0:
+
+   if (S.count(key)) {
+    // ...
+ }
+
+
+  If we talk about binary search: assume you have a vector and a predicate p(x) so that p(x) = true for all elements of some prefix of vector vec and false on all others. To find the first place where p(x) doesn't hold one can simply use
+
+int pos = partition_point(all(vec), p) - vec.begin();
+In other words, partition_point(begin, end, p) returns the first iterator iter that p(*iter) = false, assuming that the condition above holds, that is, p is true on some prefix of [begin, end)
+Imagine you want to quickly write a lambda which calculates the number of ways to choose 2
+ elements from n
+. You may write something like this:
+
+ auto choose2 = [&](int n) {
+     if (n <= 1) {
+        return 0;
+    } else {
+        return 1ll * n * (n - 1) / 2;
+    }
+ };
+ 
+ 
+     int val = (a / b) + ((a % b) != 0);
+
+
+ // rotation of an array 
+// 1 to size then 0
+
+            arr[it.ss[i]] = it.ss[(i + 1) % it.ss.size()];
+            
+            
+            
+______________________________________________________________________________________________________________
+// to determine weather its a coner in a matrix or side in a matrix 
+
+bool corner(int n , int  m , int  i , int j ) {
+    if ((i == 0 || i == n - 1) && (j == 0 || j == m - 1)) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+___________________________________________________________________________________________________________________________
+// to determine weather its a coner in a matrix or side in a matrix 
+
+bool side(int n , int  m , int  i , int j ) {
+    if ((i == 0 || i == n - 1) || (j == 0 || j == m - 1)) {
+        if ((i == 0 && j == 0) || (i == 0 && j == m - 1) || (i == n - 1 && j == 0) || (i == n - 1 && j == m - 1)) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+    else {
+        return false;
+    }
+}
+
+___________________________________________________________________________________________________________________________
+
+Lower_bound in pair == {ele,-INF}
+upper_bound in pair == {ele,INF}
+___________________________________________________________________________________________________________________________
+ sum = (x + 1) * series(y) + (y + 1) * series(x);
+INside sum of rectangle 
+___________________________________________________________________________________________________________________________
+// Sum of product 
+ a[i]*sigma(a i+1 -> n)+ ....
+
+cumulative sum 
+
+    int n;
+    cin >> n;
+    vector<int> arr(n);
+    vector<int > pref(n + 1, 0);
+    int mod = 1000000007;
+    for (int i = 0; i < n; i++) cin >> arr[i];
+
+    for (int i = 0; i < n; i++) {
+        pref[i + 1] = pref[i] + arr[i];
+    }
+    int ans = 0;
+    for (int i = 0; i < n; i++) {
+        int  sum = (pref[n] - pref[i + 1]) % mod;
+        ans += arr[i] * sum;
+        ans %= mod;
+    }
+
+    // for (int i = 0 ; i < n; i ++) {
+
+    //  for (int j = i + 1 ;  j < n ; j ++) {
+    //      ans = (ans + (arrrr[i] * arrrr[j]) % MOD) % MOD;
+    //  }
+    // }
+    cout << ans << nline;
+___________________________________________________________________________________________________________________________
+
+___________________________________________________________________________________________________________________________
+___________________________________________________________________________________________________________________________
+___________________________________________________________________________________________________________________________

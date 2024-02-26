@@ -1,0 +1,118 @@
+[Need of the  Bitwise Algorithms]
+_____________________________________________________________________________
+->Bitwise algorithms are an important tool in computer science and programming 
+  because they allow for efficient manipulation and processing of binary data. 
+  Here are a few reasons why bitwise algorithms are necessary:
+
+[Advantages ]
+
+->Space Efficiency
+
+->Time Efficiency 
+
+->Masking and Bitwise Encoding: Bitwise algorithms can be used to mask bits of data, which is useful for data encryption and compression.
+
+________________________________________________________________________________
+
+[Bitwise Operators]  
+
+1. Bitwise AND & 
+
+		A B A&B
+		0 0  0
+		0 1  0
+		1 0  0
+		1 1  1
+		
+	-> code
+		
+		int a = 7 , b = 4 ; 
+		cout<<  a&b  <<nline -> a&b = 4	
+
+	Time Complexity: O(1) 
+	Auxiliary Space: O(1)
+
+2. Bitwise OR | 
+
+	A B A|B
+	0 0  0
+	0 1  1
+	1 0  1
+	1 1  1
+	
+-> code
+	
+	int a = 7 , b = 4 ; 
+	cout<<  a|b  <<nline -> a&b = 7
+
+Time Complexity: O(1) 
+Auxiliary Space: O(1)
+
+3. Bitwise XOR Operator (^)
+
+-> alag bits so ^ 1 else 0 for same 
+ 
+-> The ^ operator (also known as the XOR operator) stands for Exclusive Or.
+
+-> Here, if bits in the compared position do not match their resulting bit is 1. i.e, The result of the bitwise XOR operator is 1 if the corresponding bits of two operands are opposite, otherwise 0.
+
+[CODE]
+ 	int a = 12, b = 25;
+    cout << (a ^ b); // 21
+    
+ 
+ 4. Bitwise NOT Operator (!~)
+ 
+ ->The bitwise Not Operator takes a single value and returns its one’s
+ complement. The one’s complement of a binary number is obtained by toggling 
+ all bits in it, i.e, transforming the 0 bit to 1 and the 1 bit to 0.
+ 
+ 	int a = 0;
+    cout << "Value of a without using NOT operator: " << a;
+    cout << "\nInverting using NOT operator (with sign bit): " << (~a);
+    cout << "\nInverting using NOT operator (without sign bit): " << (!a)
+    
+    //output
+    Value of a without using NOT operator: 0
+	Inverting using NOT operator (with sign bit): -1
+	Inverting using NOT operator (without sign bit): 1
+	
+5. Left Shift << [shift-expression << k]
+ 
+ a<<b  ==> a*2^b
+ 
+//Note: Every time we shift a number towards the left by 1 bit it multiply that number by 2.
+
+ 	1 0 1 0 1 
+[1] 0 1 0 1 0 <-- 0 inserted 
+
+the bracketed one is discarded
+
+Eg:
+
+Input: Left shift of 5 by 1.
+Binary representation of 5 = 00101 and Left shift of 001012 by 1 (i.e, 00101 << 1)
+
+Output: 10
+Explanation: All bit of 5 will be shifted by 1 to left side and this result in 010102, Which is equivalent to 10
+
+ 
+6. Right-Shift (>>)  [shift-expression >> k]
+
+ -> a>>b  -> a/(2^b)
+
+ Every time we shift a number towards the right by 1 bit it divides that number by 2.
+ 
+ 
+ 	// left shift
+	// cout<< (a<<b) ---> a*2^b
+
+	// 5<<1 *2 == 10
+	cout << ( 5 << 1) << nline;
+
+
+	// right shift
+	// 5 00101 -> 00010 -> 5/2
+	cout << ( 5 >> 1) << nline;
+	
+	

@@ -1,0 +1,26 @@
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+						Problem One 
+						-----------
+https://atcoder.jp/contests/abc212/tasks/abc212_d
+
+int n ; cin >> n;
+	map<int, int> mpp;
+	int sum   = 0 ;
+	for (int i = 0 ; i < n ; i++) {
+		int t , x; cin >> t ;
+		if (t == 2 || t == 1)
+			cin >> x;
+		if (t == 1)
+			mpp[x - sum]++;
+		else if (t == 2)
+			sum += x;
+		else {
+			int x = mpp.begin()->ff;
+			cout << x + sum << endl;
+			mpp.erase(mpp.begin());
+			continue;
+		}
+	}
+
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

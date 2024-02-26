@@ -1,0 +1,24 @@
+f clock
+4moves
+undo f
+-------------------------------
+line - horizontal
+
+------------------------------
+line up
+
+rup , t left , rdown, tleft , rup, t-r-r;
+
+
+-----------------------------------------
+corner in the correct spot
+
+t<- , rup , t-> , lup , t<- , rd,,t-> , ld
+
+-------------------------------------
+top - whit
+
+4moves - after getting thert
+
+turn bottom layer and repeat 
+

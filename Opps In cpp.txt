@@ -1,0 +1,90 @@
+OOPSSS..................
+
+Syntax	for	definition	of	a	class	:
+	class class_name {
+		Access	Modifier:		
+			Data	members
+			Member	functions
+	};
+
+The	class	body	contains	the declaration of	members	(data	and	functions).
+
+Declaration of objects of  class 
+___________________________________________________________________________
+
+
+1. statically in stack ; 
+
+// class_name object_name ; 
+ 
+class Student{
+	public:
+		int roll; 
+		string name;
+};
+
+int main(){
+	// class_name object_name ; 
+	
+	student s1 ; //Declaration of object s1 of typeStudent	
+}
+
+
+___________________________________________________________________________
+
+ 2. Dynamically : in heap 
+ 
+ syntax	for	declaring	objects	of	a	class	dynamically is :
+
+	class_name	*object_name =	new class_name
+
+	Example	code	:
+
+	class Student {
+	public :
+		int rollno;
+		char name[20];
+	};
+
+int main(	) {
+	Student *s1 = new	Student;
+	
+	 //Declaration	of object of type Student
+	// dynamically
+}
+ 
+----------------------------------------------------------------------------------------------
+
+ Constructor are invoked every time when you compile 
+
+	construcotr ka namm class he hoga
+	 constructor ka nam employee 
+	 
+	 1. 
+	 employee(string name , string company , int age ){
+	 name= name ; 
+	 Company = company ; 
+	 Age = age ; 
+	 }
+	 
+	 jab ham khud ka constuctor bnanate ha tho default constructor lost ho jata ha ; 
+	 
+	 tab 
+	 
+	 
+	 Employee  employee1 = Employee("mnayank" , "ytr code", 29);
+	 employee.Introduce ; 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+ 
+ 
+ 
+
+
+

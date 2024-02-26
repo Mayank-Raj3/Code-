@@ -1,0 +1,267 @@
+%%%%%%%%%%%%  Generated using docx2latex.pythonanywhere.com  %%%%%%%%%%%%%%
+ 
+ 
+\documentclass[a4paper,12pt]{report}
+ 
+% Other options in place of 'report' are 1)article 2)book 3)letter
+% Other options in place of 'a4paper' are 1)a5paper 2)b5paper 3)letterpaper 4)legalpaper 5)executivepaper
+ 
+ 
+ %%%%%%%%%%%%  Include Packages  %%%%%%%%%%%%%%
+ 
+ 
+\usepackage{amsmath}
+\usepackage{latexsym}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{txfonts}
+\usepackage{wasysym}
+\usepackage{enumitem}
+\usepackage{adjustbox}
+\usepackage{ragged2e}
+\usepackage{tabularx}
+\usepackage{changepage}
+\usepackage{setspace}
+\usepackage{hhline}
+\usepackage{multicol}
+\usepackage{float}
+\usepackage{multirow}
+\usepackage{makecell}
+\usepackage{mdwlist}
+%\usepackage{fancyhdr}
+\usepackage[toc,page]{appendix}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{hyperref}
+\usepackage{xcolor}
+ 
+ 
+ %%%%%%%%%%%%  Define Colors For Hyperlinks  %%%%%%%%%%%%%%
+ 
+ 
+ 
+\urlstyle{same}
+ 
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue,
+}
+ 
+ %%%%%%%%%%%%  Set Depths for Sections  %%%%%%%%%%%%%%
+ 
+% 1) Section
+% 1.1) SubSection
+% 1.1.1) SubSubSection
+% 1.1.1.1) Paragraph
+% 1.1.1.1.1) Subparagraph
+ 
+ 
+\setcounter{tocdepth}{5}
+\setcounter{secnumdepth}{5}
+ 
+ 
+ %%%%%%%%%%%%  Set Page Margins  %%%%%%%%%%%%%%
+ 
+ 
+\usepackage[a4paper,bindingoffset=0.0in,headsep=0.5cm,left=0.5in,right=0.5in,bottom=0.5in,top=0.5in,headheight=2cm]{geometry}
+\everymath{\displaystyle}
+ 
+ 
+ %%%%%%%%%%%%  Set Depths for Nested Lists created by \begin{enumerate}  %%%%%%%%%%%%%%
+ 
+ 
+\setlistdepth{9}
+\newlist{myEnumerate}{enumerate}{9}
+	\setlist[myEnumerate,1]{label=\arabic*)}
+	\setlist[myEnumerate,2]{label=\alph*)}
+	\setlist[myEnumerate,3]{label=(\roman*)}
+	\setlist[myEnumerate,4]{label=(\arabic*)}
+	\setlist[myEnumerate,5]{label=(\Alph*)}
+	\setlist[myEnumerate,6]{label=(\Roman*)}
+	\setlist[myEnumerate,7]{label=\arabic*}
+	\setlist[myEnumerate,8]{label=\alph*}
+	\setlist[myEnumerate,9]{label=\roman*}
+ 
+\renewlist{itemize}{itemize}{9}
+	\setlist[itemize]{label=$\cdot$}
+	\setlist[itemize,1]{label=\textbullet}
+	\setlist[itemize,2]{label=$\circ$}
+	\setlist[itemize,3]{label=$\ast$}
+	\setlist[itemize,4]{label=$\dagger$}
+	\setlist[itemize,5]{label=$\triangleright$}
+	\setlist[itemize,6]{label=$\bigstar$}
+	\setlist[itemize,7]{label=$\blacklozenge$}
+	\setlist[itemize,8]{label=$\prime$}
+ 
+ 
+ 
+ %%%%%%%%%%%%  Header here  %%%%%%%%%%%%%%
+ 
+ 
+%\pagestyle{fancy}
+%\fancyhf{}
+ 
+ 
+ %%%%%%%%%%%%  Footer here  %%%%%%%%%%%%%%
+ 
+\thispagestyle{empty}
+ 
+ 
+ %%%%%%%%%%%%  Print Page Numbers  %%%%%%%%%%%%%%
+ 
+ 
+%\rfoot{\thepage}
+ 
+ 
+ %%%%%%%%%%%%  Document Code starts here %%%%%%%%%%%%%%
+\newcommand{\marginAdj}{0.5in}
+ 
+\begin{document}
+\sloppy
+{\centering
+ \fontsize{20pt}{20pt}\selectfont\textbf{Mayank Raj}\\
+  \vspace{9pt}
+ \fontsize{13pt}{13pt}\selectfont Tel: +91 8389969566\\
+  \vspace{3pt}
+  
+ \fontsize{13pt}{13pt}\selectfont Email:
+ \href{mailto:mynk.code.28@gmail.com}{\color{black}{\smash{mynk.code.28@gmail.com}}} \\
+  
+ \vspace{3pt}
+ \fontsize{13pt}{13pt}\selectfont
+ \href{https://github.com/Mayank-Raj3/Mayank-Raj3}{\color{black}{\smash{Github: Mayank-Raj3}}} \\
+ 
+ \vspace{3pt}
+ \fontsize{13pt}{13pt}\selectfont
+ \href{https://www.linkedin.com/in/mayank-raj-b5871b1b9/}{\color{black}{\smash{Linkedin}}} \\
+
+}
+ 
+\vspace{9pt}
+ 
+ 
+ 
+\noindent 
+\textbf{EDUCATION} \par
+\vspace{2pt}
+\hrule
+\vspace{6pt}
+\noindent 
+\textbf{CMR Institute of Technology, Bangalore}{\fontsize{9pt}{9pt}\selectfont \textbf{ \hspace*{2.1in} \hspace*{\marginAdj} }{\fontsize{12pt}{12pt}\selectfont Dec, 2021 – Aug, 2025}} \par
+\noindent 
+{\fontsize{12pt}{12pt}\selectfont \textit{Bachelor of Engineering in  Artificial Intelligence }  \selectfont \textbf{ \hspace*{1.8in} \hspace*{\marginAdj} }{\fontsize{12pt}{12pt}\selectfont CGPA : 8.6} } \par
+\noindent 
+\begin{itemize}[noitemsep,topsep=0pt]
+\item {\fontsize{11pt}{11pt}\selectfont Courses: Data Structure and Algorithms, Artificial Intelligence, Software Engineering, DBMS, Machine Learning
+} \par
+\end{itemize}
+ \par
+\noindent 
+\textbf{Kendriya Vidyalaya AFS, Bagdogra, West Bengal}{\fontsize{9pt}{9pt}\selectfont \textbf{ \hspace*{1.5in} \hspace*{\marginAdj} }{\fontsize{12pt}{12pt}\selectfont Dec, 2019– Aug, 2021}} \par
+\noindent 
+{\fontsize{12pt}{12pt}\selectfont \textit{Senior Secondary (Class XII)}  \selectfont \textbf{ \hspace*{3.1in} \hspace*{\marginAdj} }{\fontsize{12pt}{12pt}\selectfont  Percentage: 89} } \par
+\noindent 
+{\fontsize{12pt}{12pt}\selectfont \textit{ Secondary (Class X)}  \selectfont \textbf{ \hspace*{3.6in} \hspace*{\marginAdj} }{\fontsize{12pt}{12pt}\selectfont  Percentage: 90} } \par
+\noindent
+\textbf{SKILLS  }{\fontsize{9pt}{9pt}\selectfont  \hspace*{1.95in} \hspace*{\marginAdj} } \par
+\noindent 
+\begin{itemize}[noitemsep,topsep=0pt]
+\item {\fontsize{12pt}{12pt}\selectfont C/C++, Python, Java ,Javascript ,React ,MySql ,Git} \par
+\end{itemize}
+ \par
+ \vspace{9pt}
+ 
+\noindent 
+\textbf{ACHIEVEMENTS} \par
+\vspace{2pt}
+\hrule
+\vspace{6pt}
+ 
+ 
+\noindent 
+ 
+ 
+\begin{itemize}[noitemsep,topsep=0pt]
+	
+	\item {\fontsize{12pt}{12pt}\selectfont Ranked 108st at ICPC Amritapuri Regional Regional site amongst the top 150 teams across the country.\href{https://icpc.global/ICPCID/XO4P740AP9OR}{\color{black}{\underline{\smash{Certificate}}}} } \par
+	\noindent 
+ \noindent 
+	\item {\fontsize{12pt}{12pt}\selectfont  Achieved Global Ranking of 1409th out of 21k + in Leetcode Weekly 347  Contest organised on Leetcode under the Handle  \href{https://leetcode.com/mk28nv/}{\color{black}{\underline{\smash{mk28nv}}}}} \par
+\noindent 
+\item {\fontsize{12pt}{12pt}\selectfont  Attained Maximum Rating on Codeforces: 1121   under the Handle  \href{https://codeforces.com/profile/mynk28nov}{\color{black}{\underline{\smash{mynk28nov}}}}}
+    \par
+	\noindent 
+	\item {\fontsize{12pt}{12pt}\selectfont Gained Maximum Rating on CodeChef: 1599(2*) under the Handle \href{https://www.codechef.com/users/mayank28nov}{\color{black}{\underline{\smash{mayank28nov}}}}} \par
+	\noindent 
+ 
+	\item {\fontsize{12pt}{12pt}\selectfont  Gained Maximum Rating on Leetcode: 1583 under the Handle \href{https://leetcode.com/mk28nv/}{\color{black}{\underline{\smash{mk28nv}}}}} \par
+ 
+	\noindent 
+ \noindent 
+	\item {\fontsize{12pt}{12pt}\selectfont Secured Global Position 3910th in Codeforces Round 870 (Div. 2) 2023 Amongst more than 25000+ participants. 
+} \par
+ \noindent 
+	\item {\fontsize{12pt}{12pt}\selectfont  Achieved Global Ranking of 3751th in Atcoder Beginner Contest  153 organised on Atcoder under the Handle  \href{https://atcoder.jp/users/mynk28nov}{\color{black}{\underline{\smash{mynk28nov}}}}} \par
+	\noindent 
+ 
+\end{itemize}
+\noindent 
+ 
+  
+\noindent 
+\vspace{2pt}
+\textbf{EXPERIENCE} \par
+\vspace{2pt}
+\hrule
+\vspace{6pt}
+\noindent 
+\textbf{Ask Senior Student Mentor  } \hspace*{\marginAdj} 
+\hspace*{\marginAdj} \hspace*{\marginAdj}  \hspace*{2.05in} {\fontsize{12pt}{12pt}\selectfont   May 2023 - Present } \par
+\begin{itemize}[noitemsep,topsep=0pt]
+\item {\fontsize{12pt}{12pt}\selectfont Conducted more than 50+ gmeet doubt resolution sessions on the server } \par
+\noindent 
+\item {\fontsize{12pt}{12pt}\selectfont  Helped student to get started with programming  } \par
+\noindent 
+\item {\fontsize{12pt}{12pt}\selectfont Taken sessions on basic data structures }\end{itemize}
+ \par
+\noindent 
+\vspace{1pt}
+\textbf{PROJECTS} \par
+\vspace{2pt}
+\hrule
+\vspace{6pt}
+ 
+\noindent
+\textbf{Masala Darbar} \hspace*{\marginAdj}  \href{https://github.com/Mayank-Raj3/Masala-Darbar}{\color{black}{\underline{\smash{Link}}}} \hspace*{\marginAdj}
+\hspace*{\marginAdj}  \hspace*{2.25in} {\fontsize{12pt}{12pt}\selectfont  January 2023 - February 2023} \par
+\noindent 
+\begin{itemize}[noitemsep,topsep=0pt]
+	\item {\fontsize{12pt}{12pt}\selectfont Fast Performance: Powered by the efficient Parcel bundler, Masala Darbar ensures lightning-fast load times and smooth navigation, providing an excellent user experience.} \par
+	\item {\fontsize{12pt}{12pt}\selectfont Responsive with React: Built using React JS, Masala Darbar delivers highly responsive and interactive user interfaces .} \par
+    \item {\fontsize{12pt}{12pt}\selectfont Enhanced skills in HTML, CSS, and JavaScript , React through the project. Demonstrated proficiency in front-end technologies and problem-solving abilities.} \par
+ 
+ 
+ 
+\end{itemize}
+ 
+ 
+\noindent
+\vspace{2pt}
+
+\textbf{Weather Forecasting}  \hspace*{\marginAdj}  \href{https://github.com/Mayank-Raj3/Weather-Forecast-Website/tree/main}{\color{black}{\underline{\smash{Link}}}} \hspace*{\marginAdj}  \hspace*{2.25in} {\fontsize{12pt}{12pt}\selectfont March 2023 - April 2023 } \par
+\noindent 
+\begin{itemize}[noitemsep,topsep=0pt]
+	\item {\fontsize{12pt}{12pt}\selectfont A modern Single Page Application (SPA) built with HTML, CSS, and JavaScript ES6+.} \par
+	\item {\fontsize{12pt}{12pt}\selectfont Utilizes AJAX to asynchronously fetch real-time weather data from OpenWeather API.} \par
+ 
+ 	\item {\fontsize{12pt}{12pt}\selectfont Provides a user-friendly interface for users to search and view weather information worldwide.} \par
+ 
+  	\item {\fontsize{12pt}{12pt}\selectfont Implements Progressive Web App (PWA) concepts for offline access and faster loading.} \par
+
+\end{itemize} 
+\noindent  
+\vspace{9pt}
+\end{document}
+ 

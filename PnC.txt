@@ -1,0 +1,73 @@
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+1 rank k liye 
+
+first give numberting to letters
+3 4 6 2 1 5
+M O T H E R
+
+2. count how many are smaller than current 
+
+3 4 6 2 1 5
+M O T H E R
+2 2 3 1 0 0 
+
+-> if repetation of letter then divide that by  number of occ !
+2/2! 
+
+
+
+4.multiply from o!= to len -1 from right side
+
+3  4  6  2  1  5
+M  O  T  H  E  R
+
+
+2  2  3  1  0  0 
+5! 4! 3! 2! 1! 0!
+____________________________
+(2*5!)+(4!*2)....
+
+add and thats the rank 
+
+
+
+
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+power of primes in x!
+
+if we devide it by 2 and add all the ans we get the power of 2 in x fact
+
+eg : 100!
+power of 2 in 100! =100/2 + 50 /2 + 25/2 .....0
+
+2^97 5^q 
+
+and if we need to count number of zeros in x! we can just find power of 5!
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+->->npr is for arrangement n!/(n-r)! 
+	-> jab arrangement imp ha tab
+->->ncr is for selection  n!/(r!*(n-r)!)
+	-> jab selection imp ha tab
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

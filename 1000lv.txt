@@ -1,0 +1,454 @@
+1. Trafic light : 
+ 
+ used upper bound : >{
+ 	phla bada element 
+ 
+ } , 
+ 
+ lower bound >={
+ 	present - ha tho chota
+  
+ 
+ }
+ 
+ #### NUMBER
+ //  number ko agr maximize karna ho sum tho 999 ka use tho karna he 
+ ###
+
+3 . max substring length 
+
+	ll cnt = 1 ;
+	ll ans = 0 ;
+	for (int i = 1; i < n; i++) {
+		if (s[i] != s[i - 1]) {
+			// ans = max(cnt, ans);
+			cnt = 1;
+		} else {
+			cnt++;
+		}
+		ans = max(cnt, ans);
+
+	}
+	
+4.  creating beautiful arrays 
+
+	for (int i = 1; i <= 9; i++)
+	{
+		for (int j = 1; j <= 10; j++)
+		{
+			#imp == string s(j, '0' + i); 
+			// generates like s(5,1) ==> 11111
+			s(5,2) ==> 22222
+			s(6,3) ==> 33333s
+
+			# for long sting == 
+			
+			arr.pb(stoll(s)); // stoll converts srting to long long
+			"" ==> int 
+
+
+5.
+
+gcd rules --
+1. gcd(a,b) is always abs(a-b);
+
+2.[1,21,3,4,5,] for making pair of i , j  
+	which is nc2 (2 we have to choose )
+	number of i, j will be n(n-1) /2 ;
+
+3. and gcd of e e will be always > = 2 
+
+4. and gcd of two primes will be always =1 ; 
+
+
+
+6. Lamda function and comarator
+
+function<void(int, int)> dfs =[&](){};
+
+bool compare(int a, int b)
+{
+    return a > b;
+}
+void solve()
+{
+    int n;
+    cin >> n;
+    vi v(n);
+    REP(i, 0, n)
+    cin >> v[i];
+
+    // sort(all(v), [](int a, int b)
+    //      {
+    //      if(a>b)
+    //      return true;
+    //      else
+    //      return false; });
+    auto cmp = [](int a, int b)
+    {
+        return a > b;
+    };
+    sort(all(v), cmp);
+    for (auto i : v)
+        cout << i << " ";
+}
+
+For sorting pii useing comarator 
+
+bool compare(pii a, pii b)
+{
+    if (a.F != b.F)
+        return a.F > b.F;
+    else
+        return b.S > a.S;
+}
+void solve()
+{
+    int n;
+    cin >> n;
+    vpii v(n);
+    REP(i, 0, n)
+    cin >> v[i].F;
+    REP(i, 0, n)
+    cin >> v[i].S;
+
+    sort(all(v), compare);
+    for (auto i : v)
+        cout << i.F << " " << i.S << '\n';
+}
+
+4. using lamda function in binarysearch 
+
+void solve()
+{
+    int n, k;
+    cin >> n >> k;
+    vi v(n);
+    REP(i, 0, n)
+    cin >> v[i];
+    auto check = [&](int mid)
+    {
+        return v[mid] >= k;
+    };
+    int low = 0, high = n - 1;
+    int ans = high;
+    while (low <= high)
+    {
+        int mid = (low + high) / 2;
+        if (check(mid))
+        {
+            ans = mid;
+            high = mid - 1;
+        }
+        else
+            low = mid + 1;
+    }
+    cout << ans << "\n";
+}
+
+
+
+7. modulus 
+
+a%b then ans  will be equal to 0 to b - 1;
+
+8. 
+
+always check ki loop do bar chalega na agr koi condition loop ka andr dal rhe 
+
+1 1
+2 1
+jaise 
+
+for (int i = n - 1; i >= 0 ; i--) {
+        if (sum <= m) {
+            flag = 1 ;
+            cout << cnt << nline;
+            return;
+        }
+        else {
+            sum = sum - (v[i].first - v[i].second);
+            ++cnt;
+        }
+    }
+    if (sum <= m) {
+        flag = 1 ;
+        cout << cnt << nline;
+        return;
+    }
+    
+9.
+
+dequeue :
+    stack , queue , dequeue, priority queeu doesnot support indexing
+    push_back()- 
+    push_front()-
+    
+    in dequeue we can insert from end and fornt
+    
+    
+10 . 
+        set<int > st ;
+        auto it = st.upper_bound(all(st) , number);
+        to use binarysearch in set 
+        
+        if we use *it then it will give elementr
+        for index we do = it-v.begin();
+        
+        
+        upper_bound >
+-----------------------------------------PREFIX_SUM------------------------------------------------------------------ ---------------------------------------------------------------------------------------------------------------------      
+# prefix sum (1D)
+pre[i]+=pre[i-1]
+        
+11. 1D(diffrence array )
+
+Diffrence array hamesha 000 array me he lagega
+jo l se r  tak k elements me + 1 karo
+arr[l] += 1
+arr[r+1] += -1  
+[0 1 0 0 -1 ] add 1 from index 2to4 
+ 1 2 3 4 5 
+ 
+ ab sum k liye prefix sum lelo
+ 0 1 1 1 0
+ 
+ #2d Prefix sum 
+ 
+    pre[i][j] =  arr[i - 1][j - 1] + pre[i][j - 1] + pre[i - 1][j] - (pre[i - 1][j - 1]);
+   
+    [(-)] [+    ] [ ]
+    [ + ] [X+ele] [ ]
+    [   ] [     ] [ ]
+
+if we want to build  2d prefix sum = (element in the array) + above element +  side element +(-diagonally piche vala)
+
+how to answer query 
+   cout<<pre[l][r] - pre[l - 1][r] - pre[l][r - 1] + (pre[l - 1][r - 1]);
+   pre[l][r] will give us the summ till that block 
+   This means that we are taking sum till r,l and 
+    - the one in bracket we are adding becuse that part have been subtracted twice 
+    
+ #2d differnce array  
+ 
+ these are the four operation 
+
+1.arr[r1][c1] += 1;
+2.arr[r2 + 1][c2 + 1] += 1;
+3.arr[r1][c2 + 1] -= 1;
+4.arr[r2 + 1][c1] -= 1;
+
+output add 1 to x1,y1 se x2,y2;
+
+      1  2  3  4 
+    1[ ][ ][ ][ ]
+    2[ ][1][1][1]
+    3[ ][1][1][1]
+    4[ ][1][1][1]
+
+    [ ][ ][ ][  ][  ]
+    [ ][+x][ ][ ][-x]
+    [ ][  ][ ][ ][  ]
+    [ ][  ][ ][ ][  ]
+IMG [ ][-x][ ][ ][+x]
+                            ---------CODE--------- 
+        int q; cin >> q;
+        for(int i = 1; i <= q; i++){
+            int x1, y1, x2, y2;
+            cin >> x1 >> y1 >> x2 >> y2;
+            x1--; x2--; y1--; y2--;
+            
+            upd[x1][y1]++;
+            
+            if(x2 + 1 < n) upd[x2+1][y1]--;
+            
+            if(y2 + 1 < m) upd[x1][y2+1]--;
+            
+            if(x2 + 1 < n and y2 + 1 < m) upd[x2+1][y2+1]++;
+            
+        }
+        
+        //upr se niche add karo then side side add karo
+        
+        for(int i = 1; i < n; i++){
+            for(int j = 0; j < m; j++){
+                upd[i][j] += upd[i-1][j];
+            }
+        }
+        for(int i = 0; i < n; i++){
+            for(int j = 1; j < m; j++){
+                upd[i][j] += upd[i][j-1];
+            }
+        }
+____________________________________________________________________________________________________________________________________________________________________________________
+
+____________________________________________________________________________________________________________________________________________________________________________________
+                                                _____________
+                                                Number theory 
+                                                _____________
+                                                
+1. Sieve Of Er..
+
+vi primes;
+void precomp() {
+    for (int i = 2; i <= 10000000; i++) {
+        sieve[i] = 1;
+    }
+    for (int i = 2; i * i <= 10000000; i++) {
+        if (sieve[i] == 0) continue;
+        for (int j = i * i; j <= 10000000; j += i) {
+            sieve[j] = 0; // making multiples as 0 since the will definetly will be not be prime
+        }
+    }
+    for (int i = 2; i <= 10000000; i++) {
+        if (sieve[i] == 1) {
+            primes.pb(i);
+        }
+    }
+}
+
+
+2. For divisors 
+
+    vector<int> divisors;
+    for (int i = 2; i * i <= x; i++) {
+        if (x % i == 0) {
+            divisors.push_back(i);
+            if (i != x / i)
+                divisors.push_back(x / i);
+        }
+    }
+
+
+3.
+Important Key Point
+    Consider a natural number N
+    If i is a divisor of N.
+    Then, (N/i) is also a divisor of N.
+e.g
+N=6;
+2 is divisor of N bcz (6%2==0);
+6/2 = 3 is also divisor of N bcz (6%3==0);
+
+N<=10^10 [Worst case of (N)]
+
+
+4. 
+
+Property: If you have got a divisor > sqrt(N),
+Then there must be a divisor that is less than sqrt(N)
+
+N=a*b;
+a<=sqrt(N);
+b>=sqrt(N);
+
+5. 
+Some important in-built functions
+    
+pow(n, x)   => Finds nx  in O(logn)
+sqrt(n) => Finds square root on n.
+
+6. SPF array
+
+for(int i=0;i<=1e6;i++){
+        spf[i] = i;
+    }
+    for(int i=2;i*i<=1e6;i++){
+        if(spf[i]==i){
+            for(int j=i*i;j<=1e6;j+=i){
+                if(spf[j]==j){
+                    spf[j]=i;
+                }
+            }
+        }
+    }
+    
+    
+8. Factorial 
+
+vector<int> fact;
+void preFact() {
+    fact.pb(1);
+    fact.pb(1);
+    for (int i = 2 ; i < 100010 ; i++) {
+        fact.pb((fact[i - 1]*i) % MOD);
+    }
+}
+
+
+
+____________________________________________________________________________________________________________________________________________________________________________________
+____________________________________________________________________________________________________________________________________________________________________________________
+
+                                                  ReCURSION 
+                                                _____________
+ 1. Expectation         -pd(n)-- n n-1 ..... 3 2 1 (expectation)
+ 2. faith               -p(n-1)---  n-1..... 2 1
+ 33. Link between faith -n p(n-1);
+ 
+ ___________________________________________________________________________________________________________________________________________________________________________________
+____________________________________________________________________________________________________________________________________________________________________________________
+
+ * we use undordered map when we just have to store frequence and dont want our elements to be arranged 
+ and the time complexity is  O(1);
+ 
+// ceil value k liye  
+int val = (a / b) + ((a % b) != 0);
+or  = (a+b-1)/b ;
+
+
+// calculate xor in O(1)
+
+int computeXOR(int n)
+{
+   
+  // If n is a multiple of 4
+  if (n % 4 == 0)
+    return n;
+ 
+  // If n%4 gives remainder 1
+  if (n % 4 == 1)
+    return 1;
+ 
+  // If n%4 gives remainder 2
+  if (n % 4 == 2)
+    return n + 1;
+ 
+  // If n%4 gives remainder 3
+  return 0;
+}
+
+// 
+
+ ------------------------------------------------------------------
+ Diffrence array 
+ int n  ; cin >> n;
+    int b, d;
+    map<int, int> r;
+    while (n--) {
+        cin >> b >> d;
+        r[b]++;
+        r[d]--;
+    }
+    int sum = 0, year = 0, answer = 0;
+    for (auto it : r) {
+        sum += it.second;
+        if (sum > answer)
+        {
+            answer = sum;
+            year = it.first;
+        }
+    }
+    cout << year << " " << answer;
+    
+    -----------------------------------------------------------------
+ 
+    cout << ceil((-1 + sqrt(1 + 8 * n)) / (2));
+ 
+    -----------------------------------------------------------------
+  gcd(g,n−1,n)=1
+----------------------------------------------------------------------
+    while ((pos = input.find(word, pos)) != string::npos) {
+        count++;
+        pos += word.length();
+    }

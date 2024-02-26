@@ -1,0 +1,39 @@
+___________________________________________________________________
+1) B. Stairs
+
+take on problem : - 
+
+1st: nice bnana ha tho : 1 bnayenge 
+2nd: nice bnana ha tho : 1 +(2*2 ka sqare) = 3 colm lena padega
+3rd: nice bnana ha tho : 1 +(2 ka sqare) + (4*4)  = 7 colm lena padega
+// abb idr ham 3*3 consider nhi kar skte usme stair nhi banenga 
+ab number of cell used nikalenge : n*n+1/2 se 
+4th k liye : 1+2+4+(8*8) = 15 
+5th k liye : 15+16 = 31
+6th k liye : 31+32 = 63
+tho : 2^n-1;
+
+
+___________________________________________________________________
+2)B. Young Explorers
+
+two pointers se ho jayega my approach : mapp me dalo iterate karke / it.ff;
+
+but usse cases chut rha tha 1 1 2 3 4 4 
+
+code
+for (int i  = 0 ; i < n; i++) {
+		int grp = 1;
+		while (grp < arr[i] && i < n - 1) {
+			grp++;
+			i++;
+		}
+		if (grp >= arr[i]) {
+			grps++;
+		}
+	}
+	
+___________________________________________________________________
+3)
+
+___________________________________________________________________

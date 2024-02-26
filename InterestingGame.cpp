@@ -128,8 +128,6 @@ void solve() {
 
 	db(c);
 	int a = 0 , b = 0;
-
-
 	// while (!st1.empty() && !st2.empty()) {
 	// 	int x = st2.rbegin()->ff;
 	// 	int xind = st2.rbegin()->ss;
@@ -143,9 +141,7 @@ void solve() {
 	// 		b += brr[yind];
 	// 		st1.erase(prev(st1.end()));
 	// 		st2.erase(st2.find({brr[yind], yind}));
-
 	// 	}
-
 	// }
 
 	for (int i = 0; i < n ; i++) {

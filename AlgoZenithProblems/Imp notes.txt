@@ -1,0 +1,41 @@
+///////////////////////////////////////////////////////
+1. for using getline  we use it twice  first flushes the space 
+2. second is used for taking imput 
+
+void solve() {
+	string str ;
+	int n ; cin >> n ;
+	cout << n << nline;
+	getline(cin, str);
+	// getline(cin, str); // we need it to flush the cin 
+	cout << str << nline;
+
+}
+///////////////////////////////////////////////////////
+To use pi in cpp we dont need to import it from any where 
+
+
+ld P = acos(-1);
+
+void solve() {
+	cout << ps(P, 15) << nline;
+}
+
+///////////////////////////////////////////////////////
+
+ceil  a+b-1/b // greater or eqal  number 
+
+///////////////////////////////////////////////////////
+
+max({a,b,c})
+min({a,b,c}) for theee number
+
+///////////////////////////////////
+
+if we want to compare the a^b and c^ d then we take log both side and compare
+
+take it in long double
+alogb >clogd 
+
+and if we dont want to check equal  we can addd 1e-	12
+///////////////////////////////////////////////////////
