@@ -103,59 +103,76 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
   if (found != string::npos)
 */
 /*::::::::::::::::::::::::::StartHere:::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-
-
-void solve() {
-	int n , m ; cin >> n >> m ;
-	vector<vector<int>> graph(n + 1);
-	for (int i = 0 ; i < m; i++) {
-		int a, b ; cin >> a >> b ;
-		graph[a].push_back(b);
-		graph[b].push_back(a);
+class manacher {
+public:
+	vector<int> mansArr(string s) {
+		string t;
+		for (auto c : s) t += string("#") + c;
+		vector<int> res = manacherOdd(t + "#");
+		return res;
 	}
-
-
-	vector<int> vis(n + 1);
-	vector<int> par(n + 1);
-
-
-	int ind = -1 ;
-	function<void(int, int)> dfs = [&](int src, int pare) {
-		vis[src] = 1;
-		par[src] = pare;
-
-		for (auto it : graph[src]) {
-			if (it == pare) continue;
-			if (!vis[it]) {
-				dfs(it, src);
-			} else {
-				int ptrr = src;
-				int en = it;
-				vector<int> ans;
-				ans.push_back(ptrr);
-
-				while (ptrr != en) {
-					ptrr = par[ptrr];
-					ans.push_back(ptrr);
-				}
-				ans.push_back(src);
-
-				cout << ans.size() << nline;
-				for (auto it : ans) {
-					cout << it << " ";
-				}
-				exit(0);
+	vector<int> manacherOdd(string s) {
+		int n = s.size(), l = 1, r = 1;
+		s = "$" + s + "^";
+		vector<int> p(n + 2);
+		for (int i = 1; i <= n; i++) {
+			p[i] = min(r - i, p[l + r - i]);
+			while (s[i - p[i]] == s[i + p[i]]) p[i]++;
+			if (i + p[i] > r) {
+				l = i - p[i];
+				r = i + p[i];
 			}
 		}
-	};
-
-
-	for (int i = 1 ; i <= n ; i++) {
-		if (!vis[i])
-			dfs(i, -1);
+		return vector<int>(begin(p) + 1, end(p) - 1);
 	}
+};
 
-	cout << "IMPOSSIBLE" << nline;
+class Kmp {
+public:
+	// longest prefix suffix
+	vector<int> lps;
+	int n ;
+	string s ;
+	Kmp(string ss ) {
+		n = ss.size();
+		s = ss ;
+		lps.clear();
+		lps.resize(n + 1);
+	}
+	vector<int> getKmp() {
+		//string s = rev + '#' + t; // palindrome that needs to be added
+		int i = 0 , j = -1 ;
+		lps[0] = -1;
+		while (i < n) {
+			while (j != -1  && s[i] != s[j]) j = lps[j];
+			j++;
+			i++;
+			lps[i] = j;
+		}
+		return lps;
+	}
+	string attachHash(string a , string b) {
+		return a + "#" + b;
+	}
+};
+
+class Solution {
+public:
+	string longestPrefix(string s) {
+		Kmp k(s);
+		vector<int> kkm = k.getKmp();
+		return s.substr(0, kkm[kkm.size() - 1]);
+	}
+};
+void solve() {
+	Solution s;
+	Kmp k("leetcode") ;
+
+
+	vi ans = k.getKmp();
+	for (auto it : ans ) cout << it << " ";
+
+
 }
 int32_t main() {
 #ifndef ONLINE_JUDGE
@@ -165,25 +182,4 @@ int32_t main() {
 	solve();
 }
 /*----------------------------------endsHere----------------------------------*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

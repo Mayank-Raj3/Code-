@@ -103,59 +103,118 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
   if (found != string::npos)
 */
 /*::::::::::::::::::::::::::StartHere:::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+/*void Using Merge segment  (){
 
-
-void solve() {
-	int n , m ; cin >> n >> m ;
-	vector<vector<int>> graph(n + 1);
-	for (int i = 0 ; i < m; i++) {
-		int a, b ; cin >> a >> b ;
-		graph[a].push_back(b);
-		graph[b].push_back(a);
-	}
-
-
-	vector<int> vis(n + 1);
-	vector<int> par(n + 1);
-
-
-	int ind = -1 ;
-	function<void(int, int)> dfs = [&](int src, int pare) {
-		vis[src] = 1;
-		par[src] = pare;
-
-		for (auto it : graph[src]) {
-			if (it == pare) continue;
-			if (!vis[it]) {
-				dfs(it, src);
-			} else {
-				int ptrr = src;
-				int en = it;
-				vector<int> ans;
-				ans.push_back(ptrr);
-
-				while (ptrr != en) {
-					ptrr = par[ptrr];
-					ans.push_back(ptrr);
-				}
-				ans.push_back(src);
-
-				cout << ans.size() << nline;
-				for (auto it : ans) {
-					cout << it << " ";
-				}
-				exit(0);
+	vpii v;
+	REP(i, 0, m){
+		int prev = 0;
+		REP(j, 1, n){
+			if (arr[j][i] >= arr[j - 1][i])
+				continue;
+			else{
+				v.pb({prev, j - 1});
+				prev = j;
 			}
 		}
-	};
-
-
-	for (int i = 1 ; i <= n ; i++) {
-		if (!vis[i])
-			dfs(i, -1);
+		v.pb({prev, n - 1});
 	}
 
-	cout << "IMPOSSIBLE" << nline;
+	// v :- insert all inc segments
+
+
+
+	sort(all(v), [](pii & a, pii & b){
+		if (a.F == b.F)
+			return a.S > b.S;
+		return a.F < b.F;
+	});
+	// 1,2  1,4 1,5
+
+
+	sort as {1,5} , {1,4} , {1,2}
+
+
+	set<pii> st;
+	int l = v[0].F, r = v[0].S;
+	for (int i = 1; i < sz(v); i++){
+		if (v[i].F >= l && v[i].S <= r)
+			continue;
+
+		// skips 1,4 ,1,2 as the are included in 1,5
+
+		st.insert({l, r});
+		l = v[i].F, r = v[i].S;
+	}
+	st.insert({l, r});
+	int q;
+	cin >> q;
+	while (q--)
+	{
+		int l, r;
+		cin >> l >> r;
+		l--, r--;
+		auto it = st.upper_bound({l, INF});
+		it--;
+		if (it->F <= l && it->S >= r)
+			cout << "Yes\n";
+		else
+			cout << "No\n";
+	}
+}
+*/
+void solve() {
+	int n  , m ; cin >> n >> m ;
+
+	vector<vector<int>> arr(n , vector<int> (m));
+	vector<vector<int>> dp(n, vector<int> (m, 1));
+
+	vector<int> inc(n + 1);
+
+
+	for (int i = 0 ; i < n ; i++) {
+		for (int j = 0 ; j < m ; j++) {
+			cin >> arr[i][j];
+		}
+	}
+
+	/*
+		Build Dp from below
+
+		dp[i] represents max no of consecutive inc ele in row i
+
+		if arr[i][j]<=arr[i+1][j] = dp[i]+1
+		else dp[i] =1
+
+		1 1 1 1
+
+	*/
+	for (int i = n - 1; i >= 0 ; i--) {
+		for (int j = 0 ; j < m ; j++) {
+			dp[i][j] = 1;
+			if (i + 1 < n && arr[i][j] <= arr[i + 1][j])
+				dp[i][j] = 1 + dp[i + 1][j];
+
+			inc[i] = max(inc[i], dp[i][j]);
+		}
+	}
+
+	int k ; cin >> k ;
+	for (int i = 0 ; i < k ; i++) {
+		int l , r ; cin >> l >> r ;
+		l--, r--;
+		if (inc[l] >= (r - l + 1 )) {
+			Yes
+		} else {
+			No
+		}
+	}
+
+
+
+
+
+
+
 }
 int32_t main() {
 #ifndef ONLINE_JUDGE
@@ -165,25 +224,4 @@ int32_t main() {
 	solve();
 }
 /*----------------------------------endsHere----------------------------------*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

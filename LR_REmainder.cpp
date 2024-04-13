@@ -48,7 +48,8 @@ typedef unordered_map<int, int>       umapii  ;
 typedef unsigned long long            ull     ;
 //constants
 const int MAX_N = 1e5 + 5;
-const int mod = 1e9 + 7;
+int MOD ;
+const int mod = 1e9 + 7 ;
 const int INF = 2e18;
 
 
@@ -104,86 +105,95 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 */
 /*::::::::::::::::::::::::::StartHere:::::::::::::::::::::::::::::::::::::::::::::::::::::*/
 
+class SegmentTree {
+private:
+	vector<int> tree;
+	vector<int> arr;
+	int n;
+
+	int build(int node, int start, int end) {
+		if (start == end) {
+			return tree[node] = arr[start] % MOD;
+		}
+		int mid = (start + end) / 2;
+		return tree[node] = (build(2 * node, start, mid) * build(2 * node + 1, mid + 1, end)) % MOD;
+	}
+
+	int query(int node, int start, int end, int l, int r) {
+		if (r < start || end < l) return 1; // Identity element for multiplication
+		if (l <= start && end <= r) return tree[node];
+
+		int mid = (start + end) / 2;
+		int left_prod = query(2 * node, start, mid, l, r);
+		int right_prod = query(2 * node + 1, mid + 1, end, l, r);
+		return (left_prod * right_prod) % MOD;
+	}
+
+public:
+	SegmentTree(const vector<int>& input) {
+		n = input.size();
+		arr = input;
+		tree.resize(4 * n);
+		build(1, 0, n - 1);
+	}
+
+	int query(int l, int r) {
+		return query(1, 0, n - 1, l, r);
+	}
+};
+
 
 void solve() {
-	int n , m ; cin >> n >> m ;
-	vector<vector<int>> graph(n + 1);
-	for (int i = 0 ; i < m; i++) {
-		int a, b ; cin >> a >> b ;
-		graph[a].push_back(b);
-		graph[b].push_back(a);
+	int n , m ; cin >> n >> MOD ;
+	vector<int> arr(n);
+	for (int i = 0; i < n ; i ++) {
+		cin >> arr[i];
+		// pref[i + 1] = arr[i];
+
 	}
+	SegmentTree segTree(arr);
 
+	// for (int i = 1; i <= n ; i++) {
+	// 	pref[i] *= pref[i - 1];
 
-	vector<int> vis(n + 1);
-	vector<int> par(n + 1);
+	// }
 
+	// for (int i = n; i >= 1 ; i--) {
+	// 	suff[i ] = arr[i - 1];
+	// 	if (i != n)
+	// 		suff[i] *= suff[i + 1];
+	// }
 
-	int ind = -1 ;
-	function<void(int, int)> dfs = [&](int src, int pare) {
-		vis[src] = 1;
-		par[src] = pare;
+	// db(pref)
+	// db(suff)
 
-		for (auto it : graph[src]) {
-			if (it == pare) continue;
-			if (!vis[it]) {
-				dfs(it, src);
-			} else {
-				int ptrr = src;
-				int en = it;
-				vector<int> ans;
-				ans.push_back(ptrr);
+	string s; cin >> s ;
 
-				while (ptrr != en) {
-					ptrr = par[ptrr];
-					ans.push_back(ptrr);
-				}
-				ans.push_back(src);
+	int left = 0 , right = n - 1 ;
+	for (int i = 0 ; i < s.size(); i++) {
+		cout << segTree.query(left , right  ) << " ";
 
-				cout << ans.size() << nline;
-				for (auto it : ans) {
-					cout << it << " ";
-				}
-				exit(0);
-			}
+		int com = s[i];
+		if (com == 'L') {
+			left++;
+
+		} else {
+			right--;
+
 		}
-	};
 
-
-	for (int i = 1 ; i <= n ; i++) {
-		if (!vis[i])
-			dfs(i, -1);
 	}
+	cout << nline;
 
-	cout << "IMPOSSIBLE" << nline;
+
 }
 int32_t main() {
 #ifndef ONLINE_JUDGE
 	freopen("Error.txt", "w", stderr);
 #endif
 	jay_shri_ram;
-	solve();
+	int t ; cin >> t ; while (t--)
+		solve();
 }
 /*----------------------------------endsHere----------------------------------*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

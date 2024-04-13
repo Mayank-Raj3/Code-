@@ -106,84 +106,52 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 
 
 void solve() {
-	int n , m ; cin >> n >> m ;
-	vector<vector<int>> graph(n + 1);
-	for (int i = 0 ; i < m; i++) {
-		int a, b ; cin >> a >> b ;
-		graph[a].push_back(b);
-		graph[b].push_back(a);
-	}
+	int n ; cin >> n ;
+	string temp; cin >> temp  ;
+	string anss(n, '1');
 
+	for (int k = n ; k >= 1 ; k --) {
+		string s = temp ;
+		vector<int> pref(n + 1, 0);
 
-	vector<int> vis(n + 1);
-	vector<int> par(n + 1);
+		for (int i = 0 ; i < n ; i++) {
+			if (i)
+				pref[i ] += pref[i - 1];
 
-
-	int ind = -1 ;
-	function<void(int, int)> dfs = [&](int src, int pare) {
-		vis[src] = 1;
-		par[src] = pare;
-
-		for (auto it : graph[src]) {
-			if (it == pare) continue;
-			if (!vis[it]) {
-				dfs(it, src);
-			} else {
-				int ptrr = src;
-				int en = it;
-				vector<int> ans;
-				ans.push_back(ptrr);
-
-				while (ptrr != en) {
-					ptrr = par[ptrr];
-					ans.push_back(ptrr);
+			if ((s[i] == '0' and pref[i] % 2 == 0) or (s[i] == '1' and pref[i] % 2 == 1)) {
+				//  0 and even
+				if (i + k <= n) {
+					pref[i] += 1 ;
+					pref[i + k ] -= 1;
 				}
-				ans.push_back(src);
+			}
 
-				cout << ans.size() << nline;
-				for (auto it : ans) {
-					cout << it << " ";
+			if ( pref[i] % 2 ) {
+				if (s[i] == '1') {
+					s[i] = '0';
+				} else {
+					s[i] = '1';
 				}
-				exit(0);
 			}
 		}
-	};
 
+		db(pref)
+		if (s == anss) {
+			cout << k << nline;
+			return ;
+		}
 
-	for (int i = 1 ; i <= n ; i++) {
-		if (!vis[i])
-			dfs(i, -1);
 	}
 
-	cout << "IMPOSSIBLE" << nline;
+
 }
 int32_t main() {
 #ifndef ONLINE_JUDGE
 	freopen("Error.txt", "w", stderr);
 #endif
 	jay_shri_ram;
-	solve();
+	int t ; cin >> t ; while (t--)
+		solve();
 }
 /*----------------------------------endsHere----------------------------------*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

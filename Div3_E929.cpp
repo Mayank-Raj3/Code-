@@ -106,84 +106,55 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 
 
 void solve() {
-	int n , m ; cin >> n >> m ;
-	vector<vector<int>> graph(n + 1);
-	for (int i = 0 ; i < m; i++) {
-		int a, b ; cin >> a >> b ;
-		graph[a].push_back(b);
-		graph[b].push_back(a);
+	int n ; cin >> n ;
+	vector<int> arr(n + 1), pref(n + 1);
+	for (int i = 1 ; i <= n ; i++) cin >> arr[i];
+	for (int i = 1 ; i <= n ; i++) {
+		pref[i] += arr[i] + pref[i - 1];
 	}
-
-
-	vector<int> vis(n + 1);
-	vector<int> par(n + 1);
-
-
-	int ind = -1 ;
-	function<void(int, int)> dfs = [&](int src, int pare) {
-		vis[src] = 1;
-		par[src] = pare;
-
-		for (auto it : graph[src]) {
-			if (it == pare) continue;
-			if (!vis[it]) {
-				dfs(it, src);
+	auto check = [&](int r , int u, int l ) {
+		int sec = pref[r] - pref[l - 1];
+		int points = 0 ;
+		if (sec + 1  <= u) {
+			int tot = ((u) * (u + 1)) / 2;
+			int rem = u - sec;
+			int s1 = ((rem) * (rem + 1)) / 2;
+			points += (tot - s1);
+			//  1 to u
+		}
+		else {
+			//  sec +1 > u
+			points = ((u) * (u + 1)) / 2;
+			sec -= (u + 1);
+			int tot = ((sec) * (sec + 1)) / 2;
+			points -= tot;
+		}
+		return points;
+	};
+	int q; cin >> q ;
+	while (q--) {
+		int l , u; cin >> l >> u ;
+		int lo = l , hi = n , ans = l ;
+		while (lo <= hi) {
+			int mid = (lo + hi) / 2;
+			if (check(mid, u, l) > check(mid - 1, u, l)) {
+				ans  = mid ;
+				lo = mid + 1;
 			} else {
-				int ptrr = src;
-				int en = it;
-				vector<int> ans;
-				ans.push_back(ptrr);
-
-				while (ptrr != en) {
-					ptrr = par[ptrr];
-					ans.push_back(ptrr);
-				}
-				ans.push_back(src);
-
-				cout << ans.size() << nline;
-				for (auto it : ans) {
-					cout << it << " ";
-				}
-				exit(0);
+				hi = mid - 1;
 			}
 		}
-	};
-
-
-	for (int i = 1 ; i <= n ; i++) {
-		if (!vis[i])
-			dfs(i, -1);
+		cout << ans << " ";
 	}
-
-	cout << "IMPOSSIBLE" << nline;
+	cout << nline;
 }
 int32_t main() {
 #ifndef ONLINE_JUDGE
 	freopen("Error.txt", "w", stderr);
 #endif
 	jay_shri_ram;
-	solve();
+	int t ; cin >> t ; while (t--)
+		solve();
 }
 /*----------------------------------endsHere----------------------------------*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

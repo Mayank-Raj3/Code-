@@ -106,84 +106,53 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 
 
 void solve() {
-	int n , m ; cin >> n >> m ;
-	vector<vector<int>> graph(n + 1);
-	for (int i = 0 ; i < m; i++) {
-		int a, b ; cin >> a >> b ;
-		graph[a].push_back(b);
-		graph[b].push_back(a);
-	}
+
+	int n ; cin >> n ;
+	string s ; cin >> s ;
 
 
-	vector<int> vis(n + 1);
-	vector<int> par(n + 1);
+	auto check = [&](int mid) {
+		cout << mid << nline;
+		string temp = s;
 
-
-	int ind = -1 ;
-	function<void(int, int)> dfs = [&](int src, int pare) {
-		vis[src] = 1;
-		par[src] = pare;
-
-		for (auto it : graph[src]) {
-			if (it == pare) continue;
-			if (!vis[it]) {
-				dfs(it, src);
-			} else {
-				int ptrr = src;
-				int en = it;
-				vector<int> ans;
-				ans.push_back(ptrr);
-
-				while (ptrr != en) {
-					ptrr = par[ptrr];
-					ans.push_back(ptrr);
+		for (int i = 0; i <= (n - mid); i++) {
+			if (temp[i] == '0') {
+				for (int j = i; j < (i + mid); j++) {
+					if (temp[j] == '0')
+						temp[j] = '1';
+					else
+						temp[j] = '0';
 				}
-				ans.push_back(src);
-
-				cout << ans.size() << nline;
-				for (auto it : ans) {
-					cout << it << " ";
-				}
-				exit(0);
 			}
 		}
+
+		string ones(n, '1');
+		return ones == temp;
 	};
 
+	int lo =  1 , hi = n , ans =  1 ;
 
-	for (int i = 1 ; i <= n ; i++) {
-		if (!vis[i])
-			dfs(i, -1);
+	while (lo <= hi) {
+		int mid = (lo + hi) / 2;
+		if (check(mid)) {
+			ans = mid ;
+			lo = mid + 1 ;
+		} else {
+			hi = mid - 1 ;
+		}
 	}
 
-	cout << "IMPOSSIBLE" << nline;
+	cout << ans << endl;
+
+
 }
 int32_t main() {
 #ifndef ONLINE_JUDGE
 	freopen("Error.txt", "w", stderr);
 #endif
 	jay_shri_ram;
-	solve();
+	int t ; cin >> t ; while (t--)
+		solve();
 }
 /*----------------------------------endsHere----------------------------------*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

@@ -106,48 +106,47 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 
 
 void solve() {
-	int n, m;
-	cin >> n >> m;
-	vector<int> arr(n);
-	for (int i = 0; i < n; i++) {
-		cin >> arr[i];
+	int n;
+	cin >> n;
+	int m;
+	cin >> m;
+	int a[n];
+	for (int i = 0 ; i < n ; i++) cin >> a[i];
+	int l = 0, r = n - 1;
+	string s;
+	cin >> s;
+	vector<int> v;
+	for (int i = 0 ; i < n ; i++)
+	{
+		if (s[i] == 'L')
+		{
+			v.push_back(a[l]);
+			l++;
+		}
+		else
+		{
+			v.push_back(a[r]);
+			r--;
+		}
 	}
 
-	sort(arr.begin(), arr.end(), [&] (int a, int b) {
-		int trail1 = 0 , trail2 = 0 ;
-		int mm = 10;
-		while (a % mm  == 0) {
-			mm *= 10;
-			++trail1;
-		}
-		mm = 10 ;
-		while (b % mm  == 0) {
-			mm *= 10;
-			++trail2;
-		}
-		return trail1 > trail2;
+	reverse(v.begin(), v.end());
+	db(v)
 
-	});
 
-	int ans = 0;
-	int ch = 0 ;
-	for (int i = 0; i < n; i++) {
-		ans += log10(arr[i]) + 1;
-		if (ch % 2 == 0) {
-			int mm = 10 , an = 0 ;
-			while (arr[i] % mm  == 0) {
-				mm *= 10;
-				++an;
-			}
-			ans -= an;
-		}
-		ch++;
+	int p = v[0];
+	vector<int> ans;
+	ans.push_back(p % m);
+	for (int i =  1; i < n ; i++)	{
+		p = ((p % m) * (v[i] % m)) % m;
+		ans.push_back(p % m);
+		db(ans)
 	}
-	if (ans > m ) {
-		cout << "Sasha" << nline;
-	} else {
-		cout << "Anna" << nline;
-	}
+	reverse(ans.begin(), ans.end());
+	for (int i = 0 ; i < n ; i++) cout << ans[i] << " ";
+	cout << endl;
+
+
 }
 int32_t main() {
 #ifndef ONLINE_JUDGE

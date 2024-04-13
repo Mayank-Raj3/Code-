@@ -106,56 +106,43 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 
 
 void solve() {
-	int n , m ; cin >> n >> m ;
-	vector<vector<int>> graph(n + 1);
-	for (int i = 0 ; i < m; i++) {
-		int a, b ; cin >> a >> b ;
-		graph[a].push_back(b);
-		graph[b].push_back(a);
-	}
 
+	int n , k ; cin >> n >> k ;
+	vector<int>arr(n);
+	for (int i = 0 ; i < n ; i++) cin >> arr[i];
 
-	vector<int> vis(n + 1);
-	vector<int> par(n + 1);
+	int ans  = 0 ;
 
+	map<int, int> mpp;
 
-	int ind = -1 ;
-	function<void(int, int)> dfs = [&](int src, int pare) {
-		vis[src] = 1;
-		par[src] = pare;
+	int i = 0 , j = 0 ;
 
-		for (auto it : graph[src]) {
-			if (it == pare) continue;
-			if (!vis[it]) {
-				dfs(it, src);
-			} else {
-				int ptrr = src;
-				int en = it;
-				vector<int> ans;
-				ans.push_back(ptrr);
+	int ansi =  - 1, ansj = -1 ;
 
-				while (ptrr != en) {
-					ptrr = par[ptrr];
-					ans.push_back(ptrr);
-				}
-				ans.push_back(src);
+	while (i < n) {
+		mpp[arr[i]]++;
 
-				cout << ans.size() << nline;
-				for (auto it : ans) {
-					cout << it << " ";
-				}
-				exit(0);
+		while (j <= i and mpp.size() > k) {
+			mpp[arr[j]]--;
+
+			if (mpp[arr[j]] == 0) {
+				mpp.erase(arr[j]);
 			}
+			j++;
 		}
-	};
+		if ( mpp.size() <= k and ans <= (i - j + 1)) {
+			ans = i - j + 1;
+			ansi = i ;
+			ansj = j;
+		}
 
+		i++;
 
-	for (int i = 1 ; i <= n ; i++) {
-		if (!vis[i])
-			dfs(i, -1);
 	}
 
-	cout << "IMPOSSIBLE" << nline;
+	cout << ansj + 1 << " " << ansi + 1 << nline;
+
+
 }
 int32_t main() {
 #ifndef ONLINE_JUDGE
@@ -165,25 +152,4 @@ int32_t main() {
 	solve();
 }
 /*----------------------------------endsHere----------------------------------*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

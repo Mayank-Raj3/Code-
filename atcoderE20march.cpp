@@ -106,56 +106,48 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 
 
 void solve() {
-	int n , m ; cin >> n >> m ;
-	vector<vector<int>> graph(n + 1);
-	for (int i = 0 ; i < m; i++) {
-		int a, b ; cin >> a >> b ;
-		graph[a].push_back(b);
-		graph[b].push_back(a);
+	int  n , m ; cin >> n >>  m ;
+	int k ; cin >> k ;
+	set<int> row , col ;
+	map<int, int> mpp;
+
+	vector<vector<int>> q ;
+	for (int i = 0 ; i < k ; i++) {
+		int t , r  , c ; cin >> t  >> r >> c ;
+		q.push_back({t, r, c});
 	}
+	int cnt  = 0 ;
+	for (int i = k - 1 ; i >= 0 ; i--) 	{
+		int t = q[i][0];
+		int r = q[i][1];
+		int c = q[i][2];
 
-
-	vector<int> vis(n + 1);
-	vector<int> par(n + 1);
-
-
-	int ind = -1 ;
-	function<void(int, int)> dfs = [&](int src, int pare) {
-		vis[src] = 1;
-		par[src] = pare;
-
-		for (auto it : graph[src]) {
-			if (it == pare) continue;
-			if (!vis[it]) {
-				dfs(it, src);
-			} else {
-				int ptrr = src;
-				int en = it;
-				vector<int> ans;
-				ans.push_back(ptrr);
-
-				while (ptrr != en) {
-					ptrr = par[ptrr];
-					ans.push_back(ptrr);
-				}
-				ans.push_back(src);
-
-				cout << ans.size() << nline;
-				for (auto it : ans) {
-					cout << it << " ";
-				}
-				exit(0);
+		if (t == 1) {
+			if (row.count(r) == 0) {
+				int x = m - col.size();
+				if (x > 0)
+					mpp[c] += x;
+				cnt += (x);
+				row.insert(r);
+			}
+		} else {
+			if (col.count(r) == 0) {
+				int x = n - row.size();
+				if (x > 0)
+					mpp[c] += x;
+				cnt += (x);
+				col.insert(r);
 			}
 		}
-	};
+	}
+	if (n * m - cnt > 0)
+		mpp[0] += (n * m - cnt);
 
-
-	for (int i = 1 ; i <= n ; i++) {
-		if (!vis[i])
-			dfs(i, -1);
+	cout << mpp.size() << " " << nline;
+	for (auto it : mpp) {
+		cout << it.first << " " << it.second << nline;
 	}
 
-	cout << "IMPOSSIBLE" << nline;
 }
 int32_t main() {
 #ifndef ONLINE_JUDGE
@@ -165,25 +157,4 @@ int32_t main() {
 	solve();
 }
 /*----------------------------------endsHere----------------------------------*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

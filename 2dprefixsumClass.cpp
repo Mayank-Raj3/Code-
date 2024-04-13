@@ -104,86 +104,39 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 */
 /*::::::::::::::::::::::::::StartHere:::::::::::::::::::::::::::::::::::::::::::::::::::::*/
 
-
-void solve() {
-	int n , m ; cin >> n >> m ;
-	vector<vector<int>> graph(n + 1);
-	for (int i = 0 ; i < m; i++) {
-		int a, b ; cin >> a >> b ;
-		graph[a].push_back(b);
-		graph[b].push_back(a);
-	}
-
-
-	vector<int> vis(n + 1);
-	vector<int> par(n + 1);
-
-
-	int ind = -1 ;
-	function<void(int, int)> dfs = [&](int src, int pare) {
-		vis[src] = 1;
-		par[src] = pare;
-
-		for (auto it : graph[src]) {
-			if (it == pare) continue;
-			if (!vis[it]) {
-				dfs(it, src);
-			} else {
-				int ptrr = src;
-				int en = it;
-				vector<int> ans;
-				ans.push_back(ptrr);
-
-				while (ptrr != en) {
-					ptrr = par[ptrr];
-					ans.push_back(ptrr);
-				}
-				ans.push_back(src);
-
-				cout << ans.size() << nline;
-				for (auto it : ans) {
-					cout << it << " ";
-				}
-				exit(0);
+class pref2d {
+public:
+	vector<vector<int>> pref;
+	int n, m;
+	pref2d(vector<vector<int>> grid) {
+		n = grid.size();
+		m = grid[0].size();
+		pref.resize(n + 1, vector<int>(m + 1, 0));
+		for (int i = 1; i <= n; i++) {
+			for (int j = 1; j <= m; j++) {
+				pref[i][j] = pref[i][j - 1] + grid[i - 1][j - 1] + pref[i - 1][j] - pref[i - 1][j - 1];
 			}
 		}
-	};
-
-
-	for (int i = 1 ; i <= n ; i++) {
-		if (!vis[i])
-			dfs(i, -1);
 	}
+	// 1 based indexing
+	int query(int x2, int y2, int x1, int y1) {
+		return pref[x2][y2] - pref[x1 - 1][y2] - pref[x2][y1 - 1] + pref[x1 - 1][y1 - 1];
+	}
+};
+void solve() {
 
-	cout << "IMPOSSIBLE" << nline;
+
+
+
+
 }
 int32_t main() {
 #ifndef ONLINE_JUDGE
 	freopen("Error.txt", "w", stderr);
 #endif
 	jay_shri_ram;
-	solve();
+	int t ; cin >> t ; while (t--)
+		solve();
 }
 /*----------------------------------endsHere----------------------------------*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

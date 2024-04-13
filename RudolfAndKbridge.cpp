@@ -106,84 +106,63 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 
 
 void solve() {
-	int n , m ; cin >> n >> m ;
-	vector<vector<int>> graph(n + 1);
-	for (int i = 0 ; i < m; i++) {
-		int a, b ; cin >> a >> b ;
-		graph[a].push_back(b);
-		graph[b].push_back(a);
-	}
+	int n , m , k , d ; cin >> n >> m >> k >> d ;
+
+	vector<int> arr(n);
+	for (int j = 0; j < n ; j++) {
+		multiset<int> ms ;
+		vector<int> dp(m, 0);
+		// dp[i] min cost to reach ith
+
+		dp[0] = 1 ;
+		int depth ; cin >> depth;
+		ms.insert(1);
+
+		for (int i = 1 ; i < m ; i++) {
+			cin >> depth;
+
+			dp[i] = depth + 1 + *ms.begin();
+			ms.insert(dp[i]);
 
 
-	vector<int> vis(n + 1);
-	vector<int> par(n + 1);
-
-
-	int ind = -1 ;
-	function<void(int, int)> dfs = [&](int src, int pare) {
-		vis[src] = 1;
-		par[src] = pare;
-
-		for (auto it : graph[src]) {
-			if (it == pare) continue;
-			if (!vis[it]) {
-				dfs(it, src);
-			} else {
-				int ptrr = src;
-				int en = it;
-				vector<int> ans;
-				ans.push_back(ptrr);
-
-				while (ptrr != en) {
-					ptrr = par[ptrr];
-					ans.push_back(ptrr);
-				}
-				ans.push_back(src);
-
-				cout << ans.size() << nline;
-				for (auto it : ans) {
-					cout << it << " ";
-				}
-				exit(0);
+			if (i - d  >= 1) {
+				ms.erase(ms.find(dp[i - d - 1]));
 			}
+
 		}
-	};
 
-
-	for (int i = 1 ; i <= n ; i++) {
-		if (!vis[i])
-			dfs(i, -1);
+		arr[j] = dp[m - 1];
 	}
 
-	cout << "IMPOSSIBLE" << nline;
+
+
+	int i = 0 , j = 0 , sum = 0, ans = INF ;
+
+
+	while (j < n) {
+		sum += arr[j];
+		if (j - i + 1 < k) {
+			j++;
+		}
+		else if (j - i + 1 == k) {
+			ans = min(sum , ans );
+			sum -= arr[i];
+			i++, j++;
+		}
+	}
+
+	cout << ans << nline;
+
+
+
 }
 int32_t main() {
 #ifndef ONLINE_JUDGE
 	freopen("Error.txt", "w", stderr);
 #endif
 	jay_shri_ram;
-	solve();
+	int t ; cin >> t ; while (t--)
+		solve();
 }
 /*----------------------------------endsHere----------------------------------*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

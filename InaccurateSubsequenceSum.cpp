@@ -106,84 +106,64 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 
 
 void solve() {
-	int n , m ; cin >> n >> m ;
-	vector<vector<int>> graph(n + 1);
-	for (int i = 0 ; i < m; i++) {
-		int a, b ; cin >> a >> b ;
-		graph[a].push_back(b);
-		graph[b].push_back(a);
+	int n , m , k ; cin >> n >> m >> k ;
+
+	vector<int> arr(n), brr(m);
+	map<int, int> ms , t;
+
+	for (int i = 0 ; i < n ; i++) cin >> arr[i];
+	for (int i = 0; i < m ; i++) {
+		cin >> brr[i];
+		ms[brr[i]]++;
 	}
 
+	int i = 0, j = 0 ;
+	int currcnt = 0 , ans  = 0;
 
-	vector<int> vis(n + 1);
-	vector<int> par(n + 1);
 
 
-	int ind = -1 ;
-	function<void(int, int)> dfs = [&](int src, int pare) {
-		vis[src] = 1;
-		par[src] = pare;
+	while (i < n) {
 
-		for (auto it : graph[src]) {
-			if (it == pare) continue;
-			if (!vis[it]) {
-				dfs(it, src);
-			} else {
-				int ptrr = src;
-				int en = it;
-				vector<int> ans;
-				ans.push_back(ptrr);
 
-				while (ptrr != en) {
-					ptrr = par[ptrr];
-					ans.push_back(ptrr);
-				}
-				ans.push_back(src);
-
-				cout << ans.size() << nline;
-				for (auto it : ans) {
-					cout << it << " ";
-				}
-				exit(0);
-			}
+		if (ms.count(arr[i]) and (t[arr[i]]  < ms[arr[i]]) ) {
+			currcnt++;
 		}
-	};
+
+		t[arr[i]]++;
+
+		if ((i - j + 1) < m) {
+
+			i++;
+		} else if ((i - j + 1) == m) {
+
+			if (currcnt >= k) {
+				ans++;
+			}
 
 
-	for (int i = 1 ; i <= n ; i++) {
-		if (!vis[i])
-			dfs(i, -1);
+			if (t.count(arr[j])) {
+				if (t[arr[j]] <= ms[arr[j]])
+					currcnt--;
+
+				t[arr[j]]--;
+
+			}
+
+			i++, j++;
+		}
 	}
 
-	cout << "IMPOSSIBLE" << nline;
+
+	cout << ans << nline;
+
 }
 int32_t main() {
 #ifndef ONLINE_JUDGE
 	freopen("Error.txt", "w", stderr);
 #endif
 	jay_shri_ram;
-	solve();
+	int t ; cin >> t ; while (t--)
+		solve();
 }
 /*----------------------------------endsHere----------------------------------*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
