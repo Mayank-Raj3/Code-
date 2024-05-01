@@ -104,43 +104,36 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 */
 /*::::::::::::::::::::::::::StartHere:::::::::::::::::::::::::::::::::::::::::::::::::::::*/
 
-class Solution {
-public:
-	int dp[1010][11];
-	vector<vector<int>> pref;
 
-	int rec(int ind, int prev) {
-		if (ind < 0) return 0;
-		if (dp[ind][prev] != -1) return dp[ind][prev];
-
-		int ans = 1e9;
-		for (int k = 0; k <= 9; k++) {
-			if (k != prev) {
-				ans = min(ans, pref[ind][k] + rec(ind - 1, k));
+void solve() {
+	int n;
+	cin >> n;
+	/***
+	 * grey code
+	 * b1 b2 b3 b4
+	 * g1 g2 g3 g4
+	 *
+	 * g1 = b1
+	 * g2 = b1^b2
+	 * g3 = b2^b3
+	 * g4=  b4^b3
+	 *  ***/
+	for (int i = 0; i < (1 << n); i++) {
+		vector<int> t;
+		for (int j = n - 1; j >= 0; j--) {
+			if ((1 << j) & i) {
+				t.push_back(1);
+			} else {
+				t.push_back(0);
 			}
 		}
-		return dp[ind][prev] = ans;
-	}
-
-	int minimumOperations(vector<vector<int>> &grid) {
-		int n = grid.size(), m = grid[0].size();
-		pref.resize(m, vector<int>(11, 0));
-		memset(dp, -1, sizeof(dp));
-
-
-		for (int j = 0; j < m; j++) {
-			for (int k = 0; k < 10; k++) {
-				for (int row = 0; row < n; row++) {
-					if (grid[row][j] != k)
-						pref[j][k] += 1;
-				}
-			}
+		cout << t[0];
+		for (int i = 1; i < t.size(); i++) {
+			cout << (t[i] ^ t[i - 1]);
 		}
-
-
-		return rec(m - 1, 10);
+		cout << nline;
 	}
-};
+}
 
 int32_t main() {
 #ifndef ONLINE_JUDGE

@@ -104,50 +104,31 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 */
 /*::::::::::::::::::::::::::StartHere:::::::::::::::::::::::::::::::::::::::::::::::::::::*/
 
-class Solution {
-public:
-	int dp[1010][11];
-	vector<vector<int>> pref;
 
-	int rec(int ind, int prev) {
-		if (ind < 0) return 0;
-		if (dp[ind][prev] != -1) return dp[ind][prev];
-
-		int ans = 1e9;
-		for (int k = 0; k <= 9; k++) {
-			if (k != prev) {
-				ans = min(ans, pref[ind][k] + rec(ind - 1, k));
-			}
-		}
-		return dp[ind][prev] = ans;
+void solve() {
+	int a , b ; cin >> a >> b ;
+	if (a < b) swap(a, b);
+	if (a > 2 * b) {
+		// a=100 b = 12  , 2 from a and 1 from b and b still remains
+		NO
+		return ;
 	}
-
-	int minimumOperations(vector<vector<int>> &grid) {
-		int n = grid.size(), m = grid[0].size();
-		pref.resize(m, vector<int>(11, 0));
-		memset(dp, -1, sizeof(dp));
-
-
-		for (int j = 0; j < m; j++) {
-			for (int k = 0; k < 10; k++) {
-				for (int row = 0; row < n; row++) {
-					if (grid[row][j] != k)
-						pref[j][k] += 1;
-				}
-			}
-		}
-
-
-		return rec(m - 1, 10);
+	a %= 3, b %= 3;
+	// since we can always remove 3 from a pile by appling first -2 and -1 and oppositr to the other pile
+	if (a < b) swap(a, b);
+	if ((a == 2 and b == 1 ) or (a == b and b == 0  ) ) {
+		YES
+	} else {
+		NO
 	}
-};
-
+}
 int32_t main() {
 #ifndef ONLINE_JUDGE
 	freopen("Error.txt", "w", stderr);
 #endif
 	jay_shri_ram;
-	solve();
+	int t ; cin >> t ; while (t--)
+		solve();
 }
 /*----------------------------------endsHere----------------------------------*/
 

@@ -104,44 +104,17 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 */
 /*::::::::::::::::::::::::::StartHere:::::::::::::::::::::::::::::::::::::::::::::::::::::*/
 
-class Solution {
-public:
-	int dp[1010][11];
-	vector<vector<int>> pref;
 
-	int rec(int ind, int prev) {
-		if (ind < 0) return 0;
-		if (dp[ind][prev] != -1) return dp[ind][prev];
+void solve() {
+	// https://oeis.org/search?q=0%2C6+%2C28%2C+96%2C+252%2C+550+%2C1056+%2C1848&language=english&go=Search
 
-		int ans = 1e9;
-		for (int k = 0; k <= 9; k++) {
-			if (k != prev) {
-				ans = min(ans, pref[ind][k] + rec(ind - 1, k));
-			}
-		}
-		return dp[ind][prev] = ans;
+	int n ; cin >> n ;
+	for (int i = 1 ; i <= n ; i++) {
+		cout << (i - 1)*(i + 4)*((i * i) - 3 * i + 4) / 2 << nline;
 	}
 
-	int minimumOperations(vector<vector<int>> &grid) {
-		int n = grid.size(), m = grid[0].size();
-		pref.resize(m, vector<int>(11, 0));
-		memset(dp, -1, sizeof(dp));
 
-
-		for (int j = 0; j < m; j++) {
-			for (int k = 0; k < 10; k++) {
-				for (int row = 0; row < n; row++) {
-					if (grid[row][j] != k)
-						pref[j][k] += 1;
-				}
-			}
-		}
-
-
-		return rec(m - 1, 10);
-	}
-};
-
+}
 int32_t main() {
 #ifndef ONLINE_JUDGE
 	freopen("Error.txt", "w", stderr);

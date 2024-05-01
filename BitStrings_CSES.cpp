@@ -104,44 +104,33 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 */
 /*::::::::::::::::::::::::::StartHere:::::::::::::::::::::::::::::::::::::::::::::::::::::*/
 
-class Solution {
-public:
-	int dp[1010][11];
-	vector<vector<int>> pref;
-
-	int rec(int ind, int prev) {
-		if (ind < 0) return 0;
-		if (dp[ind][prev] != -1) return dp[ind][prev];
-
-		int ans = 1e9;
-		for (int k = 0; k <= 9; k++) {
-			if (k != prev) {
-				ans = min(ans, pref[ind][k] + rec(ind - 1, k));
-			}
-		}
-		return dp[ind][prev] = ans;
+/*** Binary Expo
+ * 2^13 1101
+ * 0th -> res =1 a = 2 b = 13(1101)
+ * 1st -> odd res = 2  a = 2^2 b = 6(110)
+ * 2nd -> even res = 2 a = 2^4 b = 11(3)
+ * 3rd -> odd  res 2*2^4 a = 2^8 b = 1
+ * 4th -> odd  res= 2*2^4*2^8 a = 2^16 b = 0 (end)
+ ***/
+int binexpo(int a , int b , int mod ) {
+	int res = 1  ;
+	while (b > 0) {
+		if (b & 1)
+			res = (res * a) % mod;
+		a = (a * a) % mod;
+		b = b >> 1;
 	}
 
-	int minimumOperations(vector<vector<int>> &grid) {
-		int n = grid.size(), m = grid[0].size();
-		pref.resize(m, vector<int>(11, 0));
-		memset(dp, -1, sizeof(dp));
+	return res % mod ;
 
+}
+void solve() {
+	int a = 2 , b ;
+	cin >> b ;
 
-		for (int j = 0; j < m; j++) {
-			for (int k = 0; k < 10; k++) {
-				for (int row = 0; row < n; row++) {
-					if (grid[row][j] != k)
-						pref[j][k] += 1;
-				}
-			}
-		}
+	cout << binexpo(a, b, mod);
 
-
-		return rec(m - 1, 10);
-	}
-};
-
+}
 int32_t main() {
 #ifndef ONLINE_JUDGE
 	freopen("Error.txt", "w", stderr);

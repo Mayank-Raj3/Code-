@@ -104,44 +104,45 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 */
 /*::::::::::::::::::::::::::StartHere:::::::::::::::::::::::::::::::::::::::::::::::::::::*/
 
-class Solution {
-public:
-	int dp[1010][11];
-	vector<vector<int>> pref;
 
-	int rec(int ind, int prev) {
-		if (ind < 0) return 0;
-		if (dp[ind][prev] != -1) return dp[ind][prev];
-
-		int ans = 1e9;
-		for (int k = 0; k <= 9; k++) {
-			if (k != prev) {
-				ans = min(ans, pref[ind][k] + rec(ind - 1, k));
-			}
-		}
-		return dp[ind][prev] = ans;
+void solve() {
+	string  s; cin >> s;
+	vector<int> arr(26, 0);
+	for (int i = 0; i < s.size(); ++i) {
+		arr[s[i] - 'A']++;
+	}
+	int oddCnt = 0 ;
+	for (auto it : arr) {
+		if (it % 2) oddCnt++;
 	}
 
-	int minimumOperations(vector<vector<int>> &grid) {
-		int n = grid.size(), m = grid[0].size();
-		pref.resize(m, vector<int>(11, 0));
-		memset(dp, -1, sizeof(dp));
-
-
-		for (int j = 0; j < m; j++) {
-			for (int k = 0; k < 10; k++) {
-				for (int row = 0; row < n; row++) {
-					if (grid[row][j] != k)
-						pref[j][k] += 1;
-				}
-			}
-		}
-
-
-		return rec(m - 1, 10);
+	if (oddCnt > 1) {
+		cout << "NO SOLUTION";
+		return ;
 	}
-};
 
+	string ans = "";
+	for (int i = 0 ; i < 26 ; i++) {
+		auto it = arr[i];
+		if (it % 2 == 0) {
+			string t(it / 2 , i + 'A');
+			ans += t;
+		}
+	}
+
+	string ans2 = ans ;
+	reverse(all(ans2));
+
+	for (int i = 0 ; i < 26 ; i++) {
+		auto it = arr[i];
+		if (it % 2 ) {
+			string t(it  , i + 'A');
+			ans += t;
+		}
+	}
+	cout << ans << ans2 << nline;
+
+}
 int32_t main() {
 #ifndef ONLINE_JUDGE
 	freopen("Error.txt", "w", stderr);

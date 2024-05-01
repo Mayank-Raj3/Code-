@@ -104,44 +104,38 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 */
 /*::::::::::::::::::::::::::StartHere:::::::::::::::::::::::::::::::::::::::::::::::::::::*/
 
-class Solution {
-public:
-	int dp[1010][11];
-	vector<vector<int>> pref;
-
-	int rec(int ind, int prev) {
-		if (ind < 0) return 0;
-		if (dp[ind][prev] != -1) return dp[ind][prev];
-
-		int ans = 1e9;
-		for (int k = 0; k <= 9; k++) {
-			if (k != prev) {
-				ans = min(ans, pref[ind][k] + rec(ind - 1, k));
-			}
-		}
-		return dp[ind][prev] = ans;
+void solve() {
+	int n ; cin >> n ;
+	vector<int> arr(n);
+	map<int, int> mpp ;
+	for (int i = 0 ; i < n ; i++) {
+		cin >> arr[i];
+		mpp[arr[i]]++;
 	}
 
-	int minimumOperations(vector<vector<int>> &grid) {
-		int n = grid.size(), m = grid[0].size();
-		pref.resize(m, vector<int>(11, 0));
-		memset(dp, -1, sizeof(dp));
-
-
-		for (int j = 0; j < m; j++) {
-			for (int k = 0; k < 10; k++) {
-				for (int row = 0; row < n; row++) {
-					if (grid[row][j] != k)
-						pref[j][k] += 1;
+	int ans = 0 ;
+	// db(mpp)
+	for (int i = 0 ; i < n ; i++) {
+		vi div ;
+		for (int j = 1 ; j * j <= arr[i] ; j++) {
+			if (arr[i] % j == 0) {
+				div.pb(j);
+				if ((arr[i] / j ) != j) {
+					// perfect sq 2 times ?
+					div.pb(arr[i] / j);
 				}
 			}
+			db(div)
 		}
+		for (int j = 0 ; j < sz(div); j++)
+			ans += (mpp[div[j]] * mpp[arr[i] / div[j] ]);
 
-
-		return rec(m - 1, 10);
 	}
-};
 
+	cout << ans << nline;
+
+
+}
 int32_t main() {
 #ifndef ONLINE_JUDGE
 	freopen("Error.txt", "w", stderr);

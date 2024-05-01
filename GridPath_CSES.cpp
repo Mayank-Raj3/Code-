@@ -85,8 +85,6 @@ int mminvprime(int a, int b) {return binpow(a, b - 2, b);}
 int mod_div(int a, int b, int m) {a = a % m; b = b % m; return (mod_mul(a, mminvprime(b, m), m) + m) % m;}  //only for prime m
 
 // first four is adjacent after digonal
-int dx[8] = {0, 1, 0, -1, 1, 1, -1, -1};
-int dy[8] = {1, 0, -1, 0, 1, -1, -1, 1};
 
 /*
 template <typename T>
@@ -104,44 +102,77 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 */
 /*::::::::::::::::::::::::::StartHere:::::::::::::::::::::::::::::::::::::::::::::::::::::*/
 
-class Solution {
-public:
-	int dp[1010][11];
-	vector<vector<int>> pref;
+string s;
+vector<vector<int>> vis ;
 
-	int rec(int ind, int prev) {
-		if (ind < 0) return 0;
-		if (dp[ind][prev] != -1) return dp[ind][prev];
+int rec(int row, int col, int pos) {
+	// Pruning
+	if (row < 0 || col < 0 || row > 6 || col > 6) return 0;
 
-		int ans = 1e9;
-		for (int k = 0; k <= 9; k++) {
-			if (k != prev) {
-				ans = min(ans, pref[ind][k] + rec(ind - 1, k));
-			}
-		}
-		return dp[ind][prev] = ans;
+	if (pos == sz(s))
+		return (row == 6 && col == 0);
+
+	if (vis[row][col] || (row == 6 and col == 0 )) // if any block already visited or intermidiate me 6,0 aagya tho return
+		return 0;
+
+	/***
+	 * Optimization
+	 *
+	 * 1. in row boundry if we can only go to left and right return
+	 * 2. in col boundry if we can only go to up and down return
+	 ***/
+	if ((col >= 1 && col <= 5 && !vis[row][col + 1] && !vis[row][col - 1]) &&
+	        ((row == 0 && vis[row + 1][col]) || (row == 6 && vis[row - 1][col])))
+		return 0;
+
+	if ((row >= 1 && row <= 5 && !vis[row + 1][col] && !vis[row - 1][col]) &&
+	        ((col == 0 && vis[row][col + 1]) || (col == 6 && vis[row][col - 1])))
+		return 0;
+
+
+	if (row >= 1 && row <= 5 && col >= 1 && col <= 5 && vis[row][col + 1] && vis[row][col - 1] &&
+	        !vis[row + 1][col] && !vis[row - 1][col])
+		return 0;
+
+	if (row >= 1 && row <= 5 && col >= 1 && col <= 5 && vis[row + 1][col] && vis[row - 1][col] &&
+	        !vis[row][col + 1] && !vis[row][col - 1])
+		return 0;
+
+
+
+
+//  For trying all combination
+
+	vis[row][col] = 1;
+
+	int cnt = 0;
+
+	if (s[pos] == '?') {
+		// try all L R U D
+		cnt += rec(row, col + 1, pos + 1); // R
+		cnt += rec(row, col - 1, pos + 1); // L
+		cnt += rec(row - 1, col, pos + 1); // U
+		cnt += rec(row + 1, col, pos + 1); // D
 	}
+	else if (s[pos] == 'R' )
+		cnt += rec(row, col + 1, pos + 1);
+	else if (s[pos] == 'L' )
+		cnt += rec(row, col - 1, pos + 1);
+	else if (s[pos] == 'U' )
+		cnt += rec(row - 1, col, pos + 1);
+	else if (s[pos] == 'D' )
+		cnt += rec(row + 1, col, pos + 1);
 
-	int minimumOperations(vector<vector<int>> &grid) {
-		int n = grid.size(), m = grid[0].size();
-		pref.resize(m, vector<int>(11, 0));
-		memset(dp, -1, sizeof(dp));
+	vis[row][col] = 0; // Backtrack
 
+	return cnt;
+}
 
-		for (int j = 0; j < m; j++) {
-			for (int k = 0; k < 10; k++) {
-				for (int row = 0; row < n; row++) {
-					if (grid[row][j] != k)
-						pref[j][k] += 1;
-				}
-			}
-		}
-
-
-		return rec(m - 1, 10);
-	}
-};
-
+void solve() {
+	vis.resize(7, vector<int>(7, 0));
+	cin >> s ;
+	cout << rec(0, 0, 0);
+}
 int32_t main() {
 #ifndef ONLINE_JUDGE
 	freopen("Error.txt", "w", stderr);

@@ -104,44 +104,42 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 */
 /*::::::::::::::::::::::::::StartHere:::::::::::::::::::::::::::::::::::::::::::::::::::::*/
 
-class Solution {
-public:
-	int dp[1010][11];
-	vector<vector<int>> pref;
-
-	int rec(int ind, int prev) {
-		if (ind < 0) return 0;
-		if (dp[ind][prev] != -1) return dp[ind][prev];
-
-		int ans = 1e9;
-		for (int k = 0; k <= 9; k++) {
-			if (k != prev) {
-				ans = min(ans, pref[ind][k] + rec(ind - 1, k));
-			}
-		}
-		return dp[ind][prev] = ans;
+void solve() {
+	int n   ;
+	cin >> n ;
+	multiset<int> st;
+	vector<int> arr(n);
+	for (int i = 0 ; i < n ; i++) {
+		cin >> arr[i];
+		st.insert(arr[i]);
 	}
 
-	int minimumOperations(vector<vector<int>> &grid) {
-		int n = grid.size(), m = grid[0].size();
-		pref.resize(m, vector<int>(11, 0));
-		memset(dp, -1, sizeof(dp));
+	int cnt = 0 ;
+	for (auto it : st) {
+		st.erase(st.find(it));
 
-
-		for (int j = 0; j < m; j++) {
-			for (int k = 0; k < 10; k++) {
-				for (int row = 0; row < n; row++) {
-					if (grid[row][j] != k)
-						pref[j][k] += 1;
+		int t = 0 ;
+		for (int i = 1 ; i * i <= it ; i++) {
+			if (it % i == 0) {
+				if (st.count(i)) {
+					t++;
 				}
+				if (st.count(it / i)) {
+					t++;
+				}
+
 			}
 		}
 
+		cnt += (t == 0);
 
-		return rec(m - 1, 10);
+		st.insert(it);
 	}
-};
 
+	cout << cnt << nline;
+
+
+}
 int32_t main() {
 #ifndef ONLINE_JUDGE
 	freopen("Error.txt", "w", stderr);

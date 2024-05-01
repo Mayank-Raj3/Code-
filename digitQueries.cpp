@@ -14,7 +14,7 @@ using namespace std;
 #define int                           long long
 #define fl(i,k,n)                     for (int i = k; i < n; i++)
 #define rfl(i,n, k)                   for (int i = n; i >= k; i--)
-#define fel(a,x)                      for (auto& a : x)
+#define fel(a,x)                      for auto& a : x)
 #define mp                            make_pair
 #define ppb 						  pop_back
 #define ps(x, y)                      fixed << setprecision(y) << x
@@ -111,11 +111,15 @@ void solve() {
 	auto cntDigTillThisPoint = [&](int n ) {
 		int sum = 0 ;
 		for (int i = 1 ; i <= n  ; i *= 10) {
+
 			sum += (n - i + 1);
 		}
 		return sum ;
 	};
-	int q = 1 ;
+	cout << cntDigTillThisPoint(40) << nline;
+
+
+	int q ; cin >> q ;
 	while (q--) {
 		int k ; cin >> k ;
 		int lo = 1 , hi = 1e18 , ans = 0 ;
@@ -129,19 +133,20 @@ void solve() {
 				lo = mid + 1 ;
 			}
 		}
-
-		int prevNum = cntDigTillThisPoint(ans - 1);
-		string s = to_string(ans);
-
-
-		for (int i = 0 ; i < s.size(); i++) {
-			if ((prevNum + i + 1 ) == k) {
-				ans = (s[i] - '0');
-				break;
-			}
-		}
-
 		cout << ans << nline;
+
+		// int prevNum = cntDigTillThisPoint(ans - 1);
+		// string s = to_string(ans);
+
+
+		// for (int i = 0 ; i < s.size(); i++) {
+		// 	if ((prevNum + i + 1 ) == k) {
+		// 		ans = (s[i] - '0');
+		// 		break;
+		// 	}
+		// }
+
+		// cout << ans << nline;
 	}
 
 

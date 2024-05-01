@@ -104,44 +104,44 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 */
 /*::::::::::::::::::::::::::StartHere:::::::::::::::::::::::::::::::::::::::::::::::::::::*/
 
-class Solution {
-public:
-	int dp[1010][11];
-	vector<vector<int>> pref;
 
-	int rec(int ind, int prev) {
-		if (ind < 0) return 0;
-		if (dp[ind][prev] != -1) return dp[ind][prev];
+void solve() {
+	int n; cin >> n ;
+	int sum = (n * (n + 1)) / 2;
 
-		int ans = 1e9;
-		for (int k = 0; k <= 9; k++) {
-			if (k != prev) {
-				ans = min(ans, pref[ind][k] + rec(ind - 1, k));
+
+	if (sum % 2 ) {
+		cout << "NO";
+		return ;
+	} else {
+		int t = sum / 2;
+		vector<int> first , second ;
+		// 7 6 [5 4 3 2 ]1
+		// chose from the last until sum/2 is >=0
+		// rest will go in the other half
+
+
+		while (n) {
+			if (t - n >= 0) {
+				first.pb(n);
+				t -= n;
+			} else {
+				second.pb(n);
 			}
-		}
-		return dp[ind][prev] = ans;
-	}
-
-	int minimumOperations(vector<vector<int>> &grid) {
-		int n = grid.size(), m = grid[0].size();
-		pref.resize(m, vector<int>(11, 0));
-		memset(dp, -1, sizeof(dp));
-
-
-		for (int j = 0; j < m; j++) {
-			for (int k = 0; k < 10; k++) {
-				for (int row = 0; row < n; row++) {
-					if (grid[row][j] != k)
-						pref[j][k] += 1;
-				}
-			}
+			n--;
 		}
 
-
-		return rec(m - 1, 10);
+		cout << "YES" << nline;
+		cout << first.size() << nline;
+		for (auto it : first) cout << it << " ";
+		cout << nline;
+		cout << second.size() << nline;
+		for (auto it : second) cout << it << " ";
 	}
-};
 
+
+
+}
 int32_t main() {
 #ifndef ONLINE_JUDGE
 	freopen("Error.txt", "w", stderr);

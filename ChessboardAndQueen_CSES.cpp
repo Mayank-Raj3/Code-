@@ -104,44 +104,49 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 */
 /*::::::::::::::::::::::::::StartHere:::::::::::::::::::::::::::::::::::::::::::::::::::::*/
 
-class Solution {
-public:
-	int dp[1010][11];
-	vector<vector<int>> pref;
+vector<string> arr;
+vector<int> queen;
+set<vector<string>> ans ;
 
-	int rec(int ind, int prev) {
-		if (ind < 0) return 0;
-		if (dp[ind][prev] != -1) return dp[ind][prev];
+bool check(int row , int col) {
+	if ( arr[row][col] == '*') return false ;
 
-		int ans = 1e9;
-		for (int k = 0; k <= 9; k++) {
-			if (k != prev) {
-				ans = min(ans, pref[ind][k] + rec(ind - 1, k));
-			}
+	for (int prow = 0 ; prow < row ; prow++) {
+		int pcol = queen[prow];
+		// placed queen
+		if ( (pcol == col) or  (abs(prow - row) == abs(pcol - col))  ) {
+			return false ;
 		}
-		return dp[ind][prev] = ans;
+	}
+	return true ;
+}
+
+void Nqueen(int i, int n  ) {
+	if (i == n) {
+
+		vector<string> temp(n, string(n, '.'));
+		for (int r = 0  ; r < queen.size() ; r++) {
+			temp[r][queen[r]] = 'Q';
+		}
+		ans.insert(temp);
+		return ;
 	}
 
-	int minimumOperations(vector<vector<int>> &grid) {
-		int n = grid.size(), m = grid[0].size();
-		pref.resize(m, vector<int>(11, 0));
-		memset(dp, -1, sizeof(dp));
-
-
-		for (int j = 0; j < m; j++) {
-			for (int k = 0; k < 10; k++) {
-				for (int row = 0; row < n; row++) {
-					if (grid[row][j] != k)
-						pref[j][k] += 1;
-				}
-			}
+	for (int col = 0 ; col < n ; col++) {
+		if (check(i, col)) {
+			queen.push_back(col);
+			Nqueen(i + 1, n);
+			queen.pop_back();
 		}
-
-
-		return rec(m - 1, 10);
 	}
-};
+}
+void solve() {
+	arr.resize(8);
+	for (int i = 0 ; i < 8 ; i++) cin >> arr[i];
+	Nqueen(0, 8);
+	cout << ans.size() << nline;
 
+}
 int32_t main() {
 #ifndef ONLINE_JUDGE
 	freopen("Error.txt", "w", stderr);

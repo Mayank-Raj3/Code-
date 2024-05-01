@@ -103,45 +103,29 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
   if (found != string::npos)
 */
 /*::::::::::::::::::::::::::StartHere:::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-
-class Solution {
-public:
-	int dp[1010][11];
-	vector<vector<int>> pref;
-
-	int rec(int ind, int prev) {
-		if (ind < 0) return 0;
-		if (dp[ind][prev] != -1) return dp[ind][prev];
-
-		int ans = 1e9;
-		for (int k = 0; k <= 9; k++) {
-			if (k != prev) {
-				ans = min(ans, pref[ind][k] + rec(ind - 1, k));
-			}
-		}
-		return dp[ind][prev] = ans;
+int mini , ss;
+void subset(int ind, int n, vector<int> &arr, int sum) {
+	if (ind >= n) {
+		mini = min(mini, abs(sum - (ss - sum)));
+		return;
 	}
 
-	int minimumOperations(vector<vector<int>> &grid) {
-		int n = grid.size(), m = grid[0].size();
-		pref.resize(m, vector<int>(11, 0));
-		memset(dp, -1, sizeof(dp));
-
-
-		for (int j = 0; j < m; j++) {
-			for (int k = 0; k < 10; k++) {
-				for (int row = 0; row < n; row++) {
-					if (grid[row][j] != k)
-						pref[j][k] += 1;
-				}
-			}
-		}
-
-
-		return rec(m - 1, 10);
+	subset(ind + 1, n, arr, sum + arr[ind]);
+	subset(ind + 1, n, arr, sum);
+}
+void solve() {
+	mini = INF ;
+	int n ; cin >> n ;
+	vector<int> arr(n);
+	ss = 0 ;
+	for (int i = 0; i < n ; i++) {
+		cin >> arr[i];
+		ss += arr[i];
 	}
-};
+	subset(0, n, arr, 0);
+	cout << mini;
 
+}
 int32_t main() {
 #ifndef ONLINE_JUDGE
 	freopen("Error.txt", "w", stderr);

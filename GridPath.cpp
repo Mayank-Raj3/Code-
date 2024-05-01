@@ -103,45 +103,37 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
   if (found != string::npos)
 */
 /*::::::::::::::::::::::::::StartHere:::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+int cnt;
+string s;
 
-class Solution {
-public:
-	int dp[1010][11];
-	vector<vector<int>> pref;
-
-	int rec(int ind, int prev) {
-		if (ind < 0) return 0;
-		if (dp[ind][prev] != -1) return dp[ind][prev];
-
-		int ans = 1e9;
-		for (int k = 0; k <= 9; k++) {
-			if (k != prev) {
-				ans = min(ans, pref[ind][k] + rec(ind - 1, k));
-			}
-		}
-		return dp[ind][prev] = ans;
+void rec(int ind , int x , int y) {
+	if (ind >= sz(s)) {
+		if (x == 6 and y == 6 )
+			cnt++;
+		return ;
 	}
+	if (s[ind] == '?') {
+		rec(ind + 1 , x - 1, y); // left
+		rec(ind + 1 , x + 1, y); // right
+		rec(ind + 1 , x , y - 1); // up
+		rec(ind + 1 , x , y + 1); // down
+	} else if (s[ind] == 'L')
+		rec(ind + 1 , x - 1, y); // left
+	else if (s[ind] == 'R')
+		rec(ind + 1 , x + 1, y); // right
+	else if (s[ind] == 'U')
+		rec(ind + 1 , x , y - 1); // up
+	else
+		rec(ind + 1 , x , y + 1); // down
 
-	int minimumOperations(vector<vector<int>> &grid) {
-		int n = grid.size(), m = grid[0].size();
-		pref.resize(m, vector<int>(11, 0));
-		memset(dp, -1, sizeof(dp));
+}
+void solve() {
+	cnt = 0;
+	cin >> s ;
+	rec(0, 0, 0);
 
-
-		for (int j = 0; j < m; j++) {
-			for (int k = 0; k < 10; k++) {
-				for (int row = 0; row < n; row++) {
-					if (grid[row][j] != k)
-						pref[j][k] += 1;
-				}
-			}
-		}
-
-
-		return rec(m - 1, 10);
-	}
-};
-
+	cout << cnt << nline;
+}
 int32_t main() {
 #ifndef ONLINE_JUDGE
 	freopen("Error.txt", "w", stderr);

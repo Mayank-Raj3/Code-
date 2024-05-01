@@ -104,50 +104,56 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 */
 /*::::::::::::::::::::::::::StartHere:::::::::::::::::::::::::::::::::::::::::::::::::::::*/
 
-class Solution {
-public:
-	int dp[1010][11];
-	vector<vector<int>> pref;
 
-	int rec(int ind, int prev) {
-		if (ind < 0) return 0;
-		if (dp[ind][prev] != -1) return dp[ind][prev];
+void solve() {
+	int k ; cin >> k ;
 
-		int ans = 1e9;
-		for (int k = 0; k <= 9; k++) {
-			if (k != prev) {
-				ans = min(ans, pref[ind][k] + rec(ind - 1, k));
-			}
+	auto noOfDig = [&](int num ) {
+		int cnt = 0 ;
+		for (int i = 1 ; i <= num  ; i *= 10) {
+			cnt += (num - i + 1);
 		}
-		return dp[ind][prev] = ans;
+		return cnt ;
+	};
+
+
+
+	int lo = 1 , hi = 1e18 , ans = 0;
+	while (lo <= hi) {
+		int mid = (lo + hi) / 2;
+		if (noOfDig(mid) < k) {
+			lo = mid + 1 ;
+		} else {
+			ans = mid ;
+			hi = mid - 1 ;
+		}
 	}
 
-	int minimumOperations(vector<vector<int>> &grid) {
-		int n = grid.size(), m = grid[0].size();
-		pref.resize(m, vector<int>(11, 0));
-		memset(dp, -1, sizeof(dp));
 
+	int noOfDigTillansMinus1 = noOfDig(ans - 1);
+	string s = to_string(ans);
+	int i = -1 ;
 
-		for (int j = 0; j < m; j++) {
-			for (int k = 0; k < 10; k++) {
-				for (int row = 0; row < n; row++) {
-					if (grid[row][j] != k)
-						pref[j][k] += 1;
-				}
-			}
+	while (true) {
+
+		noOfDigTillansMinus1++;
+		i++;
+		if (noOfDigTillansMinus1 == k) {
+			cout << s[i] << nline;
+			return ;
 		}
-
-
-		return rec(m - 1, 10);
 	}
-};
 
+	// cout << noOfDigTillansMinus1 << " " << ans << nline;
+
+}
 int32_t main() {
 #ifndef ONLINE_JUDGE
 	freopen("Error.txt", "w", stderr);
 #endif
 	jay_shri_ram;
-	solve();
+	int t; cin >> t ; while (t--)
+		solve();
 }
 /*----------------------------------endsHere----------------------------------*/
 
