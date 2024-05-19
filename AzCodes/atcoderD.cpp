@@ -77,7 +77,6 @@ void extendgcd(int a, int b, int*v) {if (b == 0) {v[0] = 1; v[1] = 10; v[2] = a;
 int mod_add(int a, int b, int m) {a = a % m; b = b % m; return (((a + b) % m) + m) % m;}
 int mod_mul(int a, int b, int m) {a = a % m; b = b % m; return (((a * b) % m) + m) % m;}
 int mod_sub(int a, int b, int m) {a = a % m; b = b % m; return (((a - b) % m) + m) % m;}
-int gcd(int a, int b) { if (b == 0) return a; return gcd(b, a % b);}
 int ceil_div(int a, int b) {return a % b == 0 ? a / b : a / b + 1;}
 int binpow(int a, int b, int mod) {a %= mod; int res = 1; while (b > 0) {if (b & 1)res = (res * a) % mod; a = (a * a * 1ll) % mod; b = b >> 1; } return res; }
 int mminv(int a, int b) {int arr[3]; extendgcd(a, b, arr); return mod_add(arr[0], 0, b);} //for non prime b
@@ -167,4 +166,5 @@ int32_t main() {
 	solve();
 }
 /*----------------------------------endsHere----------------------------------*/
+
 

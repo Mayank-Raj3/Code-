@@ -71,7 +71,6 @@ template <class T> void _print(multiset <T> v);
 template <class T, class V>
 void _print(pair <T, V> p) { cerr << "{"; _print(p.ff); cerr << ","; _print(p.ss); cerr << "}"; } template <class T> void _print(vector <T> v) { cerr << "[ "; for (T i : v) { _print(i); cerr << " "; } cerr << "]"; } template <class T> void _print(set <T> v) { cerr << "[ "; for (T i : v) { _print(i); cerr << " "; } cerr << "]"; } template <class T> void _print(multiset <T> v) { cerr << "[ "; for (T i : v) { _print(i); cerr << " "; } cerr << "]"; } template <class T, class V> void _print(map <T, V> v) { cerr << "[ "; for (auto i : v) { _print(i); cerr << " "; } cerr << "]"; }
 /*{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}*/
-
 int inv(int i) {if (i == 1) return 1; return (mod - ((mod / i) * inv(mod % i)) % mod) % mod;}
 void extendgcd(int a, int b, int*v) {if (b == 0) {v[0] = 1; v[1] = 10; v[2] = a; return ;} extendgcd(b, a % b, v); int x = v[1]; v[1] = v[0] - v[1] * (a / b); v[0] = x; return;} //pass an arry of size1 3
 int mod_add(int a, int b, int m) {a = a % m; b = b % m; return (((a + b) % m) + m) % m;}
@@ -105,104 +104,74 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 /*::::::::::::::::::::::::::StartHere:::::::::::::::::::::::::::::::::::::::::::::::::::::*/
 
 
-/*
-	##1
-	ababa
-	i = 0   s0
-	i = 1   s0*p + s1               (prev)*p + curr s1
-	i = 2 	s0*p^2 + s1*p + s2      eg: (s0*p + s1  prev)*p + s2
-	i = 3 	(s0*p^2 + s1*p + s2)*p + s3
-	i = 4   ((s0*p^2 + s1*p + s2)*p + s3)*p +s4
-
-	=>      s0*p^4 + s1*p^3 +s2*p^2 +s3*p^1 +s4
-	this is how we hash and we sore the intermediate result in fhash
-
-	=> s1*pn-1 + s2*pn-2 +  . .. . . + sn
-
-
-	##2
-
-	Implementing Get hash  from s2 to s4 which is =>s2*p^2 +s3*p^1 +s4
-	=>      s0*p^4 + s1*p^3 +(s2*p^2 +s3*p^1 +s4)
-
-
-	generalised is:
-
-	fhash[r]-fhash[l-1]*(r-l+1) => [s0*p^4 + s1*p^3 +(s2*p^2 +s3*p^1 +s4) ]
-							-
-							[s0*p + s1]*(p^3)
-							= fhash of s2 to s4
-
-	##3
-	Avoding Collision
-
-	we can take two diffrent prime and mods and check with then front hash and
-	reverse hash
-
-	p 31 , 37
-	m 999999937 , 999999929
-
-
-	map<int, int>id;
-	int cnt = 1;
-
-*/
-class rolling_hash {
-public:
-
-	//  check the chars
-	// p 31 , 37
-	// m 999999937 , 999999929
-
-	long long p , mod, n ;
-	string s ;
-	vector<long long> fHash , primePow;
-
-	// for id
-	map<char, int> id;
-	int cnt = 1 ;
-
-	void init(string sS , long long pr , long long mod_) {
-		s = sS ;
-		n = s.size();
-		p = pr;
-		mod = mod_;
-		fHash.resize(n);
-		primePow.resize(n);
-		//stores all the hashes
-		fHash[0] = (s[0] - 'a' + 1); // change here with id
-		primePow[0] = 1;
-
-		for (int i = 1 ; i < n; i ++) {
-			fHash[i] = (fHash[i - 1] * p + (s[i] - 'a' + 1)) % mod;
-			primePow[i] = (primePow[i - 1] * p) % mod;
-		}
-
-	}
-
-	long long gethash(int l , int r ) {
-		if (l == 0) return fHash[r];
-		else {
-			int x = (fHash[r] - (1LL * fHash[l - 1] * primePow[r - l + 1]) % mod + mod) % mod;
-			return x;
-		}
-	}
-};
-
-class double_rolling_hash {
-public:
-	// reduce chances of collision
-	rolling_hash r1 , r2 ;
-	void init(string &s , long long  _p1 = 31 , long long  _p2 = 37  , long long  m2 = 999999937  , long long  m1 = 999999929) {
-		r1.init(s, _p1, m1);
-		r2.init(s, _p2, m2);
-	}
-	pair<long long , long long> getBothHash(int l , int r) {
-		return {r1.gethash(l, r), r2.gethash(l, r)};
-	}
-};
-
 void solve() {
+	int n, m;
+	cin >> n >> m;
+	vector<string> arr(n);
+	for (int i = 0; i < n; i++)cin >> arr[i];
+
+	for (int i = 0; i < n; i++)
+		for (int j = 0; j < m; j++) {
+			if (arr[i][j] == '#')
+				for (int k = 0; k < 4; k++) {
+					int x = i + dx[k];
+					int y = j + dy[k];
+					if (x >= 0 && x < n && y >= 0 && y < m and arr[x][y] == '.')
+						arr[x][y] = 'G';
+
+				}
+		}
+
+	vector<vpi> a ;
+	vector<vector<int>> vis(n , vector<int>(m));
+
+	vpi t ;
+	function<void(int, int)> dfs = [&](int i, int j) {
+		vis[i][j] = 1;
+
+		for (int k = 0; k < 4; k++) {
+			int x = i + dx[k];
+			int y = j + dy[k];
+			if (x >= 0 && x < n && y >= 0 && y < m && arr[x][y] == '.' && !vis[x][y]) {
+				t.push_back({x, y});
+				dfs(x, y);
+			}
+		}
+	};
+
+
+	int ans = 1 ;
+	for (int i  = 0; i < n ; i++) {
+		for (int j = 0 ; j < m ; j++) {
+			if (arr[i][j] == '.' && vis[i][j] == 0) {
+				t.clear();
+				t.push_back({i, j});
+				dfs(i, j);
+				a.pb(t);
+			}
+		}
+	}
+
+
+
+	for (auto it : a) {
+		int cnt = 0;
+		set<pair<int, int>> st ;
+		for (auto it1 : it ) {
+			int i = it1.ff , j = it1.ss;
+
+			for (int k = 0; k < 4; k++) {
+				int x = i + dx[k];
+				int y = j + dy[k];
+				if (x >= 0 && x < n && y >= 0 && y < m && arr[x][y] == 'G')
+					st.insert({x, y});
+			}
+
+			ans = max(ans , (int)(st.size() + it.size()));
+		}
+	}
+
+	cout << ans << nline;
 
 
 
@@ -212,8 +181,7 @@ int32_t main() {
 	freopen("Error.txt", "w", stderr);
 #endif
 	jay_shri_ram;
-	int t ; cin >> t ; while (t--)
-		solve();
+	solve();
 }
 /*----------------------------------endsHere----------------------------------*/
 

@@ -104,107 +104,78 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 */
 /*::::::::::::::::::::::::::StartHere:::::::::::::::::::::::::::::::::::::::::::::::::::::*/
 
-
-/*
-	##1
-	ababa
-	i = 0   s0
-	i = 1   s0*p + s1               (prev)*p + curr s1
-	i = 2 	s0*p^2 + s1*p + s2      eg: (s0*p + s1  prev)*p + s2
-	i = 3 	(s0*p^2 + s1*p + s2)*p + s3
-	i = 4   ((s0*p^2 + s1*p + s2)*p + s3)*p +s4
-
-	=>      s0*p^4 + s1*p^3 +s2*p^2 +s3*p^1 +s4
-	this is how we hash and we sore the intermediate result in fhash
-
-	=> s1*pn-1 + s2*pn-2 +  . .. . . + sn
-
-
-	##2
-
-	Implementing Get hash  from s2 to s4 which is =>s2*p^2 +s3*p^1 +s4
-	=>      s0*p^4 + s1*p^3 +(s2*p^2 +s3*p^1 +s4)
-
-
-	generalised is:
-
-	fhash[r]-fhash[l-1]*(r-l+1) => [s0*p^4 + s1*p^3 +(s2*p^2 +s3*p^1 +s4) ]
-							-
-							[s0*p + s1]*(p^3)
-							= fhash of s2 to s4
-
-	##3
-	Avoding Collision
-
-	we can take two diffrent prime and mods and check with then front hash and
-	reverse hash
-
-	p 31 , 37
-	m 999999937 , 999999929
-
-
-	map<int, int>id;
-	int cnt = 1;
-
-*/
-class rolling_hash {
+class trieNode {
 public:
+	trieNode* child[26];
+	int cnt = 0  ;
+	trieNode() {
+		for (int i = 0 ; i < 26 ; i++) child[i] = nullptr;
+	}
+};
 
-	//  check the chars
-	// p 31 , 37
-	// m 999999937 , 999999929
+class Trie {
+public:
+	trieNode* root ;
+	Trie() {
+		root = new trieNode();
+	}
 
-	long long p , mod, n ;
-	string s ;
-	vector<long long> fHash , primePow;
 
-	// for id
-	map<char, int> id;
-	int cnt = 1 ;
+	void insert(string s) {
+		trieNode* curr = root ;
+		for (auto it : s) {
+			if (curr->child[it - 'a'] == nullptr) {
+				curr->child[it - 'a'] = new trieNode();
+			}
 
-	void init(string sS , long long pr , long long mod_) {
-		s = sS ;
-		n = s.size();
-		p = pr;
-		mod = mod_;
-		fHash.resize(n);
-		primePow.resize(n);
-		//stores all the hashes
-		fHash[0] = (s[0] - 'a' + 1); // change here with id
-		primePow[0] = 1;
-
-		for (int i = 1 ; i < n; i ++) {
-			fHash[i] = (fHash[i - 1] * p + (s[i] - 'a' + 1)) % mod;
-			primePow[i] = (primePow[i - 1] * p) % mod;
+			curr = curr->child[it - 'a'] ;
+			curr->cnt++;
 		}
 
 	}
 
-	long long gethash(int l , int r ) {
-		if (l == 0) return fHash[r];
-		else {
-			int x = (fHash[r] - (1LL * fHash[l - 1] * primePow[r - l + 1]) % mod + mod) % mod;
-			return x;
+	void remove(string s) {
+		trieNode* curr = root ;
+		for (auto it : s) {
+			curr = curr->child[it - 'a'] ;
+			curr->cnt--;
 		}
-	}
-};
 
-class double_rolling_hash {
-public:
-	// reduce chances of collision
-	rolling_hash r1 , r2 ;
-	void init(string &s , long long  _p1 = 31 , long long  _p2 = 37  , long long  m2 = 999999937  , long long  m1 = 999999929) {
-		r1.init(s, _p1, m1);
-		r2.init(s, _p2, m2);
 	}
-	pair<long long , long long> getBothHash(int l , int r) {
-		return {r1.gethash(l, r), r2.gethash(l, r)};
+
+	int cntPref(string s) {
+		int cnt = 0 ;
+		trieNode* curr = root ;
+		for (auto it : s) {
+			if (curr->child[it - 'a'] == nullptr )
+				break ;
+
+			curr = curr->child[it - 'a'] ;
+			if (curr->cnt > 1)
+				cnt++;
+			else
+				break ;
+		}
+
+		return cnt ;
 	}
-};
+
+} t;
 
 void solve() {
+	int n ; cin >> n ;
+
+	vector<string> arr  ;
+	for (int i = 0 ; i < n ; i++) {
+		string s; cin >>  s ;
+		arr.pb(s);
+		t.insert(s);
+	}
 
 
+	for (int i = 0 ; i < n ; i++) {
+		cout << t.cntPref(arr[i]) << nline;
+	}
 
 }
 int32_t main() {
@@ -212,8 +183,7 @@ int32_t main() {
 	freopen("Error.txt", "w", stderr);
 #endif
 	jay_shri_ram;
-	int t ; cin >> t ; while (t--)
-		solve();
+	solve();
 }
 /*----------------------------------endsHere----------------------------------*/
 

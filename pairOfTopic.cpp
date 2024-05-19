@@ -111,7 +111,13 @@ void solve() {
 	for (int i = 0 ; i < n  ; i ++) cin >> arr[i];
 	for (int i = 0 ; i < n  ; i ++) cin >> brr[i];
 	for (int i = 0 ; i < n  ; i ++) crr[i] = (arr[i] - brr[i]);
+	/*
+		ai - bi > bj -aj
+		(ai - bi)+(bj -aj)>0
 
+		(ci+cj)>0
+
+	*/
 	sort(all(crr));
 	int cnt = 0 ;
 	db(crr);
@@ -126,7 +132,7 @@ void solve() {
 	}
 	cout << cnt << nline;
 
-	cout << binpow(2, mod - 2, mod);
+	// cout << binpow(2, mod - 2, mod);
 }
 int32_t main() {
 #ifndef ONLINE_JUDGE

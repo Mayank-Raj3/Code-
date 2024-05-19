@@ -104,116 +104,145 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 */
 /*::::::::::::::::::::::::::StartHere:::::::::::::::::::::::::::::::::::::::::::::::::::::*/
 
+class DisjointSet {
+	vector<int> rank, parent, size;
 
-/*
-	##1
-	ababa
-	i = 0   s0
-	i = 1   s0*p + s1               (prev)*p + curr s1
-	i = 2 	s0*p^2 + s1*p + s2      eg: (s0*p + s1  prev)*p + s2
-	i = 3 	(s0*p^2 + s1*p + s2)*p + s3
-	i = 4   ((s0*p^2 + s1*p + s2)*p + s3)*p +s4
-
-	=>      s0*p^4 + s1*p^3 +s2*p^2 +s3*p^1 +s4
-	this is how we hash and we sore the intermediate result in fhash
-
-	=> s1*pn-1 + s2*pn-2 +  . .. . . + sn
-
-
-	##2
-
-	Implementing Get hash  from s2 to s4 which is =>s2*p^2 +s3*p^1 +s4
-	=>      s0*p^4 + s1*p^3 +(s2*p^2 +s3*p^1 +s4)
-
-
-	generalised is:
-
-	fhash[r]-fhash[l-1]*(r-l+1) => [s0*p^4 + s1*p^3 +(s2*p^2 +s3*p^1 +s4) ]
-							-
-							[s0*p + s1]*(p^3)
-							= fhash of s2 to s4
-
-	##3
-	Avoding Collision
-
-	we can take two diffrent prime and mods and check with then front hash and
-	reverse hash
-
-	p 31 , 37
-	m 999999937 , 999999929
-
-
-	map<int, int>id;
-	int cnt = 1;
-
-*/
-class rolling_hash {
 public:
-
-	//  check the chars
-	// p 31 , 37
-	// m 999999937 , 999999929
-
-	long long p , mod, n ;
-	string s ;
-	vector<long long> fHash , primePow;
-
-	// for id
-	map<char, int> id;
-	int cnt = 1 ;
-
-	void init(string sS , long long pr , long long mod_) {
-		s = sS ;
-		n = s.size();
-		p = pr;
-		mod = mod_;
-		fHash.resize(n);
-		primePow.resize(n);
-		//stores all the hashes
-		fHash[0] = (s[0] - 'a' + 1); // change here with id
-		primePow[0] = 1;
-
-		for (int i = 1 ; i < n; i ++) {
-			fHash[i] = (fHash[i - 1] * p + (s[i] - 'a' + 1)) % mod;
-			primePow[i] = (primePow[i - 1] * p) % mod;
+	DisjointSet(int n) {
+		rank.resize(n + 1, 0);
+		parent.resize(n + 1);
+		size.resize(n + 1);
+		for (int i = 0; i <= n; i++) {
+			parent[i] = i;
+			size[i] = 1;
 		}
-
 	}
 
-	long long gethash(int l , int r ) {
-		if (l == 0) return fHash[r];
-		else {
-			int x = (fHash[r] - (1LL * fHash[l - 1] * primePow[r - l + 1]) % mod + mod) % mod;
-			return x;
+	int findUPar(int node) {
+		if (node == parent[node])
+			return node;
+		return parent[node] = findUPar(parent[node]);
+	}
+
+	void unionByRank(int u, int v) {
+		int ulp_u = findUPar(u);
+		int ulp_v = findUPar(v);
+		if (ulp_u == ulp_v)
+			return;
+		if (rank[ulp_u] < rank[ulp_v]) {
+			parent[ulp_u] = ulp_v;
+		} else if (rank[ulp_v] < rank[ulp_u]) {
+			parent[ulp_v] = ulp_u;
+		} else {
+			parent[ulp_v] = ulp_u;
+			rank[ulp_u]++;
 		}
+	}
+
+	void unionBySize(int u, int v) {
+		int ulp_u = findUPar(u);
+		int ulp_v = findUPar(v);
+		if (ulp_u == ulp_v)
+			return;
+		if (size[ulp_u] < size[ulp_v]) {
+			parent[ulp_u] = ulp_v;
+			size[ulp_v] += size[ulp_u];
+		} else {
+			parent[ulp_v] = ulp_u;
+			size[ulp_u] += size[ulp_v];
+		}
+	}
+
+	bool isConnected(int u, int v) {
+		return findUPar(u) == findUPar(v);
 	}
 };
 
-class double_rolling_hash {
+class Solution {
 public:
-	// reduce chances of collision
-	rolling_hash r1 , r2 ;
-	void init(string &s , long long  _p1 = 31 , long long  _p2 = 37  , long long  m2 = 999999937  , long long  m1 = 999999929) {
-		r1.init(s, _p1, m1);
-		r2.init(s, _p2, m2);
-	}
-	pair<long long , long long> getBothHash(int l , int r) {
-		return {r1.gethash(l, r), r2.gethash(l, r)};
+	// Function to find sum of weights of edges of the Minimum Spanning Tree.
+	int spanningTree(int V, vector<vector<int>> adj[]) {
+		vector<pair<int, pair<int, int>>> edges;
+		for (int i = 0; i < V; i++) {
+			for (auto it : adj[i]) {
+				int adjNode = it[0];
+				int wt = it[1];
+				int node = i;
+				edges.push_back({wt, {node, adjNode}});
+			}
+		}
+		DisjointSet ds(V);
+		sort(edges.begin(), edges.end());
+		int mstWt = 0;
+		int edgesAdded = 0;
+		for (auto it : edges) {
+			int wt = it.first;
+			int u = it.second.first;
+			int v = it.second.second;
+
+			if (!ds.isConnected(u, v)) {
+				mstWt += wt;
+				ds.unionBySize(u, v);
+				edgesAdded++;
+			}
+			if (edgesAdded == V - 1)
+				break; // MST formed
+		}
+
+		// If all vertices are not included in MST, return -1
+		if (edgesAdded != V - 1)
+			return -1;
+		return mstWt;
 	}
 };
 
 void solve() {
+	int V;
+	cin >> V;
+	int q;
+	cin >> q;
 
+	vector<vector<int>> edges;
 
+	while (q--) {
+		int k, w, x;
+		cin >> k >> w;
 
+		int u = -1 ;
+		for (int i = 0; i < k; i++) {
+			cin >> x;
+
+			if (u != -1) {
+				edges.pb({u, x , w}); // dont consider it as can form loops
+			} else {
+				u = x ;
+			}
+		}
+	}
+
+	vector<vector<int>> adj[V + 1];
+	for (auto it : edges) {
+		vector<int> tmp(2);
+		tmp[0] = it[1];
+		tmp[1] = it[2];
+		adj[it[0]].push_back(tmp);
+
+		tmp[0] = it[0];
+		tmp[1] = it[2];
+		adj[it[1]].push_back(tmp);
+	}
+
+	Solution obj;
+	int mstWt = obj.spanningTree(V, adj);
+	cout << mstWt << endl;
 }
+
 int32_t main() {
 #ifndef ONLINE_JUDGE
 	freopen("Error.txt", "w", stderr);
 #endif
 	jay_shri_ram;
-	int t ; cin >> t ; while (t--)
-		solve();
+	solve();
 }
 /*----------------------------------endsHere----------------------------------*/
 

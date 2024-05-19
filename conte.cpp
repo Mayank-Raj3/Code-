@@ -107,50 +107,7 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 // public:
 
 // };
-int  medianOfUniquenessArray(vector<int>& nums) {
-	long long  n = nums.size();
-	long long  tot = (n * (n + 1)) / 2;
 
-	auto check = [&](long long  uni) {
-		long long  cnt = 0;
-		long long  i = 0, j = 0;
-		map<long long , long long > mpp;
-
-		while (i < n) {
-			mpp[nums[i]]++;
-			while (j < i and mpp.size() > uni) {
-				if (mpp[nums[j]] == 1) {
-					mpp.erase(nums[j]);
-				} else {
-					mpp[nums[j]]--;
-				}
-				j++;
-			}
-			cnt += (i - j + 1);
-			i++;
-		}
-
-		if (tot % 2 == 0)
-			return (cnt >= tot / 2);
-		else
-			return (cnt >= tot / 2 + 1);
-
-	};
-
-	long long  lo = 1, hi = n, ans = 1;
-	while (lo <= hi) {
-		long long  mid = (lo + hi) / 2;
-		if (check(mid)) {
-			ans = mid;
-			hi = mid - 1;
-		} else {
-			lo = mid + 1;
-		}
-	}
-
-
-	return ans;
-}
 void solve() {
 	int n ; cin >> n ;
 	vector<int> nums(n);
