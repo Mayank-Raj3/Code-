@@ -104,48 +104,59 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 */
 /*::::::::::::::::::::::::::StartHere:::::::::::::::::::::::::::::::::::::::::::::::::::::*/
 
-struct DSU {
-	vector<int> rank , parent ;
-	int ssz ;
-	void init(int n ) {
-		ssz = n;
-		rank.resize(n + 1);
+
+class DSU {
+public:
+
+	vector<int> rank, parent;
+	int setSize;
+
+	// Constructor to initialize the DSU
+
+	DSU(int n) {
+		setSize = n;
+		rank.resize(n + 1, 0);
 		parent.resize(n + 1);
-		for (int i = 1 ; i <= n ; i++) {
+		for (int i = 1; i <= n; ++i) {
 			parent[i] = i;
 		}
 	}
-	int find (int node) {
-		if (node == parent[node]) {
-			return node ;
+
+	// Function to find the representative of a set (with path compression)
+	int find(int node) {
+		if (node != parent[node]) {
+			parent[node] = find(parent[node]);  // Path compression
 		}
-		return parent[node] = find(parent[node]);
+		return parent[node];
 	}
 
-	void merge(int u , int v) {
-		int uu = find(u);
-		int vv = find(v);
-		if (uu != vv) {
-			if (rank[uu] < rank[vv]) {
-				parent[uu] = vv;
-			} else if (rank[uu] > rank[vv]) {
-				parent[vv] = uu;
+	// Function to unite two sets
+	void merge(int u, int v) {
+		int rootU = find(u);
+		int rootV = find(v);
+		if (rootU != rootV) {
+			if (rank[rootU] < rank[rootV]) {
+				parent[rootU] = rootV;
+			} else if (rank[rootU] > rank[rootV]) {
+				parent[rootV] = rootU;
 			} else {
-				parent[vv] = uu;
-				rank[uu]++;
+				parent[rootV] = rootU;
+				rank[rootU]++;
 			}
-			ssz -= 1;
+			setSize--;
 		}
 	}
 
-	int Compo() {
-		return ssz;
+	// Function to get the current number of disjoint sets
+	int getComponentCount() const {
+		return setSize;
 	}
 };
+
 void solve() {
 	int n , m; cin >> n >> m ;
-	DSU d ;
-	d.init(n);
+	DSU d(n);
+
 	db(d.parent)
 	for (int i = 0 ; i < m ; i++) {
 		int a , b , c ; cin >> a >> b >> c ;

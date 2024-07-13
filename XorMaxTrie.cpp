@@ -4,11 +4,11 @@
 //#include <ext/pb_ds/tree_policy.hpp>
 using namespace std;
 //using namespace __gnu_pbds;
-#define int 						  long long
-#define ll 							  long long
-#define ld 							  long double
-#define nline						  "\n"
-#define ff 							  first
+#define int                           long long
+#define ll                            long long
+#define ld                            long double
+#define nline                         "\n"
+#define ff                            first
 #define ss                            second
 #define pb                            push_back
 #define int                           long long
@@ -16,7 +16,7 @@ using namespace std;
 #define rfl(i,n, k)                   for (int i = n; i >= k; i--)
 #define fel(a,x)                      for (auto& a : x)
 #define mp                            make_pair
-#define ppb 						  pop_back
+#define ppb                           pop_back
 #define ps(x, y)                      fixed << setprecision(y) << x
 #define setbit(x)                     __builtin_popcount(x);
 #define all(var)                      var.begin(), var.end()
@@ -33,16 +33,16 @@ using namespace std;
 #define jay_shri_ram                  ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 #define rall(x)                       (x).rbegin(), (x).rend()
 
-typedef pair<int, int> 	              pii     ;
+typedef pair<int, int>                pii     ;
 typedef vector<int>                   vi      ;
 typedef vector<string>                vs      ;
-typedef vector<pii> 				  vpi     ;
+typedef vector<pii>                   vpi     ;
 typedef vector <pair<int , int> >     vpi     ;
 typedef vector<bool>                  vb      ;
 typedef vector<vector<int>>           vvi     ;
-typedef map<int, int> 				  mpii    ;
-typedef set<int>   					  seti    ;
-typedef multiset<int> 				  mseti	  ;
+typedef map<int, int>                 mpii    ;
+typedef set<int>                      seti    ;
+typedef multiset<int>                 mseti   ;
 typedef unordered_set<int>            useti   ;
 typedef unordered_map<int, int>       umapii  ;
 typedef unsigned long long            ull     ;
@@ -106,121 +106,145 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 /*
 class trieNode {
 public:
-	trieNode* children[2];
-	bool isEndWord ;
-	trieNode() {
-		for (int i = 0; i < 2; i++) {
-			children[i] = nullptr;
-		}
-		isEndWord = false;
-	}
+    trieNode* children[2];
+    bool isEndWord ;
+    trieNode() {
+        for (int i = 0; i < 2; i++) {
+            children[i] = nullptr;
+        }
+        isEndWord = false;
+    }
 };
 
 class Trie {
 public:
-	trieNode* root;
-	Trie() {
-		root = new trieNode();
-	}
+    trieNode* root;
+    Trie() {
+        root = new trieNode();
+    }
 
 };*/
 
 class trieNode {
 public:
-	trieNode *child[2];
-	int cnt;
-	trieNode() {
-		for (int i = 0 ; i < 2 ; i++) {
-			child[i] = NULL;
-			cnt = 0;
-		}
-	}
+    trieNode* children[2];
+    int cnt ;
+    trieNode() {
+        for (int i = 0; i < 2; i++) {
+            children[i] = nullptr;
+        }
+        cnt = 0 ;
+    }
 };
 
-class  Trie {
+class Trie {
 public:
-	trieNode *root;
-	Trie() {
-		root = new trieNode();
-	}
+    trieNode* root;
+    Trie() {
+        root = new trieNode();
+    }
 
-	void insert(int n) {
-		trieNode *cur = root;
+    void insert(int n ) {
+        trieNode *temp = root ; //ref to root
 
-		for (int i = 31; i >= 0; i--) {
-			int x = ((n >> i) & 1LL);
+        for (int i = 29 ; i >= 0; i--) {
+            int x = (n & (1 << i)) ? 1 : 0 ;
+            if (temp->children[x] == nullptr) {
+                temp->children[x] = new trieNode();
+            }
+            temp = temp->children[x];
+            temp->cnt++;
 
-			if (cur->child[x] == NULL)
-				cur->child[x] = new trieNode;
+        }
 
-			cur->cnt++;
-			cur = cur->child[x];
-		}
-		cur->cnt++;
-	}
-	void Del(int n) {
-		trieNode *cur = root;
-		int len = 31;
+    }
 
-		for (int i = len; i >= 0; i--) {
-			int x = ((n >> i) & 1LL);
-			cur->cnt--;
-			cur = cur->child[x];
-		}
 
-		cur->cnt--;
-	}
-	int maxQuery(int n) {
-		trieNode *cur = root;
-		int ans = 0;
-		int len = 31;
-		for (int i = len; i >= 0; i--) {
+    bool search( int n) {
+        trieNode* temp = root;
+        for (int i = 29 ; i >= 0; i--) {
+            int x = (n & (1 << i)) ? 1 : 0 ;
+            if (temp->children[x] == nullptr) {
+                return false ;
+            }
+            temp = temp->children[x];
+        }
 
-			int x = 1 - ((n >> i) & 1LL);
-			if (cur->child[x] != NULL && (cur->child[x])->cnt != 0) {
+        return (temp->cnt > 0);
+    }
 
-				ans ^= (1LL << i);
-				cur = cur->child[x];
-			}
+    void Del(int n ) {
+        // considering already there
 
-			else
-				cur = cur->child[1 ^ x];
-		}
-		return ans;
-	}
+        trieNode *temp = root ; //ref to root
+
+        for (int i = 29 ; i >= 0; i--) {
+            int x = (n & (1 << i)) ? 1 : 0 ;
+            if (temp->children[x] ) {
+                temp->cnt--;
+                temp = temp->children[x];
+            }
+
+        }
+    }
+
+
+    int maxQuery(int n ) {
+        trieNode *temp = root ;
+        int ans = 0 ;
+
+        for (int i = 29 ; i >= 0; i--) {
+            int x = (n & (1 << i)) ? 1 : 0 ;
+
+            if (x == 1 and temp->children[0] ) {
+                temp = temp->children[0];
+                ans = ans + (1 << i);
+            } else if (x == 0  and temp->children[1]) {
+                temp = temp->children[1];
+                ans = ans + (1 << i);
+            } else {
+                temp = temp->children[x];
+            }
+
+
+        }
+
+        return ans ;
+    }
+
 };
 
 void solve() {
 
-	int q ; cin >> q ;
+    int q ; cin >> q ;
 
 
-	Trie t  ;
-	t.insert(0);
+    Trie t  ;
+
+    t.insert(0);
 
 
+    while (q--) {
+        char x ; cin >> x  ;
+        int n ; cin >> n ;
 
-	while (q--) {
-		string x ; cin >> x  ;
-		int n ; cin >> n ;
-
-		if (x == "+") {
-			t.insert(n);
-		} else if (x == "-") {
-			t.Del(n);
-		} else {
-			cout << t.maxQuery(n) << nline;
-		}
-	}
+        if (x == '+') {
+            t.insert(n);
+        } else if (x == '-') {
+            t.Del(n);
+        } else {
+            cout << t.maxQuery(n) << nline;
+        }
+    }
 
 
 }
 int32_t main() {
 #ifndef ONLINE_JUDGE
-	freopen("Error.txt", "w", stderr);
+    freopen("Error.txt", "w", stderr);
 #endif
-	jay_shri_ram;
-	solve();
+    jay_shri_ram;
+    solve();
 }
 /*----------------------------------endsHere----------------------------------*/
 

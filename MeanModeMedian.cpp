@@ -104,6 +104,90 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 */
 /*::::::::::::::::::::::::::StartHere:::::::::::::::::::::::::::::::::::::::::::::::::::::*/
 
+struct MiddleElement {
+	MiddleElement(int k) {
+		sizeLeft = k;
+	}
+	void balance() {
+		while (sz(left) < sizeLeft) {
+			sum += *right.begin();
+			left.insert(*right.begin());
+			right.erase(right.begin());
+		}
+		while (sz(left) > sizeLeft) {
+			sum -= *left.rbegin();
+			right.insert(*left.rbegin());
+			left.erase(left.find(*left.rbegin()));
+		}
+	}
+	void insert(int x) {
+		if (x < *left.rbegin()) left.insert(x), sum += x;
+		else right.insert(x);
+		balance();
+	}
+	void erase(int x) {
+		auto it = right.find(x);
+		if (it != right.end()) right.erase(it);
+		else left.erase(left.find(x)), sum -= x;
+		balance();
+	}
+	multiset<int> left, right;
+	int sizeLeft;
+	long long sum = 0;
+};
+
+
+
+class topKK {
+private:
+	multiset<int> topK, temp;
+	ll sum;
+	int K;
+
+public:
+	topKK(int K) : K(K), sum(0LL) {};
+
+	void add(int x) {
+		topK.insert(x);
+		sum += x;
+		if ((int)topK.size() > K) {
+			int y = *(topK.rbegin());
+			topK.erase(topK.find(y));
+			sum -= y;
+			temp.insert(y);
+		}
+		return;
+	}
+
+	void remove(int x) {
+		if (temp.find(x) != temp.end()) {
+			temp.erase(temp.find(x));
+		}
+		else if (topK.find(x) != topK.end()) {
+			sum -= x;
+			topK.erase(topK.find(x));
+			if (temp.empty()) return;
+			int y = *(temp.begin());
+			sum += y;
+			topK.insert(y);
+			temp.erase(temp.find(y));
+		}
+		return;
+	}
+
+	ll getSum() {
+		return sum;
+	}
+
+	ll getSize() {
+		return topK.size() + temp.size();
+	}
+};
+
+
+
+
+
 struct cmp {
 	bool operator()(const pii a, const pii b) const {
 		if (a.first == b.first) {
@@ -112,6 +196,9 @@ struct cmp {
 		return a.first < b.first;
 	}
 };
+
+
+
 
 struct dashboard {
 	int sum = 0 , sqsum = 0 ;
@@ -127,7 +214,7 @@ struct dashboard {
 			higher.erase(higher.begin());
 		}
 
-		//lower me jada rhaega
+		//lower me 1 jada rhaega
 		while (smaller.size() > higher.size() + 1) {
 			auto it = *smaller.rbegin();
 			smaller.erase(smaller.find(it));

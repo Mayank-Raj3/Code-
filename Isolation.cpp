@@ -106,24 +106,36 @@ using ordered_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_st
 
 
 void solve() {
-	int n , m ; cin >> n >> m ;
-	vector<set<int>> adj(n + 1);
-	multiset<int, int> cnt ;
-	while (m--) {
+
+	int n , q ; cin >> n >> q ;
+
+	map<int, set<int>> mpp ;
+	set<int> st  ;
+
+	int compo = n ;
+
+	for (int i = 0 ; i < q; i++) {
 		int t ; cin >> t ;
 		if (t == 1) {
-			int u , v  ; cin >> u >> v ;
-			adj[u].insert(v);
-			adj[v].insert(u);
+			int u , v ; cin >> u >> v ;
+			mpp[u].insert(v);
+			mpp[v].insert(u);
+			st.insert(u);
+			st.insert(v);
 		} else {
 			int u ; cin >> u ;
-			for (auto it : adj[u]) {
-				adj[it].erase(u);
+			for (auto it : mpp[u]) {
+				mpp[it].erase(u);
+				if (mpp[it].size() == 0 ) {
+					st.erase(it);
+				}
 			}
+
+			mpp[u].clear();
+			st.erase(u);
 		}
-
+		cout << n - st.size() << nline;
 	}
-
 
 }
 int32_t main() {
@@ -131,8 +143,7 @@ int32_t main() {
 	freopen("Error.txt", "w", stderr);
 #endif
 	jay_shri_ram;
-	int t ; cin >> t ; while (t--)
-		solve();
+	solve();
 }
 /*----------------------------------endsHere----------------------------------*/
 

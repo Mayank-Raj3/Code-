@@ -1,0 +1,292 @@
+#Program 5 :- Naive BasianClassifier
+
+import pandas as pd 
+from sklearn import tree 
+from sklearn.preprocessing import LabelEncoder
+from sklearn.naive_bayes import GaussianNB
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+
+dt = pd.read_csv('tennisdata.csv')
+X = dt.iloc[:,:-1]
+Y = dt.iloc[:, -1]
+
+
+le = LabelEncoder()
+X.Outlook = le.fit_transform(X.Outlook)
+X.Temperature = le.fit_transform(X.Temperature)
+X.Humidity = le.fit_transform(X.Humidity)
+X.Windy = le.fit_transform(X.Windy)
+
+Y = le.fit_transform(Y)
+
+X_train ,X_test, Y_train ,Y_test = train_test_split(X,Y,test_size = 0.20)
+classifier = GaussianNB()
+
+classifier.fit(X_train, Y_train)
+print("Accuracy is:", accuracy_score(classifier.predict(X_test), Y_test))
+
+_______________________________________________________________________________________
+
+Program #4
+
+import numpy as np
+
+X = np.array(([2, 9], [1, 5], [3, 6]), dtype=float)  
+y = np.array(([92], [86], [89]), dtype=float)        
+
+X = X/np.amax(X, axis=0)  # maximum of X array
+y = y/100                 # max test score is 100
+
+class Neural_Network(object):
+    def __init__(self):
+        self.inputSize = 2
+        self.outputSize = 1
+        self.hiddenSize = 3
+        self.W1 = np.random.randn(self.inputSize, self.hiddenSize)
+        self.W2 = np.random.randn(self.hiddenSize, self.outputSize)
+
+    def forward(self, X):
+        self.z = np.dot(X, self.W1)
+        self.z2 = self.sigmoid(self.z)
+        self.z3 = np.dot(self.z2, self.W2)
+        o = self.sigmoid(self.z3)
+        return o 
+
+    def sigmoid(self, s):
+        return 1 / (1 + np.exp(-s))
+
+    def sigmoidPrime(self, s):
+        return s * (1 - s)
+
+    def backward(self, X, y, o):
+        self.o_error = y - o
+        self.o_delta = self.o_error * self.sigmoidPrime(o)
+        self.z2_error = self.o_delta.dot(self.W2.T)
+        self.z2_delta = self.z2_error * self.sigmoidPrime(self.z2)
+        self.W1 += X.T.dot(self.z2_delta)
+        self.W2 += self.z2.T.dot(self.o_delta)
+
+    def train(self, X, y):
+        o = self.forward(X)
+        self.backward(X, y, o)
+
+
+NN = Neural_Network()
+print("\nInput: \n" + str(X))
+print("\nActual Output: \n" + str(y))
+print("\nPredicted Output: \n" + str(NN.forward(X)))
+print("\nLoss: \n" + str(np.mean(np.square(y - NN.forward(X)))))
+
+NN.train(X, y)
+
+_______________________________________________________________________________________
+
+
+Program3 
+
+
+import numpy as np
+import math
+import csv
+
+def read_data(filename):
+    with open(filename, 'r') as csvfile:
+        datareader = csv.reader(csvfile, delimiter=',')
+        headers = next(datareader)
+        metadata = []
+        traindata = []
+        for name in headers:
+            metadata.append(name)
+        for row in datareader:
+            traindata.append(row)
+
+    return (metadata, traindata)
+
+class Node:
+    def __init__(self, attribute):
+        self.attribute = attribute
+        self.children = []
+        self.answer = ""
+        
+    def __str__(self):
+        return self.attribute
+
+def subtables(data, col, delete):
+    dict = {}
+    items = np.unique(data[:, col])
+    count = np.zeros((items.shape[0], 1), dtype=np.int32)    
+    
+    for x in range(items.shape[0]):
+        for y in range(data.shape[0]):
+            if data[y, col] == items[x]:
+                count[x] += 1
+                
+    for x in range(items.shape[0]):
+        dict[items[x]] = np.empty((int(count[x]), data.shape[1]), dtype="|S32")
+        pos = 0
+        for y in range(data.shape[0]):
+            if data[y, col] == items[x]:
+                dict[items[x]][pos] = data[y]
+                pos += 1       
+        if delete:
+            dict[items[x]] = np.delete(dict[items[x]], col, 1)
+        
+    return items, dict
+
+def entropy(S):
+    items = np.unique(S)
+
+    if items.size == 1:
+        return 0
+    
+    counts = np.zeros((items.shape[0], 1))
+    sums = 0
+    
+    for x in range(items.shape[0]):
+        counts[x] = sum(S == items[x]) / (S.size * 1.0)
+
+    for count in counts:
+        sums += -1 * count * math.log(count, 2)
+    return sums
+
+def gain_ratio(data, col):
+    items, dict = subtables(data, col, delete=False) 
+                
+    total_size = data.shape[0]
+    entropies = np.zeros((items.shape[0], 1))
+    intrinsic = np.zeros((items.shape[0], 1))
+    
+    for x in range(items.shape[0]):
+        ratio = dict[items[x]].shape[0]/(total_size * 1.0)
+        entropies[x] = ratio * entropy(dict[items[x]][:, -1])
+        intrinsic[x] = ratio * math.log(ratio, 2)
+        
+    total_entropy = entropy(data[:, -1])
+    iv = -1 * sum(intrinsic)
+    
+    for x in range(entropies.shape[0]):
+        total_entropy -= entropies[x]
+        
+    return total_entropy / iv
+
+def create_node(data, metadata):
+    if (np.unique(data[:, -1])).shape[0] == 1:
+        node = Node("")
+        node.answer = np.unique(data[:, -1])[0]
+        return node
+        
+    gains = np.zeros((data.shape[1] - 1, 1))
+    
+    for col in range(data.shape[1] - 1):
+        gains[col] = gain_ratio(data, col)
+        
+    split = np.argmax(gains)
+    
+    node = Node(metadata[split])    
+    metadata = np.delete(metadata, split, 0)    
+    
+    items, dict = subtables(data, split, delete=True)
+    
+    for x in range(items.shape[0]):
+        child = create_node(dict[items[x]], metadata)
+        node.children.append((items[x], child))
+    
+    return node
+
+def empty(size):
+    s = ""
+    for x in range(size):
+        s += "   "
+    return s
+
+def print_tree(node, level):
+    if node.answer != "":
+        print(empty(level), node.answer)
+        return
+    print(empty(level), node.attribute)
+    for value, n in node.children:
+        print(empty(level + 1), value)
+        print_tree(n, level + 2)
+
+metadata, traindata = read_data("tennisdata.csv")
+data = np.array(traindata)
+node = create_node(data, metadata)
+print_tree(node, 0)
+
+
+_______________________________________________________________________________________
+
+Program 2
+
+import numpy as np
+import pandas as pd
+
+data = pd.read_csv('trainingdata.csv')
+print(data)
+
+concepts = np.array(data.iloc[:, 0:-1])
+target = np.array(data.iloc[:, -1])
+
+def learn(concepts, target):
+    specific_h = concepts[0].copy()
+    general_h = [["?" for _ in range(len(specific_h))] for _ in range(len(specific_h))]
+
+    for i, h in enumerate(concepts):
+        if target[i] == "Yes":
+            for x in range(len(specific_h)):
+                if h[x] != specific_h[x]:
+                    specific_h[x] = '?'
+                    general_h[x][x] = '?'
+        elif target[i] == "No":
+            for x in range(len(specific_h)):
+                if h[x] != specific_h[x]:
+                    general_h[x][x] = specific_h[x]
+                else:
+                    general_h[x][x] = '?'
+
+        print(f"\nSteps of Candidate Elimination Algorithm {i+1}")
+        print(specific_h)
+        print(general_h)
+    
+    general_h = [h for h in general_h if h != ['?' for _ in range(len(specific_h))]]
+    
+    return specific_h, general_h
+
+s_final, g_final = learn(concepts, target)
+print("\nFinal Specific_h:", s_final)
+print("\nFinal General_h:", g_final)
+
+_______________________________________________________________________________________
+
+Program 1
+
+import pandas as pd
+
+def load_csv(file):
+    data = pd.read_csv(file)
+    print(data)
+    return data
+
+attributes = ['Sky', 'Temp', 'Humidity', 'Wind', 'Water', 'Forecast']
+n = len(attributes)
+dataset = load_csv('trainingdata.csv')
+
+print("\nDataset:")
+print(dataset)
+
+h = ['NULL'] * n
+
+print("\nThe steps of the Find-S algorithm are:")
+for i in range(len(dataset)):
+    target = dataset.iloc[i, -1]
+    if target == 'Yes':
+        for j in range(n):
+            if h[j] == 'NULL':
+                h[j] = dataset.iloc[i, j]
+            elif h[j] != dataset.iloc[i, j]:
+                h[j] = '?'
+    print(f"Step {i + 1}: {h}")
+
+print("\nThe maximally specific Find-S hypothesis for the given training examples is:")
+print(h)
